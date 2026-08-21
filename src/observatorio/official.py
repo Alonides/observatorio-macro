@@ -115,7 +115,7 @@ def _iso_day(raw: str) -> str | None:
     if reiwa:
         year, month, day = map(int, reiwa.groups())
         return date(2018 + year, month, day).isoformat()
-    quarter = re.fullmatch(r"(\d{4})Q([1-4])", raw, flags=re.I)
+    quarter = re.fullmatch(r"(\d{4})-?Q([1-4])", raw, flags=re.I)
     if quarter:
         year, q = map(int, quarter.groups())
         next_start = date(year + (q == 4), 1 if q == 4 else q * 3 + 1, 1)
@@ -208,7 +208,19 @@ def parse_sdmx_csv(text: str) -> list[dict]:
 
 
 def parse_mof_csv(text: str) -> list[dict]:
-    reader = csv.DictReader(io.StringIO(text))
+    lines = [line for line in text.splitlines() if line.strip()]
+    start = None
+    for index, line in enumerate(lines):
+        cells = next(csv.reader([line]))
+        normalized_cells = {re.sub(r"[^0-9a-z年基準日]", "", cell.lower()) for cell in cells}
+        has_date = bool(normalized_cells & {"date", "基準日"})
+        has_ten = bool(normalized_cells & {"10y", "10yr", "10year", "10years", "10年"})
+        if has_date and has_ten:
+            start = index
+            break
+    if start is None:
+        raise SourceError("MOF Japan: no se reconoció la fila de cabecera")
+    reader = csv.DictReader(io.StringIO("\n".join(lines[start:])))
     if not reader.fieldnames:
         raise SourceError("MOF Japan: CSV sin cabecera")
     normalized = {re.sub(r"[^0-9a-z年]", "", name.lower()): name for name in reader.fieldnames}
@@ -228,7 +240,7 @@ def parse_mof_csv(text: str) -> list[dict]:
     return _dedupe(points)
 
 
-def parse_boe_csv(text: str, series_code: str = "IUDERB") -> list[dict]:
+def parse_boe_csv(text: str, series_code: str = "IUDMNPY") -> list[dict]:
     lines = [line for line in text.splitlines() if line.strip()]
     start = next((i for i, line in enumerate(lines) if series_code.upper() in line.upper()), None)
     if start is None:
@@ -383,6 +395,19 @@ def parse_bea_nipa(payload: dict, description: str) -> list[dict]:
     return _dedupe(points)
 
 
+def parse_dbnomics_json(payload: dict, divisor: float = 1.0) -> list[dict]:
+    docs = payload.get("series", {}).get("docs", [])
+    if not docs:
+        raise SourceError("DBnomics: respuesta sin series")
+    points = []
+    for period, raw in zip(docs[0].get("period", []), docs[0].get("value", [])):
+        day = _iso_day(period)
+        value = _numeric(raw)
+        if day and value is not None:
+            points.append({"date": day, "value": value / divisor})
+    return _dedupe(points)
+
+
 def parse_sec_annual_capex(payload: dict) -> list[dict]:
     facts = payload.get("facts", {}).get("us-gaap", {})
     tags = (
@@ -495,8 +520,24 @@ def _fiscal_debt() -> list[dict]:
 
 def _gold() -> list[dict]:
     def load():
+        payload = None
+        last_error = None
+        for attempt in range(3):
+            try:
+                url = f"https://prices.lbma.org.uk/json/gold_am.json?cache={int(time.time())}-{attempt}"
+                raw = _read(url, headers={
+                    "Accept": "application/json,text/plain,*/*",
+                    "Referer": "https://www.lbma.org.uk/prices-and-data/precious-metal-prices",
+                })
+                payload = json.loads(raw.decode("utf-8-sig", errors="replace"))
+                break
+            except (SourceError, json.JSONDecodeError) as exc:
+                last_error = exc
+                time.sleep(1.5 * (attempt + 1))
+        if not isinstance(payload, list):
+            raise SourceError(f"LBMA: respuesta no interpretable: {last_error}")
         points = []
-        for row in _json("https://prices.lbma.org.uk/json/gold_am.json"):
+        for row in payload:
             values = row.get("v") or []
             value = _numeric(values[0] if values else None)
             if value is not None:
@@ -593,7 +634,7 @@ def _uk_10y() -> list[dict]:
             "csv.x": "yes",
             "Datefrom": start,
             "Dateto": "now",
-            "SeriesCodes": "IUDERB",
+            "SeriesCodes": "IUDMNPY",
             "CSVF": "TN",
             "UsingCodes": "Y",
             "VPD": "Y",
@@ -601,7 +642,7 @@ def _uk_10y() -> list[dict]:
         })
         return parse_boe_csv(_text(
             "https://www.bankofengland.co.uk/boeapps/database/_iadb-fromshowcolumns.asp?" + query
-        ))
+        ), "IUDMNPY")
     return _memo("boe:gilt-10y", load)
 
 
@@ -627,19 +668,21 @@ def _euro_area_10y() -> list[dict]:
     return _memo("ecb:euro-aaa-10y", load)
 
 
-def _bea(table: str, description: str) -> list[dict]:
-    def load():
-        query = urlencode({
-            "UserID": "samplekey",
-            "method": "GetData",
-            "datasetname": "NIPA",
-            "TableName": table,
-            "Frequency": "Q",
-            "Year": "X",
-            "ResultFormat": "JSON",
-        })
-        return parse_bea_nipa(_json("https://apps.bea.gov/api/data/?" + query), description)
-    return _memo(f"bea:{table}:{description}", load)
+def _bea(table: str, series_code: str) -> list[dict]:
+    """Datos BEA transportados por el espejo abierto de DBnomics.
+
+    La API directa de BEA exige una clave personal. DBnomics replica las tablas
+    NIPA sin alterar periodos y permite mantener el robot sin secretos; la
+    procedencia se declara expresamente en el catálogo. Las tablas descargadas
+    vienen en millones de dólares y se normalizan a miles de millones.
+    """
+    return _memo(
+        f"dbnomics:bea:{table}:{series_code}",
+        lambda: parse_dbnomics_json(
+            _json(f"https://api.db.nomics.world/v22/series/BEA/NIPA-{table}/{series_code}?observations=1"),
+            divisor=1_000,
+        ),
+    )
 
 
 CAPEX_CIK = {
@@ -650,13 +693,31 @@ CAPEX_CIK = {
     "CAPEX_ORCL": "0001341439",
 }
 
+_SEC_LOCK = Lock()
+_SEC_LAST_REQUEST = 0.0
+
 
 def _capex(series_id: str) -> list[dict]:
     cik = CAPEX_CIK[series_id]
-    return _memo(
-        f"sec:capex:{cik}",
-        lambda: parse_sec_annual_capex(_json(f"https://data.sec.gov/api/xbrl/companyfacts/CIK{cik}.json")),
-    )
+    def load():
+        global _SEC_LAST_REQUEST
+        with _SEC_LOCK:
+            wait = 0.35 - (time.monotonic() - _SEC_LAST_REQUEST)
+            if wait > 0:
+                time.sleep(wait)
+            try:
+                payload = _json(
+                    f"https://data.sec.gov/api/xbrl/companyfacts/CIK{cik}.json",
+                    headers={
+                        "User-Agent": "Alonides ObservatorioMacro/0.3 alonides@users.noreply.github.com",
+                        "Accept": "application/json",
+                        "From": "alonides@users.noreply.github.com",
+                    },
+                )
+            finally:
+                _SEC_LAST_REQUEST = time.monotonic()
+        return parse_sec_annual_capex(payload)
+    return _memo(f"sec:capex:{cik}", load)
 
 
 NOMINAL_MAP = {"DGS3MO": "3 Mo", "DGS2": "2 Yr", "DGS10": "10 Yr", "DGS30": "30 Yr"}
@@ -716,9 +777,9 @@ def fetch_series(series_id: str) -> list[dict]:
     elif series_id == "IRLTLT01EZM156N":
         points = _euro_area_10y()
     elif series_id == "GDP":
-        points = _bea("T10105", "Gross domestic product")
+        points = _bea("T10105", "A191RC-Q")
     elif series_id == "A091RC1Q027SBEA":
-        points = _bea("T30200", "Interest payments")
+        points = _bea("T30200", "A091RC-Q")
     elif series_id in CAPEX_CIK:
         points = _capex(series_id)
     else:
