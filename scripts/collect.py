@@ -17,11 +17,12 @@ def main() -> int:
     print(f"Carga {result['status']}: {result['series_ok']}/{result['series_total']} series")
     for error in result["errors"]:
         print(f"- {error['series_id']}: {error['error']}", file=sys.stderr)
-    # La carga parcial es publicable si al menos el 70 % de las series conserva
-    # un dato válido. Así una fuente aislada no bloquea el observatorio.
-    return 0 if result["series_ok"] >= result["series_total"] * 0.70 else 2
+    # Las fuentes se incorporan por capas. El job es operativo cuando están
+    # presentes todas las series críticas del motor, aunque variables auxiliares
+    # sigan marcadas como pendientes.
+    return 0 if result["operational"] else 2
+
 
 
 if __name__ == "__main__":
     raise SystemExit(main())
-
