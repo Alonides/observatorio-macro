@@ -96,8 +96,8 @@ function renderCapex(data) {
       <div class="bar-row">
         <div class="bar-label"><strong>${escapeHtml(row.title.split(':')[0])}</strong><span>${fmt.format(row.value)} mM USD</span></div>
         <div class="bar-track"><i style="width:${max ? row.value / max * 100 : 0}%"></i></div>
-        <small>FY terminado ${escapeHtml(row.observation_date || '—')}</small>
-      </div>`).join('') : '<p class="empty">Se incorporará al validar Company Facts de la SEC.</p>';
+        <small>Trimestre terminado ${escapeHtml(row.observation_date || '—')}</small>
+      </div>`).join('') : '<p class="empty">El dataset de capex todavía no ha entregado observaciones válidas.</p>';
 }
 
 function renderErrors(data) {
