@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "generated_at": null,
+  "status": "pending_first_run",
+  "series_ok": 0,
+  "series_total": 0,
+  "errors": [],
+  "derived": [],
+  "regime": {
+    "regime": "PENDIENTE",
+    "label": "Pendiente de la primera carga",
+    "signals": []
+  },
+  "series": []
+}
+
