@@ -4,7 +4,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 
-from observatorio.engine import evaluate
+from observatorio.engine import derived_metrics, evaluate
 
 
 def points(old, new):
@@ -34,7 +34,27 @@ class EngineTests(unittest.TestCase):
     def test_missing_data_is_indeterminate(self):
         self.assertEqual(evaluate({})["regime"], "INDETERMINADO")
 
+    def test_vix_can_confirm_the_triple_signal(self):
+        data = {
+            "DTWEXBGS": points(100, 94),
+            "DFII10": points(2.0, 2.6),
+            "T10YIE": points(2.2, 2.6),
+            "VIXCLS": points(18, 36),
+        }
+        result = evaluate(data)
+        self.assertEqual(result["regime"], "H1")
+        stress = next(signal for signal in result["signals"] if signal["key"] == "stress")
+        self.assertTrue(stress["active"])
+
+    def test_capex_metric_aggregates_at_least_three_companies(self):
+        data = {
+            "CAPEX_MSFT": points(40, 50),
+            "CAPEX_GOOG": points(35, 45),
+            "CAPEX_AMZN": points(48, 60),
+        }
+        metric = next(item for item in derived_metrics(data) if item["id"] == "AI_CAPEX_QUARTER")
+        self.assertEqual(metric["value"], 155)
+
 
 if __name__ == "__main__":
     unittest.main()
-

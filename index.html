@@ -4,49 +4,98 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="color-scheme" content="dark">
-  <title>Observatorio Macro</title>
+  <meta name="theme-color" content="#07100f">
+  <title>El precio del privilegio · Observatorio macro</title>
   <link rel="stylesheet" href="web/styles.css">
 </head>
 <body>
-  <header class="topbar">
+  <header class="topbar shell">
     <div>
       <p class="eyebrow">OBSERVATORIO MACRO · ALONIDES</p>
       <h1>El precio del privilegio</h1>
       <p class="subtitle">Duración global, confianza monetaria y capacidad productiva.</p>
     </div>
-    <div id="health" class="health">Cargando…</div>
+    <div id="health" class="health" aria-live="polite">Cargando datos…</div>
   </header>
 
-  <main>
+  <main class="shell">
     <section class="hero-grid">
-      <article id="regime" class="regime-card"></article>
+      <article id="regime" class="card regime-card skeleton"></article>
       <article class="card">
-        <h2>Indicadores derivados</h2>
+        <div class="section-head compact">
+          <div><p class="eyebrow">LECTURA ACTUAL</p><h2>Magnitudes derivadas</h2></div>
+        </div>
         <div id="derived" class="metric-grid"></div>
+        <div id="coverage" class="coverage"></div>
       </article>
+    </section>
+
+    <section class="card charts-section">
+      <div class="section-head">
+        <div>
+          <p class="eyebrow">HISTÓRICO COMPARABLE</p>
+          <h2>Radar de régimen</h2>
+          <p>Las curvas muestran fechas de observación reales; no rellenan huecos ni inventan cierres.</p>
+        </div>
+        <div class="range-picker" aria-label="Ventana temporal">
+          <button type="button" data-range="92">3 meses</button>
+          <button type="button" data-range="365" class="selected">1 año</button>
+          <button type="button" data-range="all">Todo</button>
+        </div>
+      </div>
+      <div class="chart-grid">
+        <article class="chart-card">
+          <div><p class="chart-kicker">ESTADOS UNIDOS</p><h3>Curva nominal</h3></div>
+          <div id="chart-us" class="chart" role="img" aria-label="Evolución de los Treasury a 2, 10 y 30 años"></div>
+        </article>
+        <article class="chart-card">
+          <div><p class="chart-kicker">H2 · CESTA RELATIVA</p><h3>Duración soberana global</h3></div>
+          <div id="chart-global" class="chart" role="img" aria-label="Evolución de rendimientos soberanos a 10 años"></div>
+        </article>
+        <article class="chart-card">
+          <div><p class="chart-kicker">DENOMINADOR Y RESERVA</p><h3>Dólar, oro y Bitcoin · base 100</h3></div>
+          <div id="chart-reserve" class="chart" role="img" aria-label="Índices normalizados de dólar, oro y Bitcoin"></div>
+        </article>
+        <article class="chart-card norway-card">
+          <div><p class="chart-kicker">FOCO NORUEGA</p><h3>NOK, bono 10 años y Brent · base 100</h3></div>
+          <div id="chart-norway" class="chart" role="img" aria-label="Índices normalizados de corona noruega, bono y petróleo Brent"></div>
+        </article>
+      </div>
     </section>
 
     <section class="card">
       <div class="section-head">
         <div><p class="eyebrow">PRUEBA DISCRIMINANTE</p><h2>Señales H0 · H1 · H2</h2></div>
-        <p>Umbrales declarados y versionados; gris significa dato insuficiente.</p>
+        <p>Umbrales prospectivos y versionados. Gris significa dato insuficiente; una señal activa no es por sí sola un diagnóstico.</p>
       </div>
       <div id="signals" class="signals"></div>
     </section>
 
-    <section class="card">
+    <section class="card productive-card">
       <div class="section-head">
-        <div><p class="eyebrow">ÚLTIMA OBSERVACIÓN</p><h2>Mapa de variables</h2></div>
-        <input id="filter" type="search" placeholder="Filtrar por nombre o grupo">
+        <div>
+          <p class="eyebrow">COMPETENCIA POR CAPITAL</p>
+          <h2>Capacidad productiva privada</h2>
+        </div>
+        <p>Último trimestre publicado, sobre la base que guía cada compañía. No es una suma contable homogénea ni equivale íntegramente a IA.</p>
       </div>
+      <div id="capex" class="bar-chart"></div>
+    </section>
+
+    <section class="card">
+      <div class="section-head data-head">
+        <div><p class="eyebrow">TRAZABILIDAD</p><h2>Variables y fuentes</h2></div>
+        <input id="filter" type="search" placeholder="Filtrar variable, grupo o fuente" autocomplete="off">
+      </div>
+      <div id="errors"></div>
       <div id="groups"></div>
     </section>
   </main>
 
-  <footer>
-    Instrumento analítico, no recomendación financiera. Cada valor conserva su fecha de observación real.
+  <footer class="shell">
+    <p>Instrumento analítico, no recomendación financiera. Cada valor conserva su productor, fecha de observación y estado de frescura.</p>
+    <p>El código, los umbrales y el historial son auditables en Git.</p>
   </footer>
   <script src="web/app.js"></script>
 </body>
 </html>
-
