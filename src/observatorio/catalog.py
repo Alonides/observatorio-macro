@@ -67,8 +67,8 @@ SERIES: tuple[SeriesSpec, ...] = (
     SeriesSpec("IRLTLT01EZM156N", "Eurozona: spot soberano AAA 10 años", "Duración global", "%", "daily", 10, "European Central Bank", "https://data.ecb.europa.eu/data/datasets/YC/YC.B.U2.EUR.4F.G_N_A.SV_C_YM.SR_10Y"),
     # Capacidad fiscal y denominador económico.
     SeriesSpec("GFDEBTN", "Deuda federal bruta de EE. UU.", "Fiscal", "millones USD", "daily", 7, "U.S. Treasury Fiscal Data", "https://fiscaldata.treasury.gov/datasets/debt-to-the-penny/"),
-    SeriesSpec("A091RC1Q027SBEA", "Intereses federales pagados", "Fiscal", "miles de millones USD SAAR", "quarterly", 140, "U.S. Bureau of Economic Analysis", "https://apps.bea.gov/iTable/"),
-    SeriesSpec("GDP", "PIB nominal de EE. UU.", "Fiscal", "miles de millones USD SAAR", "quarterly", 140, "U.S. Bureau of Economic Analysis", "https://apps.bea.gov/iTable/"),
+    SeriesSpec("A091RC1Q027SBEA", "Intereses federales pagados", "Fiscal", "miles de millones USD SAAR", "quarterly", 140, "BEA · espejo DBnomics", "https://db.nomics.world/BEA/NIPA-T30200/A091RC-Q"),
+    SeriesSpec("GDP", "PIB nominal de EE. UU.", "Fiscal", "miles de millones USD SAAR", "quarterly", 140, "BEA · espejo DBnomics", "https://db.nomics.world/BEA/NIPA-T10105/A191RC-Q"),
     SeriesSpec("CPIAUCSL", "IPC de EE. UU.", "Inflación", "índice", "monthly", 45, "U.S. Bureau of Labor Statistics", "https://www.bls.gov/cpi/data.htm"),
     SeriesSpec("UNRATE", "Desempleo de EE. UU.", "Economía real", "%", "monthly", 45, "U.S. Bureau of Labor Statistics", "https://www.bls.gov/cps/data.htm"),
     # Inversión productiva que compite por capital. Último ejercicio fiscal
