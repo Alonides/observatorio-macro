@@ -30,6 +30,17 @@
       </article>
     </section>
 
+    <section class="card state-section">
+      <div class="section-head">
+        <div>
+          <p class="eyebrow">ESTADO ESTRUCTURAL · MOTOR INDEPENDIENTE</p>
+          <h2>Presiones lentas del sistema</h2>
+        </div>
+        <p>No produce una nota total ni altera H0/H1/H2. Cada dimensión conserva su unidad, cobertura y fecha.</p>
+      </div>
+      <div id="structural-state" class="state-grid"></div>
+    </section>
+
     <section class="card charts-section">
       <div class="section-head">
         <div>
@@ -56,9 +67,13 @@
           <div><p class="chart-kicker">DENOMINADOR Y RESERVA</p><h3>Dólar, oro y Bitcoin · base 100</h3></div>
           <div id="chart-reserve" class="chart" role="img" aria-label="Índices normalizados de dólar, oro y Bitcoin"></div>
         </article>
+        <article class="chart-card">
+          <div><p class="chart-kicker">NUMERARIO ORO</p><h3>Activos y promesas medidos en oro · base 100</h3></div>
+          <div id="chart-gold" class="chart" role="img" aria-label="S&amp;P 500, Bitcoin y deuda pública medidos en oro"></div>
+        </article>
         <article class="chart-card norway-card">
-          <div><p class="chart-kicker">FOCO NORUEGA</p><h3>NOK, bono 10 años y Brent · base 100</h3></div>
-          <div id="chart-norway" class="chart" role="img" aria-label="Índices normalizados de corona noruega, bono y petróleo Brent"></div>
+          <div><p class="chart-kicker">FOCO NORUEGA</p><h3>NOK, oro local, bono 10 años y Brent · base 100</h3></div>
+          <div id="chart-norway" class="chart" role="img" aria-label="Índices normalizados de corona noruega, oro en coronas, bono y petróleo Brent"></div>
         </article>
       </div>
     </section>
@@ -66,7 +81,13 @@
     <section class="card">
       <div class="section-head">
         <div><p class="eyebrow">PRUEBA DISCRIMINANTE</p><h2>Señales H0 · H1 · H2</h2></div>
-        <p>Umbrales prospectivos y versionados. Gris significa dato insuficiente; una señal activa no es por sí sola un diagnóstico.</p>
+        <p>La triple señal abre investigación, no dicta H1. Cada hipótesis exige evidencia positiva; la ausencia de H1 no prueba H0.</p>
+      </div>
+      <div class="hypothesis-key" aria-label="Definiciones canónicas">
+        <div><strong>H0</strong><span>prima estadounidense de oferta y plazo</span></div>
+        <div><strong>H1</strong><span>pérdida específica de confianza institucional</span></div>
+        <div><strong>H2</strong><span>reprecio global de la duración</span></div>
+        <div><strong>MIXED</strong><span>choque global con componente estadounidense</span></div>
       </div>
       <div id="signals" class="signals"></div>
     </section>
@@ -93,8 +114,8 @@
   </main>
 
   <footer class="shell">
-    <p>Instrumento analítico, no recomendación financiera. Cada valor conserva su productor, fecha de observación y estado de frescura.</p>
-    <p>El código, los umbrales y el historial son auditables en Git.</p>
+    <p>Instrumento analítico, no recomendación financiera. Ningún hueco se rellena con cero.</p>
+    <p id="methodology-foot">El código, los parámetros y el historial son auditables en Git.</p>
   </footer>
   <script src="web/app.js"></script>
 </body>

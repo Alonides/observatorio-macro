@@ -12,6 +12,7 @@ from observatorio.official import (
     parse_dbnomics_json,
     parse_eia_json,
     parse_fed_ddp_csv,
+    parse_fred_bundle_csv,
     parse_h41_html,
     parse_mof_csv,
     parse_norges_html,
@@ -38,6 +39,12 @@ class OfficialSourceParserTests(unittest.TestCase):
         ])
         parsed = parse_fed_ddp_csv(text)
         self.assertEqual(parsed["JRXWTFB_N.B"][-1]["value"], 119.1848)
+
+    def test_fred_bundle_keeps_each_series_independent(self):
+        text = "observation_date,SP500,BAMLC0A0CM\n2026-08-19,7707.98,0.81\n2026-08-20,7641.16,.\n"
+        parsed = parse_fred_bundle_csv(text)
+        self.assertEqual(parsed["SP500"][-1], {"date": "2026-08-20", "value": 7641.16})
+        self.assertEqual(parsed["BAMLC0A0CM"][-1], {"date": "2026-08-19", "value": 0.81})
 
     def test_sofr_json(self):
         payload = {"refRates": [{"effectiveDate": "2026-08-20", "percentRate": 3.63}]}

@@ -161,6 +161,27 @@ def parse_fed_ddp_csv(text: str) -> dict[str, list[dict]]:
     return {column: _dedupe(points) for column, points in output.items()}
 
 
+def parse_fred_bundle_csv(text: str) -> dict[str, list[dict]]:
+    reader = csv.DictReader(io.StringIO(text.lstrip("\ufeff")))
+    if not reader.fieldnames:
+        raise SourceError("FRED: CSV sin cabecera")
+    date_column = next((column for column in ("observation_date", "DATE") if column in reader.fieldnames), None)
+    if date_column is None:
+        raise SourceError(f"FRED: columna de fecha no reconocida: {reader.fieldnames}")
+    output: dict[str, list[dict]] = {
+        column: [] for column in reader.fieldnames if column != date_column
+    }
+    for row in reader:
+        day = _iso_day(row.get(date_column) or "")
+        if not day:
+            continue
+        for series_id in output:
+            value = _numeric(row.get(series_id))
+            if value is not None:
+                output[series_id].append({"date": day, "value": value})
+    return {series_id: _dedupe(points) for series_id, points in output.items()}
+
+
 def parse_sofr_json(payload: dict) -> list[dict]:
     points = []
     for row in payload.get("refRates", []):
@@ -469,7 +490,19 @@ def _fed_package(release: str, package: str, observations: int = 500) -> dict[st
             f"rel={release}&series={series}&lastobs={observations}"
             "&filetype=csv&label=include&layout=seriescolumn"
         )
-        return parse_fed_ddp_csv(_text(url))
+        # Data Download puede responder HTTP 200 con cuerpo vacio durante
+        # episodios breves de carga. ``_read`` no puede distinguir ese caso
+        # de una descarga valida, de modo que el adaptador reintenta tambien
+        # los errores de contenido y nunca convierte el vacio en cero.
+        last_error: SourceError | None = None
+        for attempt in range(3):
+            try:
+                return parse_fed_ddp_csv(_text(url))
+            except SourceError as exc:
+                last_error = exc
+                if attempt < 2:
+                    time.sleep(1.25 * (attempt + 1))
+        raise last_error or SourceError("Federal Reserve DDP: respuesta vacia")
     return _memo(f"fed:{release}:{package}", load)
 
 
@@ -499,19 +532,32 @@ def _h41() -> dict[str, list[dict]]:
     )
 
 
-def _fiscal_debt() -> list[dict]:
+def _fiscal_debt_package() -> dict[str, list[dict]]:
     def load():
         url = (
             "https://api.fiscaldata.treasury.gov/services/api/fiscal_service/v2/"
             "accounting/od/debt_to_penny?sort=-record_date&page%5Bsize%5D=500"
         )
-        points = []
+        output = {"GFDEBTN": [], "US_DEBT_HELD_PUBLIC": []}
         for row in _json(url).get("data", []):
-            value = _numeric(row.get("tot_pub_debt_out_amt"))
-            if value is not None:
-                points.append({"date": row["record_date"], "value": value / 1_000_000})
-        return _dedupe(points)
+            total = _numeric(row.get("tot_pub_debt_out_amt"))
+            public = _numeric(row.get("debt_held_public_amt"))
+            if total is not None:
+                output["GFDEBTN"].append({"date": row["record_date"], "value": total / 1_000_000})
+            if public is not None:
+                output["US_DEBT_HELD_PUBLIC"].append({"date": row["record_date"], "value": public / 1_000_000})
+        return {series_id: _dedupe(points) for series_id, points in output.items()}
     return _memo("fiscal:debt", load)
+
+
+FRED_MARKET_IDS = ("SP500", "BAMLC0A0CM", "BAMLC0A0CMEY")
+
+
+def _fred_market_package() -> dict[str, list[dict]]:
+    def load():
+        query = urlencode({"id": ",".join(FRED_MARKET_IDS)})
+        return parse_fred_bundle_csv(_text(f"https://fred.stlouisfed.org/graph/fredgraph.csv?{query}"))
+    return _memo("fred:market-context", load)
 
 
 def _gold() -> list[dict]:
@@ -599,8 +645,7 @@ def _eia(route: str, series: str) -> list[dict]:
 
 
 def _japan_10y() -> list[dict]:
-    def load():
-        raw = _read("https://www.mof.go.jp/english/policy/jgbs/reference/interest_rate/jgbcme.csv")
+    def decode(raw: bytes) -> list[dict]:
         for encoding in ("utf-8-sig", "cp932", "shift_jis"):
             try:
                 points = parse_mof_csv(raw.decode(encoding))
@@ -608,7 +653,15 @@ def _japan_10y() -> list[dict]:
                     return points
             except (UnicodeDecodeError, SourceError):
                 continue
-        raise SourceError("MOF Japan: no se pudo decodificar o interpretar jgbcme.csv")
+        raise SourceError("MOF Japan: no se pudo decodificar o interpretar el CSV")
+
+    def load():
+        base = "https://www.mof.go.jp/english/policy/jgbs/reference/interest_rate/"
+        # El fichero corriente solo contiene el mes abierto. Se une con el
+        # historico oficial para que la ventana de 92 dias sea evaluable.
+        historical = decode(_read(base + "historical/jgbcme_all.csv"))
+        current = decode(_read(base + "jgbcme.csv"))
+        return _dedupe(historical + current)
     return _memo("mof:jgb-10y", load)
 
 
@@ -721,14 +774,16 @@ def fetch_series(series_id: str) -> list[dict]:
         points = _rrp()
     elif series_id in {"WALCL", "WTREGEN"}:
         points = _h41().get(series_id, [])
-    elif series_id == "GFDEBTN":
-        points = _fiscal_debt()
+    elif series_id in {"GFDEBTN", "US_DEBT_HELD_PUBLIC"}:
+        points = _fiscal_debt_package().get(series_id, [])
     elif series_id == "GOLDAMGBD228NLBM":
         points = _gold()
     elif series_id == "CBBTCUSD":
         points = _bitcoin()
     elif series_id == "VIXCLS":
         points = _vix()
+    elif series_id in FRED_MARKET_IDS:
+        points = _fred_market_package().get(series_id, [])
     elif series_id == "CPIAUCSL":
         points = _bls().get("CUSR0000SA0", [])
     elif series_id == "UNRATE":

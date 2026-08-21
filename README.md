@@ -1,18 +1,32 @@
 # Observatorio macro
 
-Observatorio macroeconómico automatizado para vigilar el precio del privilegio del dólar, la competencia global por duración y las condiciones de un posible cambio de régimen monetario.
+Panel automatizado y auditable para vigilar el precio del privilegio del dólar, la competencia global por duración y la migración entre promesas soberanas y capacidad productiva.
 
 ## Qué hace
 
-- Recoge 36 series: fuentes oficiales para macro y mercados, más un dataset especializado de capex con metodología, licencia y fuentes por fila.
-- Conserva la fecha de observación y la fecha de recogida: nunca confunde un dato antiguo con uno nuevo.
-- Calcula pendientes de la curva estadounidense y cambios a tres meses.
-- Clasifica la evidencia entre tres hipótesis no excluyentes:
-  - **H0:** reprecio global de la duración.
-  - **H1:** pérdida específica de confianza en la promesa fiscal estadounidense.
-  - **H2:** combinación de ambas.
-- Publica un panel estático, móvil y sin servidor con histórico, foco noruego, trazabilidad y gráficos comparables.
-- Ejecuta pruebas y una recogida diaria mediante GitHub Actions, aunque el ordenador esté apagado.
+- Recoge **40 series** y calcula **8 series derivadas**, con productor, transporte, periodo del dato, momento de recogida, revisión y frescura.
+- No rellena huecos con cero y conserva el último dato válido cuando una fuente falla.
+- Ejecuta dos motores separados:
+  - **acontecimiento:** busca cambios de régimen en una ventana primaria de 92 días;
+  - **estado estructural:** muestra presiones lentas en sus propias unidades y nunca produce una nota total.
+- Añade una capa de numerario oro: bolsa, Bitcoin, divisas y deuda pueden leerse fuera del dólar nominal.
+- Publica un panel estático y ejecuta la ingestión diaria en GitHub Actions aunque el ordenador esté apagado.
+
+## Hipótesis canónicas
+
+- **H0 — prima estadounidense de oferta y plazo:** deterioro relativo de la duración estadounidense sin evidencia suficiente de pérdida institucional.
+- **H1 — pérdida específica de confianza:** señal triple, especificidad estadounidense y confirmación independiente.
+- **H2 — reprecio global de la duración:** subida sincrónica en varios soberanos sin residuo excepcional de EE. UU.
+- **MIXED:** choque global con componente estadounidense.
+- **INDETERMINATE:** ninguna hipótesis reúne evidencia positiva suficiente.
+
+La ausencia de H1 no demuestra H0. La señal triple —dólar a la baja, TIPS real al alza y breakeven al alza— es una alarma de investigación, no un veredicto. Bolsa, OAS y rendimiento corporativo ayudan a distinguir reflación, estrés sistémico y posible migración hacia capacidad privada, pero una regla simple de «bolsa abajo» no bloquea H1.
+
+## Gobernanza metodológica
+
+[`methodology.yml`](methodology.yml) es la fuente única de parámetros, definiciones operativas, periodos de calibración y fechas de congelación. Cada JSON publica su versión y SHA-256 canónico. El ensayo fija la semántica; la especificación y el código determinista fijan el resultado. Si discrepan, el panel declara el conflicto: la prosa no corrige manualmente la salida.
+
+La versión pública v0.1 queda preservada en `archive/v0.1`. La revisión v0.2 se desarrolla en `feature/methodology-v0.2`; no reescribe resultados históricos anteriores.
 
 ## Uso local
 
@@ -26,22 +40,16 @@ python -m http.server 8000
 
 Después abre `http://localhost:8000`.
 
-Para comprobar solo conectividad sin modificar los JSON:
+Para comprobar conectividad sin modificar los JSON:
 
 ```bash
 python scripts/source_smoke.py --all
 ```
 
-## Automatización
+## Automatización y fuentes
 
-El flujo `.github/workflows/daily.yml` se ejecuta cada día a las 05:30 UTC y también puede iniciarse manualmente desde **Actions → Daily macro ingestion → Run workflow**. Si una fuente falla, conserva los datos válidos, registra el error y marca la carga como parcial.
+`.github/workflows/daily.yml` se ejecuta cada día a las 05:30 UTC y también desde **Actions → Daily macro ingestion → Run workflow**. Una incidencia aislada produce `operational_partial`; solo la ausencia de una serie nuclear vuelve no operativo el panel.
 
-El histórico se fusiona por fecha: las fuentes que solo publican el último nivel (por ejemplo H.4.1) amplían la serie en cada ejecución en vez de borrar observaciones previas.
+Se consultan Treasury, Federal Reserve, New York Fed, BLS, EIA, Cboe, LBMA, Norges Bank, ECB, Bundesbank, Bank of England, Ministry of Finance Japan y Fiscal Data. CoinGecko aporta Bitcoin. FRED y DBnomics se usan como transportes declarados cuando la fuente económica o el índice tienen otro productor. El capex emplea *Hyperscaler Capex Tracker* (CC BY 4.0), que conserva la base y las fuentes por fila.
 
-## Método
-
-El panel es un instrumento de vigilancia, no una recomendación financiera ni un modelo de predicción opaco. Los umbrales están declarados en `src/observatorio/engine.py`; cualquier cambio queda registrado por Git.
-
-El circuito operativo no depende de FRED. Consulta Treasury, Federal Reserve, New York Fed, BLS, EIA, Cboe, LBMA, Norges Bank, ECB, Bundesbank, Bank of England y Ministry of Finance Japan; CoinGecko aporta Bitcoin. Las dos tablas NIPA de BEA viajan por el espejo abierto DBnomics porque la API directa exige una clave personal. La SEC bloquea de forma persistente los rangos de GitHub Actions; por eso el bloque empresarial usa el *Hyperscaler Capex Tracker* (CC BY 4.0), que conserva base, método y fuentes de cada fila. El panel declara siempre el transporte real.
-
-Consulta [Arquitectura](docs/ARCHITECTURE.md) y [Diccionario de datos](docs/DATA_DICTIONARY.md).
+Más detalle: [Arquitectura](docs/ARCHITECTURE.md), [Diccionario de datos](docs/DATA_DICTIONARY.md), [hoja de ruta v0.2](docs/ROADMAP_V02.md) y [registro metodológico](docs/METHODOLOGY_CHANGELOG.md).
