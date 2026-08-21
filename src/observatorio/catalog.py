@@ -31,7 +31,7 @@ FED_H41 = "https://www.federalreserve.gov/releases/h41/current/h41.htm"
 FED_H10 = "https://www.federalreserve.gov/releases/h10/current/"
 NYFED = "https://markets.newyorkfed.org/"
 EIA = "https://www.eia.gov/opendata/"
-SEC = "https://data.sec.gov/"
+CAPEX_TRACKER = "https://www.regardsofwallstreet.com/data/capex"
 
 
 SERIES: tuple[SeriesSpec, ...] = (
@@ -71,13 +71,13 @@ SERIES: tuple[SeriesSpec, ...] = (
     SeriesSpec("GDP", "PIB nominal de EE. UU.", "Fiscal", "miles de millones USD SAAR", "quarterly", 140, "BEA · espejo DBnomics", "https://db.nomics.world/BEA/NIPA-T10105/A191RC-Q"),
     SeriesSpec("CPIAUCSL", "IPC de EE. UU.", "Inflación", "índice", "monthly", 45, "U.S. Bureau of Labor Statistics", "https://www.bls.gov/cpi/data.htm"),
     SeriesSpec("UNRATE", "Desempleo de EE. UU.", "Economía real", "%", "monthly", 45, "U.S. Bureau of Labor Statistics", "https://www.bls.gov/cps/data.htm"),
-    # Inversión productiva que compite por capital. Último ejercicio fiscal
-    # comunicado, no estimación diaria ni capitalización bursátil.
-    SeriesSpec("CAPEX_MSFT", "Microsoft: capex último ejercicio", "Capacidad productiva", "miles de millones USD", "annual", 500, "SEC Company Facts", SEC),
-    SeriesSpec("CAPEX_GOOG", "Alphabet: capex último ejercicio", "Capacidad productiva", "miles de millones USD", "annual", 500, "SEC Company Facts", SEC),
-    SeriesSpec("CAPEX_AMZN", "Amazon: capex último ejercicio", "Capacidad productiva", "miles de millones USD", "annual", 500, "SEC Company Facts", SEC),
-    SeriesSpec("CAPEX_META", "Meta: capex último ejercicio", "Capacidad productiva", "miles de millones USD", "annual", 500, "SEC Company Facts", SEC),
-    SeriesSpec("CAPEX_ORCL", "Oracle: capex último ejercicio", "Capacidad productiva", "miles de millones USD", "annual", 500, "SEC Company Facts", SEC),
+    # Inversión productiva que compite por capital. La base contable varía por
+    # compañía y se conserva tal como la guía cada emisor; véase metodología.
+    SeriesSpec("CAPEX_MSFT", "Microsoft: capex último trimestre", "Capacidad productiva", "miles de millones USD", "quarterly", 140, "Hyperscaler Capex Tracker · CC BY 4.0", CAPEX_TRACKER),
+    SeriesSpec("CAPEX_GOOG", "Alphabet: capex último trimestre", "Capacidad productiva", "miles de millones USD", "quarterly", 140, "Hyperscaler Capex Tracker · CC BY 4.0", CAPEX_TRACKER),
+    SeriesSpec("CAPEX_AMZN", "Amazon: capex último trimestre", "Capacidad productiva", "miles de millones USD", "quarterly", 140, "Hyperscaler Capex Tracker · CC BY 4.0", CAPEX_TRACKER),
+    SeriesSpec("CAPEX_META", "Meta: capex último trimestre", "Capacidad productiva", "miles de millones USD", "quarterly", 140, "Hyperscaler Capex Tracker · CC BY 4.0", CAPEX_TRACKER),
+    SeriesSpec("CAPEX_ORCL", "Oracle: capex último trimestre", "Capacidad productiva", "miles de millones USD", "quarterly", 140, "Hyperscaler Capex Tracker · CC BY 4.0", CAPEX_TRACKER),
 )
 
 SERIES_BY_ID = {item.id: item for item in SERIES}
