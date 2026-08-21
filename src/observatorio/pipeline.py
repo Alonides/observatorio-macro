@@ -9,7 +9,7 @@ from pathlib import Path
 
 from .catalog import SERIES
 from .engine import evaluate, derived_metrics
-from .fred import fetch_series
+from .official import CORE_SERIES, fetch_series
 from .quality import quality_status, age_days
 
 
@@ -74,10 +74,14 @@ def collect(fetcher=fetch_series, now: datetime | None = None, max_points: int =
             "quality": quality_status(spec, point["date"], today),
         })
 
+    missing_core = sorted(series_id for series_id in CORE_SERIES if not collected.get(series_id))
+    operational = not missing_core
     payload = {
         "schema_version": 1,
         "generated_at": now.isoformat(),
-        "status": "ok" if not errors else "partial",
+        "status": "ok" if not errors else "operational_partial" if operational else "failed",
+        "operational": operational,
+        "missing_core": missing_core,
         "series_ok": sum(1 for item in snapshots if item["value"] is not None),
         "series_total": len(SERIES),
         "errors": errors,
