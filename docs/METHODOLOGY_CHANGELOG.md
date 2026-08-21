@@ -34,3 +34,11 @@ Cambios:
 8. El JGB a diez años une el histórico oficial del MOF con el mes corriente; deja de depender de trece observaciones aisladas.
 
 Regla de cambio: un parámetro nuevo recibe fecha de congelación y corte de calibración antes de evaluar datos posteriores. Toda recalibración crea una nueva versión; no modifica este registro retrospectivamente.
+
+## 2026-08-22 · pre-registro del modelo relativo v0.2
+
+- Se congelan antes de estimar la cesta Japón–Alemania–Reino Unido, la frecuencia mensual, el OLS con intercepto y el uso de variaciones de rendimientos en moneda local.
+- Se fija como estadístico operativo la suma móvil de tres residuos mensuales; dos y cuatro meses quedan reservados a sensibilidad y no pueden competir por el máximo.
+- Se fija el método de rango más próximo para p90/p95 y la exigencia de dos cierres consecutivos sobre p95 para la especificidad fuerte de H1.
+- El tramo 2003–2024 estima; 2025–presente solo valida fuera de muestra.
+- En el momento de esta entrada no se habían calculado coeficientes, umbrales ni activaciones.

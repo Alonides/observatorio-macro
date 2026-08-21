@@ -137,12 +137,30 @@ event_engine:
         la version 0.2.0.
     target_model:
       type: ols_monthly_change
+      specification_frozen_on: 2026-08-22
       calibration_start: 2003-01-01
       calibration_end: 2024-12-31
+      out_of_sample_start: 2025-01-01
+      dependent_series: DGS10
+      frequency: month_end
+      observation_rule: last_available_in_closed_calendar_month
+      currency_treatment: local_currency_yield_changes
+      missing_data: complete_cases_no_imputation
+      regression:
+        intercept: true
+        predictors: [IRLTLT01JPM156N, IRLTLT01DEM156N, IRLTLT01GBM156N]
+        estimator: ordinary_least_squares
+      classifier:
+        horizon_months: 3
+        statistic: rolling_sum_of_monthly_residuals
+        quantile_method: nearest_rank
+        selection_across_windows: prohibited
       h0_percentile: 90
       h1_percentile: 95
       h1_persistence_months: 2
-      status: pending_calibration
+      sensitivity_horizons_months: [2, 4]
+      artifact: data/calibration/us_relative_v02.json
+      status: specification_frozen_pre_estimation
 
   risk_context:
     status: transitional
