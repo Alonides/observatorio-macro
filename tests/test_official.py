@@ -8,6 +8,7 @@ from observatorio.official import (
     parse_bea_nipa,
     parse_bls_json,
     parse_boe_csv,
+    parse_capex_tracker_csv,
     parse_dbnomics_json,
     parse_eia_json,
     parse_fed_ddp_csv,
@@ -16,7 +17,6 @@ from observatorio.official import (
     parse_norges_html,
     parse_rrp_json,
     parse_sdmx_csv,
-    parse_sec_annual_capex,
     parse_sofr_json,
     parse_treasury_csv,
 )
@@ -103,12 +103,15 @@ class OfficialSourceParserTests(unittest.TestCase):
         self.assertEqual(scaled["date"], "2026-06-30")
         self.assertAlmostEqual(scaled["value"], 31.2504)
 
-    def test_sec_capex_uses_latest_filing_for_each_fiscal_year(self):
-        payload = {"facts": {"us-gaap": {"PaymentsToAcquirePropertyPlantAndEquipment": {"units": {"USD": [
-            {"form": "10-K", "fp": "FY", "start": "2025-01-01", "end": "2025-12-31", "val": 50_000_000_000, "filed": "2026-02-01"},
-            {"form": "10-Q", "fp": "Q1", "start": "2026-01-01", "end": "2026-03-31", "val": 9_000_000_000, "filed": "2026-04-20"},
-        ]}}}}}
-        self.assertEqual(parse_sec_annual_capex(payload), [{"date": "2025-12-31", "value": 50.0}])
+    def test_capex_tracker_uses_headline_basis_and_quarter_end(self):
+        text = """# License: CC BY 4.0
+company,ticker,period,period_end,cash_capex_usd,headline_usd,headline_basis
+microsoft,MSFT,2026-Q2,2026-06-30,35802000000,41000000000,capex_including_finance_leases
+alphabet,GOOGL,2026-Q2,2026-06-30,44900000000,44900000000,cash_capex
+"""
+        parsed = parse_capex_tracker_csv(text)
+        self.assertEqual(parsed["CAPEX_MSFT"], [{"date": "2026-06-30", "value": 41.0}])
+        self.assertEqual(parsed["CAPEX_GOOG"], [{"date": "2026-06-30", "value": 44.9}])
 
 
 if __name__ == "__main__":
