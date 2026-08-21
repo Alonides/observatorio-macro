@@ -130,15 +130,19 @@ def _dedupe(points: list[dict]) -> list[dict]:
 def parse_treasury_csv(text: str) -> dict[str, list[dict]]:
     output: dict[str, list[dict]] = {}
     for row in csv.DictReader(io.StringIO(text)):
-        day = _iso_day(row.get("Date") or "")
+        date_column = next((column for column in row if str(column).strip().lower() == "date"), None)
+        day = _iso_day(row.get(date_column) or "") if date_column else None
         if not day:
             continue
         for column, raw in row.items():
-            if column == "Date":
+            if str(column).strip().lower() == "date":
                 continue
             value = _numeric(raw)
             if value is not None:
-                output.setdefault(column.strip(), []).append({"date": day, "value": value})
+                # Los consolidados escriben ``10 yr`` y los anuales ``10 Yr``.
+                # Se normaliza antes de unirlos para no perder el histórico.
+                key = str(column).strip().upper()
+                output.setdefault(key, []).append({"date": day, "value": value})
     return {column: _dedupe(points) for column, points in output.items()}
 
 
@@ -459,11 +463,29 @@ def parse_capex_tracker_csv(text: str) -> dict[str, list[dict]]:
     return {series_id: _dedupe(points) for series_id, points in output.items()}
 
 
+TREASURY_ARCHIVES = {
+    "daily_treasury_yield_curve": "par-yield-curve-rates-1990-2023.csv",
+    "daily_treasury_real_yield_curve": "par-real-yield-curve-rates-2003-2023.csv",
+}
+
+
 def _treasury(kind: str) -> dict[str, list[dict]]:
     def load():
         merged: dict[str, list[dict]] = {}
         current_year = date.today().year
-        for year in (current_year - 1, current_year):
+        archive_name = TREASURY_ARCHIVES.get(kind)
+        if archive_name:
+            archive_url = (
+                "https://home.treasury.gov/resource-center/data-chart-center/interest-rates/"
+                f"daily-treasury-rate-archives/{archive_name}"
+            )
+            for column, points in parse_treasury_csv(_text(archive_url)).items():
+                merged.setdefault(column, []).extend(points)
+
+        # Los archivos consolidados terminan en 2023. Se añaden los años
+        # posteriores por separado para que el histórico sea autorreparable
+        # en un clon nuevo y siga incorporando la observación corriente.
+        for year in range(2024, current_year + 1):
             url = (
                 f"https://home.treasury.gov/resource-center/data-chart-center/interest-rates/"
                 f"daily-treasury-rates.csv/{year}/all?type={kind}&field_tdr_date_value={year}"
@@ -666,23 +688,34 @@ def _japan_10y() -> list[dict]:
 
 
 def _germany_10y() -> list[dict]:
+    start = (date.today() - timedelta(days=500)).isoformat()
+    return germany_10y_history(start)
+
+
+def germany_10y_history(start: str = "2003-01-01", end: str | None = None) -> list[dict]:
     def load():
-        start = (date.today() - timedelta(days=500)).isoformat()
-        query = urlencode({"format": "sdmx_csv", "lang": "en", "startPeriod": start})
+        parameters = {"format": "sdmx_csv", "lang": "en", "startPeriod": start}
+        if end:
+            parameters["endPeriod"] = end
+        query = urlencode(parameters)
         return parse_sdmx_csv(_text(
             "https://api.statistiken.bundesbank.de/rest/data/BBSSY/"
             "D.REN.EUR.A630.000000WT1010.A?" + query
         ))
-    return _memo("bundesbank:bund-10y", load)
+    return _memo(f"bundesbank:bund-10y:{start}:{end or 'latest'}", load)
 
 
 def _uk_10y() -> list[dict]:
+    start = f"01/Jan/{date.today().year - 2}"
+    return uk_10y_history(start)
+
+
+def uk_10y_history(start: str = "01/Jan/2003", end: str = "now") -> list[dict]:
     def load():
-        start = f"01/Jan/{date.today().year - 2}"
         query = urlencode({
             "csv.x": "yes",
             "Datefrom": start,
-            "Dateto": "now",
+            "Dateto": end,
             "SeriesCodes": "IUDMNPY",
             "CSVF": "TN",
             "UsingCodes": "Y",
@@ -692,7 +725,26 @@ def _uk_10y() -> list[dict]:
         return parse_boe_csv(_text(
             "https://www.bankofengland.co.uk/boeapps/database/_iadb-fromshowcolumns.asp?" + query
         ), "IUDMNPY")
-    return _memo("boe:gilt-10y", load)
+    return _memo(f"boe:gilt-10y:{start}:{end}", load)
+
+
+def relative_model_history(end: date | None = None) -> dict[str, list[dict]]:
+    """Descarga los cuatro insumos congelados del modelo relativo.
+
+    Esta función se usa para la calibración reproducible, no en cada consulta
+    del visor. Las fuentes son los productores declarados en el catálogo.
+    """
+    end = end or date.today()
+    boe_end = end.strftime("%d/%b/%Y")
+    return {
+        "DGS10": [
+            point for point in _treasury("daily_treasury_yield_curve").get("10 YR", [])
+            if point["date"] <= end.isoformat()
+        ],
+        "IRLTLT01JPM156N": [point for point in _japan_10y() if point["date"] <= end.isoformat()],
+        "IRLTLT01DEM156N": germany_10y_history("2003-01-01", end.isoformat()),
+        "IRLTLT01GBM156N": uk_10y_history("01/Jan/2003", boe_end),
+    }
 
 
 def _norway_10y() -> list[dict]:
@@ -744,7 +796,7 @@ def _capex(series_id: str) -> list[dict]:
     return _capex_package().get(series_id, [])
 
 
-NOMINAL_MAP = {"DGS3MO": "3 Mo", "DGS2": "2 Yr", "DGS10": "10 Yr", "DGS30": "30 Yr"}
+NOMINAL_MAP = {"DGS3MO": "3 MO", "DGS2": "2 YR", "DGS10": "10 YR", "DGS30": "30 YR"}
 H10_RATES_MAP = {
     "DEXUSEU": "RXI$US_N.B.EU",
     "DEXNOUS": "RXI_N.B.NO",

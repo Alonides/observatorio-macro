@@ -59,6 +59,22 @@ def validate_methodology(payload: dict) -> None:
     _validate_parameter("global_duration.minimum_markets_rising", event["global_duration"]["minimum_markets_rising"])
     _validate_parameter("global_duration.minimum_rise_pp", event["global_duration"]["minimum_rise_pp"])
     _validate_parameter("us_specific.transition_excess_change_pp_min", event["us_specific"]["transition_excess_change_pp_min"])
+    target = event["us_specific"]["target_model"]
+    if target.get("status") == "calibrated_candidate":
+        result = target.get("calibration_result") or {}
+        required_result = {
+            "observations", "intercept_pp", "betas", "r_squared", "rmse_pp",
+            "h0_p90_pp", "h1_p95_pp",
+        }
+        missing = sorted(required_result - set(result))
+        if missing:
+            raise MethodologyError(f"us_specific.target_model: faltan resultados: {', '.join(missing)}")
+        if set(result["betas"]) != set(target["regression"]["predictors"]):
+            raise MethodologyError("us_specific.target_model: los coeficientes no coinciden con la cesta congelada")
+        if float(result["h1_p95_pp"]) <= float(result["h0_p90_pp"]):
+            raise MethodologyError("us_specific.target_model: p95 debe ser mayor que p90")
+        if target.get("artifact_sha256") is None:
+            raise MethodologyError("us_specific.target_model: falta la huella del artefacto")
     if payload["governance"].get("event_and_state_must_remain_separate") is not True:
         raise MethodologyError("methodology.yml: los motores de acto y estado deben permanecer separados")
 

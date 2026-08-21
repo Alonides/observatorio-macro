@@ -121,7 +121,7 @@ event_engine:
       rationale: Mide direccion; la magnitud relativa se adjudica mediante el residuo estadounidense.
 
   us_specific:
-    model: equal_weight_peer_residual_transition
+    model: ols_monthly_relative_residual_v02
     peer_series: [IRLTLT01JPM156N, IRLTLT01DEM156N, IRLTLT01GBM156N]
     transition_excess_change_pp_min:
       value: 0.35
@@ -130,14 +130,14 @@ event_engine:
       frozen_on: 2026-08-21
       calibration_start: null
       calibration_end: 2026-08-20
-      status: transitional
+      status: retired
       rationale: >-
-        Regla provisional heredada de v0.1. Debe ser sustituida por percentiles
-        p90 y p95 de un residuo estimado sobre 2003-2024 antes de hacer efectiva
-        la version 0.2.0.
+        Regla provisional heredada de v0.1, conservada solo como cicatriz de
+        auditoria. Desde el 22 de agosto de 2026 no interviene en el resultado.
     target_model:
       type: ols_monthly_change
       specification_frozen_on: 2026-08-22
+      preregistration_commit: 3a03a35d9e89b7047e7c31addf5f78417896c312
       calibration_start: 2003-01-01
       calibration_end: 2024-12-31
       out_of_sample_start: 2025-01-01
@@ -160,7 +160,26 @@ event_engine:
       h1_persistence_months: 2
       sensitivity_horizons_months: [2, 4]
       artifact: data/calibration/us_relative_v02.json
-      status: specification_frozen_pre_estimation
+      artifact_sha256: 41acfe0c60eeb73e3a4e7944e54492c32b372f2af26b13d0d2fef5e391a90c36
+      status: calibrated_candidate
+      estimated_on: 2026-08-22
+      calibration_result:
+        observations: 263
+        intercept_pp: 0.004184739228
+        betas:
+          IRLTLT01JPM156N: 0.327697699029
+          IRLTLT01DEM156N: 0.445419000888
+          IRLTLT01GBM156N: 0.500077472509
+        r_squared: 0.685088436504
+        rmse_pp: 0.145117150899
+        h0_p90_pp: 0.255450704639
+        h1_p95_pp: 0.358694243008
+        calibration_p90_observations: 27
+        calibration_p95_observations: 14
+        calibration_persistent_p95_observations: 6
+        out_of_sample_end: 2026-07
+        out_of_sample_p90_observations: 0
+        out_of_sample_p95_observations: 0
 
   risk_context:
     status: transitional

@@ -27,7 +27,12 @@ class OfficialSourceParserTests(unittest.TestCase):
     def test_treasury_csv(self):
         text = 'Date,"2 Yr","10 Yr"\n08/20/2026,4.19,4.69\n'
         parsed = parse_treasury_csv(text)
-        self.assertEqual(parsed["10 Yr"], [{"date": "2026-08-20", "value": 4.69}])
+        self.assertEqual(parsed["10 YR"], [{"date": "2026-08-20", "value": 4.69}])
+
+    def test_treasury_archive_header_is_case_insensitive(self):
+        text = 'date,2 yr,10 yr\n08/20/2003,2.10,4.20\n'
+        parsed = parse_treasury_csv(text)
+        self.assertEqual(parsed["10 YR"], [{"date": "2003-08-20", "value": 4.2}])
 
     def test_fed_ddp_csv_skips_metadata(self):
         text = '\n'.join([

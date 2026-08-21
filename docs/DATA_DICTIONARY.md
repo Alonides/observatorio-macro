@@ -17,6 +17,12 @@
 
 El catálogo contiene 40 series recogidas y 8 derivadas. La suma del capex es descriptiva: la base contable varía según la guía de cada compañía y no equivale íntegramente a IA. La competencia financiera por el mismo libro de duración —emisión corporativa larga y soberana europea— sigue pendiente de una fuente diaria o mensual reproducible.
 
+## Artefacto del modelo relativo
+
+`data/calibration/us_relative_v02.json` conserva 283 cierres mensuales completos de Estados Unidos, Japón, Alemania y Reino Unido, sus fechas de observación, la huella SHA-256 de los insumos, coeficientes, umbrales, activaciones y resultados fuera de muestra. No es una serie adicional del panel ni se reestima a diario. `methodology.yml` fija su propia huella SHA-256 para impedir que un artefacto distinto se cargue bajo el mismo nombre.
+
+Los rendimientos se comparan en moneda local porque el objeto es el cambio del tipo de descuento soberano doméstico. No representan la rentabilidad cubierta en dólares de un inversor internacional.
+
 ## Derivados en oro
 
 | ID | Fórmula | Unidad |

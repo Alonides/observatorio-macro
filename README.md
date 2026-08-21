@@ -22,6 +22,8 @@ Panel automatizado y auditable para vigilar el precio del privilegio del dólar,
 
 La ausencia de H1 no demuestra H0. La señal triple —dólar a la baja, TIPS real al alza y breakeven al alza— es una alarma de investigación, no un veredicto. Bolsa, OAS y rendimiento corporativo ayudan a distinguir reflación, estrés sistémico y posible migración hacia capacidad privada, pero una regla simple de «bolsa abajo» no bloquea H1.
 
+La especificidad estadounidense ya no se calcula como una resta simple. Un OLS mensual pre-registrado compara el Treasury a diez años con Japón, Alemania y Reino Unido: 2003–2024 estima los coeficientes y 2025–presente queda fuera de muestra. H0 exige un residuo acumulado de tres meses sobre p90; la especificidad fuerte de H1 exige p95 durante dos cierres consecutivos. El informe completo está en [calibración relativa v0.2](docs/CALIBRATION_REPORT_V02.md).
+
 ## Gobernanza metodológica
 
 [`methodology.yml`](methodology.yml) es la fuente única de parámetros, definiciones operativas, periodos de calibración y fechas de congelación. Cada JSON publica su versión y SHA-256 canónico. El ensayo fija la semántica; la especificación y el código determinista fijan el resultado. Si discrepan, el panel declara el conflicto: la prosa no corrige manualmente la salida.
@@ -45,6 +47,14 @@ Para comprobar conectividad sin modificar los JSON:
 ```bash
 python scripts/source_smoke.py --all
 ```
+
+La calibración quedó congelada y su artefacto está versionado en `data/calibration/us_relative_v02.json`; el robot diario lo aplica, pero no lo reestima.
+
+```bash
+python scripts/verify_calibration.py
+```
+
+La verificación es offline: reconstruye el OLS, los residuos y los percentiles desde los cierres mensuales guardados y comprueba la huella fijada en `methodology.yml`.
 
 ## Automatización y fuentes
 

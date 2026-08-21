@@ -21,6 +21,19 @@ ROOT = Path(__file__).resolve().parents[2]
 DATA_DIR = ROOT / "data"
 METHODOLOGY = load_methodology()
 
+# El panel diario conserva una ventana compacta por defecto. Estas series
+# necesitan historia desde 2003 para el percentil estructural del TIPS y para
+# reconstruir el breakeven sin depender de un proveedor opaco.
+HISTORY_LIMITS = {
+    "DGS10": 7_000,
+    "DFII10": 7_000,
+    "T10YIE": 7_000,
+}
+
+
+def _history_limit(series_id: str, default: int) -> int:
+    return int(HISTORY_LIMITS.get(series_id, default))
+
 
 def _load_json(path: Path, default):
     if not path.exists():
@@ -97,14 +110,14 @@ def collect(fetcher=fetch_series, now: datetime | None = None, max_points: int =
                 received = _not_after(future.result(), today)
                 points = [{**point, "retrieved_at": now.isoformat()} for point in received]
                 prior = _not_after(previous.get(spec.id, []), today)
-                collected[spec.id] = _merge_points(prior, points, max_points)
+                collected[spec.id] = _merge_points(prior, points, _history_limit(spec.id, max_points))
                 print(
                     f"OK {spec.id}: {len(received)} nuevas/recibidas; "
                     f"{len(collected[spec.id])} conservadas",
                     flush=True,
                 )
             except Exception as exc:  # aislamiento deliberado por fuente/serie
-                fallback = _not_after(previous.get(spec.id, []), today)[-max_points:]
+                fallback = _not_after(previous.get(spec.id, []), today)[-_history_limit(spec.id, max_points):]
                 if fallback:
                     collected[spec.id] = fallback
                 errors.append({"series_id": spec.id, "error": str(exc), "fallback_used": bool(fallback)})
@@ -118,7 +131,9 @@ def collect(fetcher=fetch_series, now: datetime | None = None, max_points: int =
             {**point, "retrieved_at": now.isoformat()}
             for point in derived.get(spec.id, [])
         ]
-        collected[spec.id] = _merge_points(previous.get(spec.id, []), incoming, max_points)
+        collected[spec.id] = _merge_points(
+            previous.get(spec.id, []), incoming, _history_limit(spec.id, max_points)
+        )
 
     snapshots = []
     for spec in ALL_SERIES:
@@ -164,7 +179,7 @@ def collect(fetcher=fetch_series, now: datetime | None = None, max_points: int =
         "series_total": len(ALL_SERIES),
         "errors": errors,
         "derived": derived_metrics(collected),
-        "regime": evaluate(collected),
+        "regime": evaluate(collected, as_of=today),
         "structural_state": evaluate_state(collected),
         "series": snapshots,
     }

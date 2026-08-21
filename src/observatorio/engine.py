@@ -11,6 +11,7 @@ from dataclasses import asdict, dataclass
 from datetime import date, timedelta
 from statistics import median
 
+from .calibration import live_relative_score
 from .methodology import load_methodology, manifest, parameter_value
 
 
@@ -70,7 +71,8 @@ def _context_windows(series: dict[str, list[dict]]) -> dict[str, dict]:
     return output
 
 
-def evaluate(series: dict[str, list[dict]]) -> dict:
+def evaluate(series: dict[str, list[dict]], as_of: date | None = None) -> dict:
+    as_of = as_of or date.today()
     global_method = EVENT_METHOD["global_duration"]
     us_method = EVENT_METHOD["us_specific"]
 
@@ -79,7 +81,6 @@ def evaluate(series: dict[str, list[dict]]) -> dict:
     breakeven_limit = parameter_value(METHODOLOGY, "triple_alert", "breakeven_10y_change_pp_min")
     repo_limit = parameter_value(METHODOLOGY, "confirmations", "sofr_iorb_spread_pp_min")
     vix_limit = parameter_value(METHODOLOGY, "confirmations", "vix_stress_min")
-    us_excess_limit = float(us_method["transition_excess_change_pp_min"]["value"])
 
     dollar_change = _change(series.get("DTWEXBGS", []), percent=True)
     real_change = _change(series.get("DFII10", []))
@@ -148,7 +149,7 @@ def evaluate(series: dict[str, list[dict]]) -> dict:
         if market_changes.get(series_id) is not None
     ]
     peer_median = median(peer_changes) if peer_changes else None
-    excess = None if us_change is None or peer_median is None else us_change - peer_median
+    relative = live_relative_score(series, us_method["target_model"], as_of)
 
     rise_floor = float(global_method["minimum_rise_pp"]["value"])
     minimum_markets = int(global_method["minimum_markets_rising"]["value"])
@@ -167,10 +168,15 @@ def evaluate(series: dict[str, list[dict]]) -> dict:
     us_specific = _signal(
         "us_specific",
         "Prima estadounidense relativa",
-        excess,
-        lambda value: value >= us_excess_limit,
-        f"EE. UU.-pares ≥ +{us_excess_limit * 100:g} pb en {WINDOW_DAYS} dias · transicion",
-        "Regla provisional hasta sustituirla por el residuo p90/p95 calibrado sobre 2003-2024.",
+        relative.get("score_pp") if relative.get("available") else None,
+        lambda value: bool(relative.get("h0_specific")),
+        (
+            f"residuo 3m ≥ p90 (+{float(us_method['target_model']['calibration_result']['h0_p90_pp']) * 100:.1f} pb)"
+        ),
+        (
+            "OLS mensual congelado sobre 2003-2024. H1 exige además p95 en dos cierres "
+            "consecutivos; las ventanas alternativas no compiten por el resultado."
+        ),
     )
 
     triple_active = sum(signal.active is True for signal in triple)
@@ -187,8 +193,9 @@ def evaluate(series: dict[str, list[dict]]) -> dict:
 
     # Cada hipotesis exige evidencia positiva. H0 no aparece por simple descarte
     # de H1. La triple coincidencia es una alarma, nunca una sentencia.
-    h1 = triple_active == 3 and us_specific.active is True and confirmation_active
-    h2 = global_signal.active is True and us_specific.active is not True
+    h1_specific = bool(relative.get("h1_specific_persistent")) if relative.get("available") else False
+    h1 = triple_active == 3 and h1_specific and confirmation_active
+    h2 = global_signal.active is True and us_specific.active is False
     mixed = global_signal.active is True and h1
     h0 = us_specific.active is True and global_signal.active is not True and triple_active < 3
 
@@ -241,14 +248,15 @@ def evaluate(series: dict[str, list[dict]]) -> dict:
             "market_changes_pp": market_changes,
             "peer_median_change_pp": peer_median,
             "us_change_pp": us_change,
-            "us_excess_change_pp": excess,
-            "us_specific_rule_status": us_method["transition_excess_change_pp_min"].get("status"),
+            "us_relative_model": relative,
+            "us_specific_rule_status": us_method["target_model"].get("status"),
         },
         "context_windows": _context_windows(series),
         "methodology": manifest(METHODOLOGY),
         "method_note": (
             "La señal triple abre investigacion y nunca decide H1 por si sola. "
-            "H0 requiere evidencia estadounidense positiva; H2 exige sincronismo global. "
+            "H0 requiere un residuo estadounidense ≥p90; H1 exige ≥p95 persistente; "
+            "H2 exige sincronismo global y residuo por debajo de p90. "
             "Las ventanas de seis y doce meses son contexto, no rutas alternativas de activacion."
         ),
     }

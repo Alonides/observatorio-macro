@@ -65,7 +65,11 @@ def evaluate_state(series: dict[str, list[dict]]) -> dict:
             sample_start=real_start,
             sample_end=None if real_latest is None else real_latest["date"],
             coverage_status=real_coverage,
-            note="El percentil no se considera historico completo hasta cubrir 2003-presente.",
+            note=(
+                "Percentil calculado sobre la historia oficial disponible desde 2003."
+                if real_coverage == "full_since_2003"
+                else "El percentil es provisional hasta cubrir 2003-presente."
+            ),
         ),
         _dimension(
             "debt_held_by_public_to_gdp",

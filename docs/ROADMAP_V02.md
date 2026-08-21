@@ -23,14 +23,15 @@ Estado al 21 de agosto de 2026. Las fases se ordenan por dependencia metodológi
 - Crear un motor estructural independiente y sin puntuación agregada.
 - Incorporar TIPS real, deuda/PIB e intereses/PIB.
 - Añadir ocho series derivadas en oro y un panel específico.
-- Pendiente: ampliar TIPS hasta 2003 y cargar cuota de letras, TIC oficial y COFER.
+- TIPS y Treasury a diez años se amplían hasta 2003 mediante archivos oficiales.
+- Pendiente: cargar cuota de letras, TIC oficial y COFER.
 
-## Fase 3 — calibración antes de producción · pendiente
+## Fase 3 — calibración antes de producción · completada como candidata
 
-- Sustituir la regla provisional EE. UU.-mediana por un modelo relativo contra pares.
-- Congelar especificación, cesta, frecuencia y tratamiento de divisa antes de estimar.
-- Estimar sobre 2003–2024; reservar 2025–presente fuera de muestra.
-- Publicar p90/p95, sensibilidad a ventanas y número de activaciones históricas.
+- Sustituida la regla provisional EE. UU.-mediana por un OLS relativo contra pares.
+- Especificación, cesta, frecuencia y tratamiento de divisa congelados antes de estimar.
+- Estimado sobre 2003–2024; 2025–presente permanece fuera de muestra.
+- Publicados p90/p95, sensibilidad a dos y cuatro meses y activaciones históricas.
 - Mantener 1971–2002 como laboratorio de proxies separado.
 
 ## Fase 4 — microestructura y duración rival · pendiente

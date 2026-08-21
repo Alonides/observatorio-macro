@@ -30,7 +30,7 @@ Ambas se publican en JSON y el visor solo representa esos resultados. Las ventan
 
 La triple señal detectó dos episodios de reflación en la calibración disponible —junio de 2009 y febrero de 2011—. Por ello abre investigación y no pretende distinguir por sí sola reflación de pérdida institucional. El contexto de riesgo usa S&P 500, OAS investment-grade y rendimiento corporativo absoluto; el OAS no se interpreta aisladamente porque el Treasury forma parte de su denominador.
 
-La especificidad estadounidense usa provisionalmente una diferencia contra la mediana de Japón, Alemania y Reino Unido. Antes de hacer efectiva v0.2 debe sustituirse por un residuo calibrado, con percentiles p90/p95 y prueba fuera de muestra.
+La especificidad estadounidense se estima mediante un OLS mensual congelado antes de observar el resultado: variaciones del Treasury a diez años contra Japón, Alemania y Reino Unido, todos en rendimientos de moneda local. La muestra 2003–2024 produce un R² de 0,685. El clasificador suma tres residuos mensuales: p90 (+25,5 pb) aporta evidencia positiva a H0 y p95 (+35,9 pb) durante dos cierres consecutivos aporta la especificidad fuerte que H1 necesita, sin sustituir la señal triple ni la confirmación. Entre enero de 2025 y julio de 2026 no hubo activaciones p90. Dos y cuatro meses se publican como sensibilidad y nunca compiten por el máximo. Véanse la [especificación previa](CALIBRATION_SPEC_V02.md) y el [informe](CALIBRATION_REPORT_V02.md).
 
 ## Motor de estado
 
@@ -54,4 +54,4 @@ No existe `aggregate_score`. Evento y estado responden preguntas distintas: rupt
 
 ## Capas históricas
 
-La calibración objetivo del motor vivo comienza en 2003, cuando existen TIPS. El histórico retenido todavía es parcial hasta completar el *backfill*. La investigación 1971–2002, que requerirá expectativas de encuesta como proxy, se mantendrá como laboratorio separado y no se mezclará con el clasificador operativo.
+La calibración del motor vivo comienza en 2003. El Treasury nominal y el TIPS real se reconstruyen desde los archivos oficiales y se conservan hasta 7.000 observaciones; el resto del panel mantiene una ventana compacta. La investigación 1971–2002, que requerirá expectativas de encuesta como proxy, se mantendrá como laboratorio separado y no se mezclará con el clasificador operativo.

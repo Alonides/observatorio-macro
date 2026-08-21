@@ -1,4 +1,5 @@
 import json
+import hashlib
 import sys
 import unittest
 from pathlib import Path
@@ -26,6 +27,17 @@ class MethodologyTests(unittest.TestCase):
     def test_context_windows_cannot_classify(self):
         event = load_methodology()["event_engine"]
         self.assertFalse(event["context_windows_are_classifiers"])
+
+    def test_relative_model_is_calibrated_and_artifact_is_pinned(self):
+        target = load_methodology()["event_engine"]["us_specific"]["target_model"]
+        self.assertEqual(target["status"], "calibrated_candidate")
+        self.assertGreater(
+            float(target["calibration_result"]["h1_p95_pp"]),
+            float(target["calibration_result"]["h0_p90_pp"]),
+        )
+        artifact = Path(__file__).resolve().parents[1] / target["artifact"]
+        self.assertTrue(artifact.exists())
+        self.assertEqual(hashlib.sha256(artifact.read_bytes()).hexdigest(), target["artifact_sha256"])
 
 
 if __name__ == "__main__":
