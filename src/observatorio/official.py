@@ -408,38 +408,34 @@ def parse_dbnomics_json(payload: dict, divisor: float = 1.0) -> list[dict]:
     return _dedupe(points)
 
 
-def parse_sec_annual_capex(payload: dict) -> list[dict]:
-    facts = payload.get("facts", {}).get("us-gaap", {})
-    tags = (
-        "PaymentsToAcquirePropertyPlantAndEquipment",
-        "PaymentsForAdditionsToPropertyPlantAndEquipment",
-        "PaymentsToAcquireProductiveAssets",
-    )
-    units = []
-    for tag in tags:
-        units = facts.get(tag, {}).get("units", {}).get("USD", [])
-        if units:
-            break
-    points = []
-    for row in units:
-        if row.get("form") != "10-K" or row.get("fp") != "FY":
-            continue
-        start = _iso_day(row.get("start") or "")
-        end = _iso_day(row.get("end") or "")
-        value = _numeric(row.get("val"))
-        if not start or not end or value is None:
-            continue
-        duration = (date.fromisoformat(end) - date.fromisoformat(start)).days
-        if 300 <= duration <= 400:
-            points.append({"date": end, "value": value / 1_000_000_000, "filed": row.get("filed") or ""})
-    latest_filing: dict[str, dict] = {}
-    for point in points:
-        if point["date"] not in latest_filing or point["filed"] > latest_filing[point["date"]]["filed"]:
-            latest_filing[point["date"]] = point
-    return [
-        {"date": point["date"], "value": point["value"]}
-        for point in sorted(latest_filing.values(), key=lambda item: item["date"])
-    ]
+CAPEX_COMPANY_IDS = {
+    "microsoft": "CAPEX_MSFT",
+    "alphabet": "CAPEX_GOOG",
+    "amazon": "CAPEX_AMZN",
+    "meta": "CAPEX_META",
+    "oracle": "CAPEX_ORCL",
+}
+
+
+def parse_capex_tracker_csv(text: str) -> dict[str, list[dict]]:
+    """Lee el dataset CC BY y conserva el valor sobre la base declarada.
+
+    ``headline_usd`` no se fuerza a una definición contable común: el dataset
+    elige la magnitud que cada compañía utiliza en su guía y documenta la base
+    y las fuentes primarias en cada fila. El panel lo presenta como una cesta
+    descriptiva, no como una suma contable homogénea.
+    """
+    lines = [line for line in text.splitlines() if line.strip() and not line.startswith("#")]
+    if not lines:
+        raise SourceError("Hyperscaler Capex Tracker: CSV vacío")
+    output: dict[str, list[dict]] = {series_id: [] for series_id in CAPEX_COMPANY_IDS.values()}
+    for row in csv.DictReader(io.StringIO("\n".join(lines))):
+        series_id = CAPEX_COMPANY_IDS.get(str(row.get("company") or "").strip().lower())
+        day = _iso_day(row.get("period_end") or "")
+        value = _numeric(row.get("headline_usd"))
+        if series_id and day and value is not None:
+            output[series_id].append({"date": day, "value": value / 1_000_000_000})
+    return {series_id: _dedupe(points) for series_id, points in output.items()}
 
 
 def _treasury(kind: str) -> dict[str, list[dict]]:
@@ -685,39 +681,14 @@ def _bea(table: str, series_code: str) -> list[dict]:
     )
 
 
-CAPEX_CIK = {
-    "CAPEX_MSFT": "0000789019",
-    "CAPEX_GOOG": "0001652044",
-    "CAPEX_AMZN": "0001018724",
-    "CAPEX_META": "0001326801",
-    "CAPEX_ORCL": "0001341439",
-}
-
-_SEC_LOCK = Lock()
-_SEC_LAST_REQUEST = 0.0
+def _capex_package() -> dict[str, list[dict]]:
+    def load():
+        return parse_capex_tracker_csv(_text("https://www.regardsofwallstreet.com/data/capex.csv"))
+    return _memo("capex:hyperscaler-tracker", load)
 
 
 def _capex(series_id: str) -> list[dict]:
-    cik = CAPEX_CIK[series_id]
-    def load():
-        global _SEC_LAST_REQUEST
-        with _SEC_LOCK:
-            wait = 0.35 - (time.monotonic() - _SEC_LAST_REQUEST)
-            if wait > 0:
-                time.sleep(wait)
-            try:
-                payload = _json(
-                    f"https://data.sec.gov/api/xbrl/companyfacts/CIK{cik}.json",
-                    headers={
-                        "User-Agent": "Alonides ObservatorioMacro/0.3 alonides@users.noreply.github.com",
-                        "Accept": "application/json",
-                        "From": "alonides@users.noreply.github.com",
-                    },
-                )
-            finally:
-                _SEC_LAST_REQUEST = time.monotonic()
-        return parse_sec_annual_capex(payload)
-    return _memo(f"sec:capex:{cik}", load)
+    return _capex_package().get(series_id, [])
 
 
 NOMINAL_MAP = {"DGS3MO": "3 Mo", "DGS2": "2 Yr", "DGS10": "10 Yr", "DGS30": "30 Yr"}
@@ -780,7 +751,7 @@ def fetch_series(series_id: str) -> list[dict]:
         points = _bea("T10105", "A191RC-Q")
     elif series_id == "A091RC1Q027SBEA":
         points = _bea("T30200", "A091RC-Q")
-    elif series_id in CAPEX_CIK:
+    elif series_id in CAPEX_COMPANY_IDS.values():
         points = _capex(series_id)
     else:
         raise SourceError(f"{series_id}: fuente no incorporada")
