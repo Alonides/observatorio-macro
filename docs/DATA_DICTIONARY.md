@@ -10,7 +10,7 @@
 | Duración global | Japón, Alemania, Reino Unido, Noruega, eurozona | Diferenciar EE. UU. de un choque mundial |
 | Fiscal | deuda federal, intereses, PIB nominal | Capacidad y denominador |
 | Economía real | IPC y desempleo | Condiciones de contorno |
-| Capacidad productiva | capex FY de Microsoft, Alphabet, Amazon, Meta y Oracle | Competencia privada por capital; no se equipara íntegramente a IA |
+| Capacidad productiva | capex trimestral de Microsoft, Alphabet, Amazon, Meta y Oracle | Competencia privada por capital; la base varía según la guía de cada compañía y no se equipara íntegramente a IA |
 
 `quality` puede ser `ok`, `warning`, `stale` o `missing`. La antigüedad admisible depende de la frecuencia declarada de cada serie.
 
