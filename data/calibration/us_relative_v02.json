@@ -1,0 +1,5178 @@
+{
+  "schema_version": 1,
+  "model_id": "US_RELATIVE_DURATION_V02",
+  "status": "calibrated_candidate",
+  "generated_at": "2026-08-21T23:06:42.574230+00:00",
+  "as_of": "2026-08-22",
+  "last_closed_month": "2026-07",
+  "preregistration": {
+    "frozen_on": "2026-08-22",
+    "git_commit": "3a03a35d9e89b7047e7c31addf5f78417896c312",
+    "methodology_sha256": "12d79a555b387410183079a82fe35057469899994b78b49098b50495c1608766"
+  },
+  "sample": {
+    "calibration_start": "2003-01-01",
+    "calibration_end": "2024-12-31",
+    "out_of_sample_start": "2025-01-01",
+    "complete_month_end_rows": 283,
+    "first_month": "2003-01",
+    "last_month": "2026-07",
+    "input_sha256": "fa4b947f6fc191bbb623ef5c14adf879edbb30f93bd28d8df8e84f08468ac953"
+  },
+  "specification": {
+    "dependent": "DGS10",
+    "predictors": [
+      "IRLTLT01JPM156N",
+      "IRLTLT01DEM156N",
+      "IRLTLT01GBM156N"
+    ],
+    "frequency": "month_end",
+    "observation_rule": "last_available_in_closed_calendar_month",
+    "currency_treatment": "local_currency_yield_changes",
+    "missing_data": "complete_cases_no_imputation",
+    "estimator": "ordinary_least_squares",
+    "intercept": true,
+    "quantile_method": "nearest_rank",
+    "primary_horizon_months": 3,
+    "selection_across_windows": "prohibited"
+  },
+  "fit": {
+    "observations": 263,
+    "intercept_pp": 0.004184739228,
+    "betas": {
+      "IRLTLT01JPM156N": 0.327697699029,
+      "IRLTLT01DEM156N": 0.445419000888,
+      "IRLTLT01GBM156N": 0.500077472509
+    },
+    "r_squared": 0.685088436504,
+    "rmse_pp": 0.145117150899
+  },
+  "operational_thresholds": {
+    "h0_p90_pp": 0.255450704639,
+    "h1_p95_pp": 0.358694243008,
+    "h1_persistence_months": 2
+  },
+  "horizons": {
+    "2": {
+      "calibration_observations": 262,
+      "p90_pp": 0.246852621295,
+      "p95_pp": 0.29706539584,
+      "calibration_activations": {
+        "p90_observation_count": 27,
+        "p90_months": [
+          "2003-07",
+          "2003-08",
+          "2004-04",
+          "2004-05",
+          "2004-11",
+          "2004-12",
+          "2005-03",
+          "2005-07",
+          "2005-10",
+          "2008-08",
+          "2008-09",
+          "2008-10",
+          "2009-02",
+          "2009-03",
+          "2009-06",
+          "2012-03",
+          "2016-11",
+          "2016-12",
+          "2018-10",
+          "2020-10",
+          "2021-03",
+          "2022-04",
+          "2022-10",
+          "2022-11",
+          "2023-09",
+          "2023-10",
+          "2024-04"
+        ],
+        "p90_episodes": [
+          {
+            "start": "2003-07",
+            "end": "2003-08",
+            "months": 2
+          },
+          {
+            "start": "2004-04",
+            "end": "2004-05",
+            "months": 2
+          },
+          {
+            "start": "2004-11",
+            "end": "2004-12",
+            "months": 2
+          },
+          {
+            "start": "2005-03",
+            "end": "2005-03",
+            "months": 1
+          },
+          {
+            "start": "2005-07",
+            "end": "2005-07",
+            "months": 1
+          },
+          {
+            "start": "2005-10",
+            "end": "2005-10",
+            "months": 1
+          },
+          {
+            "start": "2008-08",
+            "end": "2008-10",
+            "months": 3
+          },
+          {
+            "start": "2009-02",
+            "end": "2009-03",
+            "months": 2
+          },
+          {
+            "start": "2009-06",
+            "end": "2009-06",
+            "months": 1
+          },
+          {
+            "start": "2012-03",
+            "end": "2012-03",
+            "months": 1
+          },
+          {
+            "start": "2016-11",
+            "end": "2016-12",
+            "months": 2
+          },
+          {
+            "start": "2018-10",
+            "end": "2018-10",
+            "months": 1
+          },
+          {
+            "start": "2020-10",
+            "end": "2020-10",
+            "months": 1
+          },
+          {
+            "start": "2021-03",
+            "end": "2021-03",
+            "months": 1
+          },
+          {
+            "start": "2022-04",
+            "end": "2022-04",
+            "months": 1
+          },
+          {
+            "start": "2022-10",
+            "end": "2022-11",
+            "months": 2
+          },
+          {
+            "start": "2023-09",
+            "end": "2023-10",
+            "months": 2
+          },
+          {
+            "start": "2024-04",
+            "end": "2024-04",
+            "months": 1
+          }
+        ],
+        "p95_observation_count": 14,
+        "p95_months": [
+          "2003-07",
+          "2003-08",
+          "2004-05",
+          "2004-11",
+          "2004-12",
+          "2008-08",
+          "2009-02",
+          "2009-03",
+          "2016-12",
+          "2020-10",
+          "2022-04",
+          "2022-11",
+          "2023-09",
+          "2023-10"
+        ],
+        "p95_episodes": [
+          {
+            "start": "2003-07",
+            "end": "2003-08",
+            "months": 2
+          },
+          {
+            "start": "2004-05",
+            "end": "2004-05",
+            "months": 1
+          },
+          {
+            "start": "2004-11",
+            "end": "2004-12",
+            "months": 2
+          },
+          {
+            "start": "2008-08",
+            "end": "2008-08",
+            "months": 1
+          },
+          {
+            "start": "2009-02",
+            "end": "2009-03",
+            "months": 2
+          },
+          {
+            "start": "2016-12",
+            "end": "2016-12",
+            "months": 1
+          },
+          {
+            "start": "2020-10",
+            "end": "2020-10",
+            "months": 1
+          },
+          {
+            "start": "2022-04",
+            "end": "2022-04",
+            "months": 1
+          },
+          {
+            "start": "2022-11",
+            "end": "2022-11",
+            "months": 1
+          },
+          {
+            "start": "2023-09",
+            "end": "2023-10",
+            "months": 2
+          }
+        ],
+        "persistent_p95_count": 4,
+        "persistent_p95_months": [
+          "2003-08",
+          "2004-12",
+          "2009-03",
+          "2023-10"
+        ]
+      },
+      "out_of_sample": {
+        "start": "2025-01",
+        "end": "2026-07",
+        "observations": 19,
+        "activations": {
+          "p90_observation_count": 1,
+          "p90_months": [
+            "2025-05"
+          ],
+          "p90_episodes": [
+            {
+              "start": "2025-05",
+              "end": "2025-05",
+              "months": 1
+            }
+          ],
+          "p95_observation_count": 0,
+          "p95_months": [],
+          "p95_episodes": [],
+          "persistent_p95_count": 0,
+          "persistent_p95_months": []
+        },
+        "scores": [
+          {
+            "month": "2025-01",
+            "residual_sum_pp": 0.036453669311
+          },
+          {
+            "month": "2025-02",
+            "residual_sum_pp": -0.422959264802
+          },
+          {
+            "month": "2025-03",
+            "residual_sum_pp": -0.605760095794
+          },
+          {
+            "month": "2025-04",
+            "residual_sum_pp": -0.051666288535
+          },
+          {
+            "month": "2025-05",
+            "residual_sum_pp": 0.267170736544
+          },
+          {
+            "month": "2025-06",
+            "residual_sum_pp": -0.052078488899
+          },
+          {
+            "month": "2025-07",
+            "residual_sum_pp": -0.126371086126
+          },
+          {
+            "month": "2025-08",
+            "residual_sum_pp": -0.267078194856
+          },
+          {
+            "month": "2025-09",
+            "residual_sum_pp": -0.31783952235
+          },
+          {
+            "month": "2025-10",
+            "residual_sum_pp": 0.034354355504
+          },
+          {
+            "month": "2025-11",
+            "residual_sum_pp": -0.078298662857
+          },
+          {
+            "month": "2025-12",
+            "residual_sum_pp": -0.183179088776
+          },
+          {
+            "month": "2026-01",
+            "residual_sum_pp": -0.006038713114
+          },
+          {
+            "month": "2026-02",
+            "residual_sum_pp": -0.082267091453
+          },
+          {
+            "month": "2026-03",
+            "residual_sum_pp": -0.259317536607
+          },
+          {
+            "month": "2026-04",
+            "residual_sum_pp": -0.226343871204
+          },
+          {
+            "month": "2026-05",
+            "residual_sum_pp": 0.124660635097
+          },
+          {
+            "month": "2026-06",
+            "residual_sum_pp": 0.205652001681
+          },
+          {
+            "month": "2026-07",
+            "residual_sum_pp": 0.026034717812
+          }
+        ]
+      }
+    },
+    "3": {
+      "calibration_observations": 261,
+      "p90_pp": 0.255450704639,
+      "p95_pp": 0.358694243008,
+      "calibration_activations": {
+        "p90_observation_count": 27,
+        "p90_months": [
+          "2003-07",
+          "2003-08",
+          "2004-06",
+          "2004-11",
+          "2004-12",
+          "2005-01",
+          "2005-11",
+          "2008-09",
+          "2008-10",
+          "2009-02",
+          "2009-03",
+          "2009-04",
+          "2009-06",
+          "2014-09",
+          "2016-11",
+          "2016-12",
+          "2017-01",
+          "2018-04",
+          "2020-10",
+          "2021-03",
+          "2022-04",
+          "2022-05",
+          "2023-09",
+          "2023-10",
+          "2023-11",
+          "2024-04",
+          "2024-12"
+        ],
+        "p90_episodes": [
+          {
+            "start": "2003-07",
+            "end": "2003-08",
+            "months": 2
+          },
+          {
+            "start": "2004-06",
+            "end": "2004-06",
+            "months": 1
+          },
+          {
+            "start": "2004-11",
+            "end": "2005-01",
+            "months": 3
+          },
+          {
+            "start": "2005-11",
+            "end": "2005-11",
+            "months": 1
+          },
+          {
+            "start": "2008-09",
+            "end": "2008-10",
+            "months": 2
+          },
+          {
+            "start": "2009-02",
+            "end": "2009-04",
+            "months": 3
+          },
+          {
+            "start": "2009-06",
+            "end": "2009-06",
+            "months": 1
+          },
+          {
+            "start": "2014-09",
+            "end": "2014-09",
+            "months": 1
+          },
+          {
+            "start": "2016-11",
+            "end": "2017-01",
+            "months": 3
+          },
+          {
+            "start": "2018-04",
+            "end": "2018-04",
+            "months": 1
+          },
+          {
+            "start": "2020-10",
+            "end": "2020-10",
+            "months": 1
+          },
+          {
+            "start": "2021-03",
+            "end": "2021-03",
+            "months": 1
+          },
+          {
+            "start": "2022-04",
+            "end": "2022-05",
+            "months": 2
+          },
+          {
+            "start": "2023-09",
+            "end": "2023-11",
+            "months": 3
+          },
+          {
+            "start": "2024-04",
+            "end": "2024-04",
+            "months": 1
+          },
+          {
+            "start": "2024-12",
+            "end": "2024-12",
+            "months": 1
+          }
+        ],
+        "p95_observation_count": 14,
+        "p95_months": [
+          "2003-07",
+          "2004-11",
+          "2004-12",
+          "2005-01",
+          "2008-09",
+          "2008-10",
+          "2009-03",
+          "2009-04",
+          "2009-06",
+          "2016-12",
+          "2022-04",
+          "2023-09",
+          "2023-10",
+          "2023-11"
+        ],
+        "p95_episodes": [
+          {
+            "start": "2003-07",
+            "end": "2003-07",
+            "months": 1
+          },
+          {
+            "start": "2004-11",
+            "end": "2005-01",
+            "months": 3
+          },
+          {
+            "start": "2008-09",
+            "end": "2008-10",
+            "months": 2
+          },
+          {
+            "start": "2009-03",
+            "end": "2009-04",
+            "months": 2
+          },
+          {
+            "start": "2009-06",
+            "end": "2009-06",
+            "months": 1
+          },
+          {
+            "start": "2016-12",
+            "end": "2016-12",
+            "months": 1
+          },
+          {
+            "start": "2022-04",
+            "end": "2022-04",
+            "months": 1
+          },
+          {
+            "start": "2023-09",
+            "end": "2023-11",
+            "months": 3
+          }
+        ],
+        "persistent_p95_count": 6,
+        "persistent_p95_months": [
+          "2004-12",
+          "2005-01",
+          "2008-10",
+          "2009-04",
+          "2023-10",
+          "2023-11"
+        ]
+      },
+      "out_of_sample": {
+        "start": "2025-01",
+        "end": "2026-07",
+        "observations": 19,
+        "activations": {
+          "p90_observation_count": 0,
+          "p90_months": [],
+          "p90_episodes": [],
+          "p95_observation_count": 0,
+          "p95_months": [],
+          "p95_episodes": [],
+          "persistent_p95_count": 0,
+          "persistent_p95_months": []
+        },
+        "scores": [
+          {
+            "month": "2025-01",
+            "residual_sum_pp": 0.108466534615
+          },
+          {
+            "month": "2025-02",
+            "residual_sum_pp": -0.301733948491
+          },
+          {
+            "month": "2025-03",
+            "residual_sum_pp": -0.690531742795
+          },
+          {
+            "month": "2025-04",
+            "residual_sum_pp": -0.389853906337
+          },
+          {
+            "month": "2025-05",
+            "residual_sum_pp": -0.000401741448
+          },
+          {
+            "month": "2025-06",
+            "residual_sum_pp": 0.163827700558
+          },
+          {
+            "month": "2025-07",
+            "residual_sum_pp": -0.075106539039
+          },
+          {
+            "month": "2025-08",
+            "residual_sum_pp": -0.370421230842
+          },
+          {
+            "month": "2025-09",
+            "residual_sum_pp": -0.34086757249
+          },
+          {
+            "month": "2025-10",
+            "residual_sum_pp": -0.209695789212
+          },
+          {
+            "month": "2025-11",
+            "residual_sum_pp": -0.152088040491
+          },
+          {
+            "month": "2025-12",
+            "residual_sum_pp": -0.075035355637
+          },
+          {
+            "month": "2026-01",
+            "residual_sum_pp": -0.192481109109
+          },
+          {
+            "month": "2026-02",
+            "residual_sum_pp": -0.079003784233
+          },
+          {
+            "month": "2026-03",
+            "residual_sum_pp": -0.26861955694
+          },
+          {
+            "month": "2026-04",
+            "residual_sum_pp": -0.299308942324
+          },
+          {
+            "month": "2026-05",
+            "residual_sum_pp": -0.06169183039
+          },
+          {
+            "month": "2026-06",
+            "residual_sum_pp": 0.165660595965
+          },
+          {
+            "month": "2026-07",
+            "residual_sum_pp": 0.190686758626
+          }
+        ]
+      }
+    },
+    "4": {
+      "calibration_observations": 260,
+      "p90_pp": 0.319139660577,
+      "p95_pp": 0.409178408302,
+      "calibration_activations": {
+        "p90_observation_count": 27,
+        "p90_months": [
+          "2003-07",
+          "2004-11",
+          "2004-12",
+          "2005-01",
+          "2005-02",
+          "2005-09",
+          "2008-09",
+          "2008-10",
+          "2009-04",
+          "2009-05",
+          "2009-06",
+          "2010-03",
+          "2012-03",
+          "2014-09",
+          "2016-08",
+          "2016-11",
+          "2016-12",
+          "2017-02",
+          "2018-04",
+          "2018-05",
+          "2020-12",
+          "2021-03",
+          "2022-04",
+          "2023-09",
+          "2023-10",
+          "2023-11",
+          "2023-12"
+        ],
+        "p90_episodes": [
+          {
+            "start": "2003-07",
+            "end": "2003-07",
+            "months": 1
+          },
+          {
+            "start": "2004-11",
+            "end": "2005-02",
+            "months": 4
+          },
+          {
+            "start": "2005-09",
+            "end": "2005-09",
+            "months": 1
+          },
+          {
+            "start": "2008-09",
+            "end": "2008-10",
+            "months": 2
+          },
+          {
+            "start": "2009-04",
+            "end": "2009-06",
+            "months": 3
+          },
+          {
+            "start": "2010-03",
+            "end": "2010-03",
+            "months": 1
+          },
+          {
+            "start": "2012-03",
+            "end": "2012-03",
+            "months": 1
+          },
+          {
+            "start": "2014-09",
+            "end": "2014-09",
+            "months": 1
+          },
+          {
+            "start": "2016-08",
+            "end": "2016-08",
+            "months": 1
+          },
+          {
+            "start": "2016-11",
+            "end": "2016-12",
+            "months": 2
+          },
+          {
+            "start": "2017-02",
+            "end": "2017-02",
+            "months": 1
+          },
+          {
+            "start": "2018-04",
+            "end": "2018-05",
+            "months": 2
+          },
+          {
+            "start": "2020-12",
+            "end": "2020-12",
+            "months": 1
+          },
+          {
+            "start": "2021-03",
+            "end": "2021-03",
+            "months": 1
+          },
+          {
+            "start": "2022-04",
+            "end": "2022-04",
+            "months": 1
+          },
+          {
+            "start": "2023-09",
+            "end": "2023-12",
+            "months": 4
+          }
+        ],
+        "p95_observation_count": 14,
+        "p95_months": [
+          "2003-07",
+          "2004-11",
+          "2004-12",
+          "2005-02",
+          "2008-10",
+          "2009-04",
+          "2009-05",
+          "2012-03",
+          "2016-12",
+          "2017-02",
+          "2021-03",
+          "2023-09",
+          "2023-10",
+          "2023-11"
+        ],
+        "p95_episodes": [
+          {
+            "start": "2003-07",
+            "end": "2003-07",
+            "months": 1
+          },
+          {
+            "start": "2004-11",
+            "end": "2004-12",
+            "months": 2
+          },
+          {
+            "start": "2005-02",
+            "end": "2005-02",
+            "months": 1
+          },
+          {
+            "start": "2008-10",
+            "end": "2008-10",
+            "months": 1
+          },
+          {
+            "start": "2009-04",
+            "end": "2009-05",
+            "months": 2
+          },
+          {
+            "start": "2012-03",
+            "end": "2012-03",
+            "months": 1
+          },
+          {
+            "start": "2016-12",
+            "end": "2016-12",
+            "months": 1
+          },
+          {
+            "start": "2017-02",
+            "end": "2017-02",
+            "months": 1
+          },
+          {
+            "start": "2021-03",
+            "end": "2021-03",
+            "months": 1
+          },
+          {
+            "start": "2023-09",
+            "end": "2023-11",
+            "months": 3
+          }
+        ],
+        "persistent_p95_count": 4,
+        "persistent_p95_months": [
+          "2004-12",
+          "2009-05",
+          "2023-10",
+          "2023-11"
+        ]
+      },
+      "out_of_sample": {
+        "start": "2025-01",
+        "end": "2026-07",
+        "observations": 19,
+        "activations": {
+          "p90_observation_count": 0,
+          "p90_months": [],
+          "p90_episodes": [],
+          "p95_observation_count": 0,
+          "p95_months": [],
+          "p95_episodes": [],
+          "persistent_p95_count": 0,
+          "persistent_p95_months": []
+        },
+        "scores": [
+          {
+            "month": "2025-01",
+            "residual_sum_pp": 0.250628868333
+          },
+          {
+            "month": "2025-02",
+            "residual_sum_pp": -0.229721083187
+          },
+          {
+            "month": "2025-03",
+            "residual_sum_pp": -0.569306426483
+          },
+          {
+            "month": "2025-04",
+            "residual_sum_pp": -0.474625553338
+          },
+          {
+            "month": "2025-05",
+            "residual_sum_pp": -0.33858935925
+          },
+          {
+            "month": "2025-06",
+            "residual_sum_pp": -0.103744777435
+          },
+          {
+            "month": "2025-07",
+            "residual_sum_pp": 0.140799650418
+          },
+          {
+            "month": "2025-08",
+            "residual_sum_pp": -0.319156683755
+          },
+          {
+            "month": "2025-09",
+            "residual_sum_pp": -0.444210608477
+          },
+          {
+            "month": "2025-10",
+            "residual_sum_pp": -0.232723839352
+          },
+          {
+            "month": "2025-11",
+            "residual_sum_pp": -0.396138185207
+          },
+          {
+            "month": "2025-12",
+            "residual_sum_pp": -0.148824733272
+          },
+          {
+            "month": "2026-01",
+            "residual_sum_pp": -0.084337375971
+          },
+          {
+            "month": "2026-02",
+            "residual_sum_pp": -0.265446180228
+          },
+          {
+            "month": "2026-03",
+            "residual_sum_pp": -0.265356249721
+          },
+          {
+            "month": "2026-04",
+            "residual_sum_pp": -0.308610962657
+          },
+          {
+            "month": "2026-05",
+            "residual_sum_pp": -0.134656901509
+          },
+          {
+            "month": "2026-06",
+            "residual_sum_pp": -0.020691869523
+          },
+          {
+            "month": "2026-07",
+            "residual_sum_pp": 0.15069535291
+          }
+        ]
+      }
+    }
+  },
+  "month_end_inputs": [
+    {
+      "month": "2003-01",
+      "observation_dates": {
+        "DGS10": "2003-01-31",
+        "IRLTLT01JPM156N": "2003-01-31",
+        "IRLTLT01DEM156N": "2003-01-31",
+        "IRLTLT01GBM156N": "2003-01-31"
+      },
+      "levels": {
+        "DGS10": 4.0,
+        "IRLTLT01JPM156N": 0.81,
+        "IRLTLT01DEM156N": 4.04,
+        "IRLTLT01GBM156N": 4.2859
+      }
+    },
+    {
+      "month": "2003-02",
+      "observation_dates": {
+        "DGS10": "2003-02-28",
+        "IRLTLT01JPM156N": "2003-02-28",
+        "IRLTLT01DEM156N": "2003-02-28",
+        "IRLTLT01GBM156N": "2003-02-28"
+      },
+      "levels": {
+        "DGS10": 3.71,
+        "IRLTLT01JPM156N": 0.786,
+        "IRLTLT01DEM156N": 3.95,
+        "IRLTLT01GBM156N": 4.2092
+      }
+    },
+    {
+      "month": "2003-03",
+      "observation_dates": {
+        "DGS10": "2003-03-31",
+        "IRLTLT01JPM156N": "2003-03-31",
+        "IRLTLT01DEM156N": "2003-03-31",
+        "IRLTLT01GBM156N": "2003-03-31"
+      },
+      "levels": {
+        "DGS10": 3.83,
+        "IRLTLT01JPM156N": 0.705,
+        "IRLTLT01DEM156N": 4.06,
+        "IRLTLT01GBM156N": 4.341
+      }
+    },
+    {
+      "month": "2003-04",
+      "observation_dates": {
+        "DGS10": "2003-04-30",
+        "IRLTLT01JPM156N": "2003-04-30",
+        "IRLTLT01DEM156N": "2003-04-30",
+        "IRLTLT01GBM156N": "2003-04-30"
+      },
+      "levels": {
+        "DGS10": 3.89,
+        "IRLTLT01JPM156N": 0.612,
+        "IRLTLT01DEM156N": 4.14,
+        "IRLTLT01GBM156N": 4.4044
+      }
+    },
+    {
+      "month": "2003-05",
+      "observation_dates": {
+        "DGS10": "2003-05-30",
+        "IRLTLT01JPM156N": "2003-05-30",
+        "IRLTLT01DEM156N": "2003-05-30",
+        "IRLTLT01GBM156N": "2003-05-30"
+      },
+      "levels": {
+        "DGS10": 3.37,
+        "IRLTLT01JPM156N": 0.538,
+        "IRLTLT01DEM156N": 3.65,
+        "IRLTLT01GBM156N": 4.1458
+      }
+    },
+    {
+      "month": "2003-06",
+      "observation_dates": {
+        "DGS10": "2003-06-30",
+        "IRLTLT01JPM156N": "2003-06-30",
+        "IRLTLT01DEM156N": "2003-06-30",
+        "IRLTLT01GBM156N": "2003-06-30"
+      },
+      "levels": {
+        "DGS10": 3.54,
+        "IRLTLT01JPM156N": 0.821,
+        "IRLTLT01DEM156N": 3.83,
+        "IRLTLT01GBM156N": 4.2522
+      }
+    },
+    {
+      "month": "2003-07",
+      "observation_dates": {
+        "DGS10": "2003-07-31",
+        "IRLTLT01JPM156N": "2003-07-31",
+        "IRLTLT01DEM156N": "2003-07-31",
+        "IRLTLT01GBM156N": "2003-07-31"
+      },
+      "levels": {
+        "DGS10": 4.49,
+        "IRLTLT01JPM156N": 0.938,
+        "IRLTLT01DEM156N": 4.08,
+        "IRLTLT01GBM156N": 4.5967
+      }
+    },
+    {
+      "month": "2003-08",
+      "observation_dates": {
+        "DGS10": "2003-08-29",
+        "IRLTLT01JPM156N": "2003-08-29",
+        "IRLTLT01DEM156N": "2003-08-29",
+        "IRLTLT01GBM156N": "2003-08-29"
+      },
+      "levels": {
+        "DGS10": 4.45,
+        "IRLTLT01JPM156N": 1.432,
+        "IRLTLT01DEM156N": 4.2,
+        "IRLTLT01GBM156N": 4.6731
+      }
+    },
+    {
+      "month": "2003-09",
+      "observation_dates": {
+        "DGS10": "2003-09-30",
+        "IRLTLT01JPM156N": "2003-09-30",
+        "IRLTLT01DEM156N": "2003-09-30",
+        "IRLTLT01GBM156N": "2003-09-30"
+      },
+      "levels": {
+        "DGS10": 3.96,
+        "IRLTLT01JPM156N": 1.398,
+        "IRLTLT01DEM156N": 4.04,
+        "IRLTLT01GBM156N": 4.595
+      }
+    },
+    {
+      "month": "2003-10",
+      "observation_dates": {
+        "DGS10": "2003-10-31",
+        "IRLTLT01JPM156N": "2003-10-31",
+        "IRLTLT01DEM156N": "2003-10-31",
+        "IRLTLT01GBM156N": "2003-10-31"
+      },
+      "levels": {
+        "DGS10": 4.33,
+        "IRLTLT01JPM156N": 1.463,
+        "IRLTLT01DEM156N": 4.35,
+        "IRLTLT01GBM156N": 5.0501
+      }
+    },
+    {
+      "month": "2003-11",
+      "observation_dates": {
+        "DGS10": "2003-11-28",
+        "IRLTLT01JPM156N": "2003-11-28",
+        "IRLTLT01DEM156N": "2003-11-28",
+        "IRLTLT01GBM156N": "2003-11-28"
+      },
+      "levels": {
+        "DGS10": 4.34,
+        "IRLTLT01JPM156N": 1.315,
+        "IRLTLT01DEM156N": 4.44,
+        "IRLTLT01GBM156N": 5.0815
+      }
+    },
+    {
+      "month": "2003-12",
+      "observation_dates": {
+        "DGS10": "2003-12-31",
+        "IRLTLT01JPM156N": "2003-12-30",
+        "IRLTLT01DEM156N": "2003-12-30",
+        "IRLTLT01GBM156N": "2003-12-31"
+      },
+      "levels": {
+        "DGS10": 4.27,
+        "IRLTLT01JPM156N": 1.363,
+        "IRLTLT01DEM156N": 4.3,
+        "IRLTLT01GBM156N": 4.7999
+      }
+    },
+    {
+      "month": "2004-01",
+      "observation_dates": {
+        "DGS10": "2004-01-30",
+        "IRLTLT01JPM156N": "2004-01-30",
+        "IRLTLT01DEM156N": "2004-01-30",
+        "IRLTLT01GBM156N": "2004-01-30"
+      },
+      "levels": {
+        "DGS10": 4.16,
+        "IRLTLT01JPM156N": 1.322,
+        "IRLTLT01DEM156N": 4.24,
+        "IRLTLT01GBM156N": 4.8909
+      }
+    },
+    {
+      "month": "2004-02",
+      "observation_dates": {
+        "DGS10": "2004-02-27",
+        "IRLTLT01JPM156N": "2004-02-27",
+        "IRLTLT01DEM156N": "2004-02-27",
+        "IRLTLT01GBM156N": "2004-02-27"
+      },
+      "levels": {
+        "DGS10": 3.99,
+        "IRLTLT01JPM156N": 1.243,
+        "IRLTLT01DEM156N": 4.06,
+        "IRLTLT01GBM156N": 4.7656
+      }
+    },
+    {
+      "month": "2004-03",
+      "observation_dates": {
+        "DGS10": "2004-03-31",
+        "IRLTLT01JPM156N": "2004-03-31",
+        "IRLTLT01DEM156N": "2004-03-31",
+        "IRLTLT01GBM156N": "2004-03-31"
+      },
+      "levels": {
+        "DGS10": 3.86,
+        "IRLTLT01JPM156N": 1.434,
+        "IRLTLT01DEM156N": 3.95,
+        "IRLTLT01GBM156N": 4.756
+      }
+    },
+    {
+      "month": "2004-04",
+      "observation_dates": {
+        "DGS10": "2004-04-30",
+        "IRLTLT01JPM156N": "2004-04-30",
+        "IRLTLT01DEM156N": "2004-04-30",
+        "IRLTLT01GBM156N": "2004-04-30"
+      },
+      "levels": {
+        "DGS10": 4.53,
+        "IRLTLT01JPM156N": 1.535,
+        "IRLTLT01DEM156N": 4.2,
+        "IRLTLT01GBM156N": 4.9973
+      }
+    },
+    {
+      "month": "2004-05",
+      "observation_dates": {
+        "DGS10": "2004-05-28",
+        "IRLTLT01JPM156N": "2004-05-31",
+        "IRLTLT01DEM156N": "2004-05-31",
+        "IRLTLT01GBM156N": "2004-05-28"
+      },
+      "levels": {
+        "DGS10": 4.66,
+        "IRLTLT01JPM156N": 1.535,
+        "IRLTLT01DEM156N": 4.33,
+        "IRLTLT01GBM156N": 5.1697
+      }
+    },
+    {
+      "month": "2004-06",
+      "observation_dates": {
+        "DGS10": "2004-06-30",
+        "IRLTLT01JPM156N": "2004-06-30",
+        "IRLTLT01DEM156N": "2004-06-30",
+        "IRLTLT01GBM156N": "2004-06-30"
+      },
+      "levels": {
+        "DGS10": 4.62,
+        "IRLTLT01JPM156N": 1.766,
+        "IRLTLT01DEM156N": 4.35,
+        "IRLTLT01GBM156N": 5.1174
+      }
+    },
+    {
+      "month": "2004-07",
+      "observation_dates": {
+        "DGS10": "2004-07-30",
+        "IRLTLT01JPM156N": "2004-07-30",
+        "IRLTLT01DEM156N": "2004-07-30",
+        "IRLTLT01GBM156N": "2004-07-30"
+      },
+      "levels": {
+        "DGS10": 4.5,
+        "IRLTLT01JPM156N": 1.854,
+        "IRLTLT01DEM156N": 4.25,
+        "IRLTLT01GBM156N": 5.121
+      }
+    },
+    {
+      "month": "2004-08",
+      "observation_dates": {
+        "DGS10": "2004-08-31",
+        "IRLTLT01JPM156N": "2004-08-31",
+        "IRLTLT01DEM156N": "2004-08-31",
+        "IRLTLT01GBM156N": "2004-08-31"
+      },
+      "levels": {
+        "DGS10": 4.13,
+        "IRLTLT01JPM156N": 1.568,
+        "IRLTLT01DEM156N": 4.07,
+        "IRLTLT01GBM156N": 4.9364
+      }
+    },
+    {
+      "month": "2004-09",
+      "observation_dates": {
+        "DGS10": "2004-09-30",
+        "IRLTLT01JPM156N": "2004-09-30",
+        "IRLTLT01DEM156N": "2004-09-30",
+        "IRLTLT01GBM156N": "2004-09-30"
+      },
+      "levels": {
+        "DGS10": 4.14,
+        "IRLTLT01JPM156N": 1.451,
+        "IRLTLT01DEM156N": 3.99,
+        "IRLTLT01GBM156N": 4.8375
+      }
+    },
+    {
+      "month": "2004-10",
+      "observation_dates": {
+        "DGS10": "2004-10-29",
+        "IRLTLT01JPM156N": "2004-10-29",
+        "IRLTLT01DEM156N": "2004-10-29",
+        "IRLTLT01GBM156N": "2004-10-29"
+      },
+      "levels": {
+        "DGS10": 4.05,
+        "IRLTLT01JPM156N": 1.499,
+        "IRLTLT01DEM156N": 3.88,
+        "IRLTLT01GBM156N": 4.7444
+      }
+    },
+    {
+      "month": "2004-11",
+      "observation_dates": {
+        "DGS10": "2004-11-30",
+        "IRLTLT01JPM156N": "2004-11-30",
+        "IRLTLT01DEM156N": "2004-11-30",
+        "IRLTLT01GBM156N": "2004-11-30"
+      },
+      "levels": {
+        "DGS10": 4.36,
+        "IRLTLT01JPM156N": 1.463,
+        "IRLTLT01DEM156N": 3.8,
+        "IRLTLT01GBM156N": 4.6001
+      }
+    },
+    {
+      "month": "2004-12",
+      "observation_dates": {
+        "DGS10": "2004-12-31",
+        "IRLTLT01JPM156N": "2004-12-30",
+        "IRLTLT01DEM156N": "2004-12-30",
+        "IRLTLT01GBM156N": "2004-12-31"
+      },
+      "levels": {
+        "DGS10": 4.24,
+        "IRLTLT01JPM156N": 1.437,
+        "IRLTLT01DEM156N": 3.71,
+        "IRLTLT01GBM156N": 4.5298
+      }
+    },
+    {
+      "month": "2005-01",
+      "observation_dates": {
+        "DGS10": "2005-01-31",
+        "IRLTLT01JPM156N": "2005-01-31",
+        "IRLTLT01DEM156N": "2005-01-31",
+        "IRLTLT01GBM156N": "2005-01-31"
+      },
+      "levels": {
+        "DGS10": 4.14,
+        "IRLTLT01JPM156N": 1.333,
+        "IRLTLT01DEM156N": 3.55,
+        "IRLTLT01GBM156N": 4.5847
+      }
+    },
+    {
+      "month": "2005-02",
+      "observation_dates": {
+        "DGS10": "2005-02-28",
+        "IRLTLT01JPM156N": "2005-02-28",
+        "IRLTLT01DEM156N": "2005-02-28",
+        "IRLTLT01GBM156N": "2005-02-28"
+      },
+      "levels": {
+        "DGS10": 4.36,
+        "IRLTLT01JPM156N": 1.469,
+        "IRLTLT01DEM156N": 3.68,
+        "IRLTLT01GBM156N": 4.7104
+      }
+    },
+    {
+      "month": "2005-03",
+      "observation_dates": {
+        "DGS10": "2005-03-31",
+        "IRLTLT01JPM156N": "2005-03-31",
+        "IRLTLT01DEM156N": "2005-03-31",
+        "IRLTLT01GBM156N": "2005-03-31"
+      },
+      "levels": {
+        "DGS10": 4.5,
+        "IRLTLT01JPM156N": 1.333,
+        "IRLTLT01DEM156N": 3.64,
+        "IRLTLT01GBM156N": 4.6874
+      }
+    },
+    {
+      "month": "2005-04",
+      "observation_dates": {
+        "DGS10": "2005-04-29",
+        "IRLTLT01JPM156N": "2005-04-28",
+        "IRLTLT01DEM156N": "2005-04-29",
+        "IRLTLT01GBM156N": "2005-04-29"
+      },
+      "levels": {
+        "DGS10": 4.21,
+        "IRLTLT01JPM156N": 1.247,
+        "IRLTLT01DEM156N": 3.38,
+        "IRLTLT01GBM156N": 4.5214
+      }
+    },
+    {
+      "month": "2005-05",
+      "observation_dates": {
+        "DGS10": "2005-05-31",
+        "IRLTLT01JPM156N": "2005-05-31",
+        "IRLTLT01DEM156N": "2005-05-31",
+        "IRLTLT01GBM156N": "2005-05-31"
+      },
+      "levels": {
+        "DGS10": 4.0,
+        "IRLTLT01JPM156N": 1.262,
+        "IRLTLT01DEM156N": 3.3,
+        "IRLTLT01GBM156N": 4.32
+      }
+    },
+    {
+      "month": "2005-06",
+      "observation_dates": {
+        "DGS10": "2005-06-30",
+        "IRLTLT01JPM156N": "2005-06-30",
+        "IRLTLT01DEM156N": "2005-06-30",
+        "IRLTLT01GBM156N": "2005-06-30"
+      },
+      "levels": {
+        "DGS10": 3.94,
+        "IRLTLT01JPM156N": 1.174,
+        "IRLTLT01DEM156N": 3.15,
+        "IRLTLT01GBM156N": 4.1824
+      }
+    },
+    {
+      "month": "2005-07",
+      "observation_dates": {
+        "DGS10": "2005-07-29",
+        "IRLTLT01JPM156N": "2005-07-29",
+        "IRLTLT01DEM156N": "2005-07-29",
+        "IRLTLT01GBM156N": "2005-07-29"
+      },
+      "levels": {
+        "DGS10": 4.28,
+        "IRLTLT01JPM156N": 1.307,
+        "IRLTLT01DEM156N": 3.22,
+        "IRLTLT01GBM156N": 4.3257
+      }
+    },
+    {
+      "month": "2005-08",
+      "observation_dates": {
+        "DGS10": "2005-08-31",
+        "IRLTLT01JPM156N": "2005-08-31",
+        "IRLTLT01DEM156N": "2005-08-31",
+        "IRLTLT01GBM156N": "2005-08-31"
+      },
+      "levels": {
+        "DGS10": 4.02,
+        "IRLTLT01JPM156N": 1.347,
+        "IRLTLT01DEM156N": 3.13,
+        "IRLTLT01GBM156N": 4.1606
+      }
+    },
+    {
+      "month": "2005-09",
+      "observation_dates": {
+        "DGS10": "2005-09-30",
+        "IRLTLT01JPM156N": "2005-09-30",
+        "IRLTLT01DEM156N": "2005-09-30",
+        "IRLTLT01GBM156N": "2005-09-30"
+      },
+      "levels": {
+        "DGS10": 4.34,
+        "IRLTLT01JPM156N": 1.472,
+        "IRLTLT01DEM156N": 3.14,
+        "IRLTLT01GBM156N": 4.2863
+      }
+    },
+    {
+      "month": "2005-10",
+      "observation_dates": {
+        "DGS10": "2005-10-31",
+        "IRLTLT01JPM156N": "2005-10-31",
+        "IRLTLT01DEM156N": "2005-10-31",
+        "IRLTLT01GBM156N": "2005-10-31"
+      },
+      "levels": {
+        "DGS10": 4.57,
+        "IRLTLT01JPM156N": 1.549,
+        "IRLTLT01DEM156N": 3.39,
+        "IRLTLT01GBM156N": 4.3297
+      }
+    },
+    {
+      "month": "2005-11",
+      "observation_dates": {
+        "DGS10": "2005-11-30",
+        "IRLTLT01JPM156N": "2005-11-30",
+        "IRLTLT01DEM156N": "2005-11-30",
+        "IRLTLT01GBM156N": "2005-11-30"
+      },
+      "levels": {
+        "DGS10": 4.49,
+        "IRLTLT01JPM156N": 1.445,
+        "IRLTLT01DEM156N": 3.44,
+        "IRLTLT01GBM156N": 4.2177
+      }
+    },
+    {
+      "month": "2005-12",
+      "observation_dates": {
+        "DGS10": "2005-12-30",
+        "IRLTLT01JPM156N": "2005-12-30",
+        "IRLTLT01DEM156N": "2005-12-30",
+        "IRLTLT01GBM156N": "2005-12-30"
+      },
+      "levels": {
+        "DGS10": 4.39,
+        "IRLTLT01JPM156N": 1.473,
+        "IRLTLT01DEM156N": 3.3,
+        "IRLTLT01GBM156N": 4.0987
+      }
+    },
+    {
+      "month": "2006-01",
+      "observation_dates": {
+        "DGS10": "2006-01-31",
+        "IRLTLT01JPM156N": "2006-01-31",
+        "IRLTLT01DEM156N": "2006-01-31",
+        "IRLTLT01GBM156N": "2006-01-31"
+      },
+      "levels": {
+        "DGS10": 4.53,
+        "IRLTLT01JPM156N": 1.555,
+        "IRLTLT01DEM156N": 3.48,
+        "IRLTLT01GBM156N": 4.1362
+      }
+    },
+    {
+      "month": "2006-02",
+      "observation_dates": {
+        "DGS10": "2006-02-28",
+        "IRLTLT01JPM156N": "2006-02-28",
+        "IRLTLT01DEM156N": "2006-02-28",
+        "IRLTLT01GBM156N": "2006-02-28"
+      },
+      "levels": {
+        "DGS10": 4.55,
+        "IRLTLT01JPM156N": 1.586,
+        "IRLTLT01DEM156N": 3.51,
+        "IRLTLT01GBM156N": 4.1768
+      }
+    },
+    {
+      "month": "2006-03",
+      "observation_dates": {
+        "DGS10": "2006-03-31",
+        "IRLTLT01JPM156N": "2006-03-31",
+        "IRLTLT01DEM156N": "2006-03-31",
+        "IRLTLT01GBM156N": "2006-03-31"
+      },
+      "levels": {
+        "DGS10": 4.86,
+        "IRLTLT01JPM156N": 1.754,
+        "IRLTLT01DEM156N": 3.77,
+        "IRLTLT01GBM156N": 4.3993
+      }
+    },
+    {
+      "month": "2006-04",
+      "observation_dates": {
+        "DGS10": "2006-04-28",
+        "IRLTLT01JPM156N": "2006-04-28",
+        "IRLTLT01DEM156N": "2006-04-28",
+        "IRLTLT01GBM156N": "2006-04-28"
+      },
+      "levels": {
+        "DGS10": 5.07,
+        "IRLTLT01JPM156N": 1.913,
+        "IRLTLT01DEM156N": 3.99,
+        "IRLTLT01GBM156N": 4.6417
+      }
+    },
+    {
+      "month": "2006-05",
+      "observation_dates": {
+        "DGS10": "2006-05-31",
+        "IRLTLT01JPM156N": "2006-05-31",
+        "IRLTLT01DEM156N": "2006-05-31",
+        "IRLTLT01GBM156N": "2006-05-31"
+      },
+      "levels": {
+        "DGS10": 5.12,
+        "IRLTLT01JPM156N": 1.831,
+        "IRLTLT01DEM156N": 3.94,
+        "IRLTLT01GBM156N": 4.6045
+      }
+    },
+    {
+      "month": "2006-06",
+      "observation_dates": {
+        "DGS10": "2006-06-30",
+        "IRLTLT01JPM156N": "2006-06-30",
+        "IRLTLT01DEM156N": "2006-06-30",
+        "IRLTLT01GBM156N": "2006-06-30"
+      },
+      "levels": {
+        "DGS10": 5.15,
+        "IRLTLT01JPM156N": 1.914,
+        "IRLTLT01DEM156N": 4.1,
+        "IRLTLT01GBM156N": 4.7197
+      }
+    },
+    {
+      "month": "2006-07",
+      "observation_dates": {
+        "DGS10": "2006-07-31",
+        "IRLTLT01JPM156N": "2006-07-31",
+        "IRLTLT01DEM156N": "2006-07-31",
+        "IRLTLT01GBM156N": "2006-07-31"
+      },
+      "levels": {
+        "DGS10": 4.99,
+        "IRLTLT01JPM156N": 1.932,
+        "IRLTLT01DEM156N": 3.93,
+        "IRLTLT01GBM156N": 4.6173
+      }
+    },
+    {
+      "month": "2006-08",
+      "observation_dates": {
+        "DGS10": "2006-08-31",
+        "IRLTLT01JPM156N": "2006-08-31",
+        "IRLTLT01DEM156N": "2006-08-31",
+        "IRLTLT01GBM156N": "2006-08-31"
+      },
+      "levels": {
+        "DGS10": 4.74,
+        "IRLTLT01JPM156N": 1.644,
+        "IRLTLT01DEM156N": 3.8,
+        "IRLTLT01GBM156N": 4.5182
+      }
+    },
+    {
+      "month": "2006-09",
+      "observation_dates": {
+        "DGS10": "2006-09-29",
+        "IRLTLT01JPM156N": "2006-09-29",
+        "IRLTLT01DEM156N": "2006-09-29",
+        "IRLTLT01GBM156N": "2006-09-29"
+      },
+      "levels": {
+        "DGS10": 4.64,
+        "IRLTLT01JPM156N": 1.671,
+        "IRLTLT01DEM156N": 3.66,
+        "IRLTLT01GBM156N": 4.5267
+      }
+    },
+    {
+      "month": "2006-10",
+      "observation_dates": {
+        "DGS10": "2006-10-31",
+        "IRLTLT01JPM156N": "2006-10-31",
+        "IRLTLT01DEM156N": "2006-10-31",
+        "IRLTLT01GBM156N": "2006-10-31"
+      },
+      "levels": {
+        "DGS10": 4.61,
+        "IRLTLT01JPM156N": 1.722,
+        "IRLTLT01DEM156N": 3.79,
+        "IRLTLT01GBM156N": 4.5111
+      }
+    },
+    {
+      "month": "2006-11",
+      "observation_dates": {
+        "DGS10": "2006-11-30",
+        "IRLTLT01JPM156N": "2006-11-30",
+        "IRLTLT01DEM156N": "2006-11-30",
+        "IRLTLT01GBM156N": "2006-11-30"
+      },
+      "levels": {
+        "DGS10": 4.46,
+        "IRLTLT01JPM156N": 1.67,
+        "IRLTLT01DEM156N": 3.72,
+        "IRLTLT01GBM156N": 4.5024
+      }
+    },
+    {
+      "month": "2006-12",
+      "observation_dates": {
+        "DGS10": "2006-12-29",
+        "IRLTLT01JPM156N": "2006-12-29",
+        "IRLTLT01DEM156N": "2006-12-29",
+        "IRLTLT01GBM156N": "2006-12-29"
+      },
+      "levels": {
+        "DGS10": 4.71,
+        "IRLTLT01JPM156N": 1.678,
+        "IRLTLT01DEM156N": 3.94,
+        "IRLTLT01GBM156N": 4.7293
+      }
+    },
+    {
+      "month": "2007-01",
+      "observation_dates": {
+        "DGS10": "2007-01-31",
+        "IRLTLT01JPM156N": "2007-01-31",
+        "IRLTLT01DEM156N": "2007-01-31",
+        "IRLTLT01GBM156N": "2007-01-31"
+      },
+      "levels": {
+        "DGS10": 4.83,
+        "IRLTLT01JPM156N": 1.704,
+        "IRLTLT01DEM156N": 4.09,
+        "IRLTLT01GBM156N": 4.9633
+      }
+    },
+    {
+      "month": "2007-02",
+      "observation_dates": {
+        "DGS10": "2007-02-28",
+        "IRLTLT01JPM156N": "2007-02-28",
+        "IRLTLT01DEM156N": "2007-02-28",
+        "IRLTLT01GBM156N": "2007-02-28"
+      },
+      "levels": {
+        "DGS10": 4.56,
+        "IRLTLT01JPM156N": 1.644,
+        "IRLTLT01DEM156N": 3.95,
+        "IRLTLT01GBM156N": 4.7825
+      }
+    },
+    {
+      "month": "2007-03",
+      "observation_dates": {
+        "DGS10": "2007-03-30",
+        "IRLTLT01JPM156N": "2007-03-30",
+        "IRLTLT01DEM156N": "2007-03-30",
+        "IRLTLT01GBM156N": "2007-03-30"
+      },
+      "levels": {
+        "DGS10": 4.65,
+        "IRLTLT01JPM156N": 1.655,
+        "IRLTLT01DEM156N": 4.05,
+        "IRLTLT01GBM156N": 4.9613
+      }
+    },
+    {
+      "month": "2007-04",
+      "observation_dates": {
+        "DGS10": "2007-04-30",
+        "IRLTLT01JPM156N": "2007-04-27",
+        "IRLTLT01DEM156N": "2007-04-30",
+        "IRLTLT01GBM156N": "2007-04-30"
+      },
+      "levels": {
+        "DGS10": 4.63,
+        "IRLTLT01JPM156N": 1.631,
+        "IRLTLT01DEM156N": 4.2,
+        "IRLTLT01GBM156N": 5.036
+      }
+    },
+    {
+      "month": "2007-05",
+      "observation_dates": {
+        "DGS10": "2007-05-31",
+        "IRLTLT01JPM156N": "2007-05-31",
+        "IRLTLT01DEM156N": "2007-05-31",
+        "IRLTLT01GBM156N": "2007-05-31"
+      },
+      "levels": {
+        "DGS10": 4.9,
+        "IRLTLT01JPM156N": 1.751,
+        "IRLTLT01DEM156N": 4.39,
+        "IRLTLT01GBM156N": 5.2501
+      }
+    },
+    {
+      "month": "2007-06",
+      "observation_dates": {
+        "DGS10": "2007-06-29",
+        "IRLTLT01JPM156N": "2007-06-29",
+        "IRLTLT01DEM156N": "2007-06-29",
+        "IRLTLT01GBM156N": "2007-06-29"
+      },
+      "levels": {
+        "DGS10": 5.03,
+        "IRLTLT01JPM156N": 1.866,
+        "IRLTLT01DEM156N": 4.55,
+        "IRLTLT01GBM156N": 5.4814
+      }
+    },
+    {
+      "month": "2007-07",
+      "observation_dates": {
+        "DGS10": "2007-07-31",
+        "IRLTLT01JPM156N": "2007-07-31",
+        "IRLTLT01DEM156N": "2007-07-31",
+        "IRLTLT01GBM156N": "2007-07-31"
+      },
+      "levels": {
+        "DGS10": 4.78,
+        "IRLTLT01JPM156N": 1.801,
+        "IRLTLT01DEM156N": 4.35,
+        "IRLTLT01GBM156N": 5.2268
+      }
+    },
+    {
+      "month": "2007-08",
+      "observation_dates": {
+        "DGS10": "2007-08-31",
+        "IRLTLT01JPM156N": "2007-08-31",
+        "IRLTLT01DEM156N": "2007-08-31",
+        "IRLTLT01GBM156N": "2007-08-31"
+      },
+      "levels": {
+        "DGS10": 4.54,
+        "IRLTLT01JPM156N": 1.616,
+        "IRLTLT01DEM156N": 4.27,
+        "IRLTLT01GBM156N": 5.0302
+      }
+    },
+    {
+      "month": "2007-09",
+      "observation_dates": {
+        "DGS10": "2007-09-28",
+        "IRLTLT01JPM156N": "2007-09-28",
+        "IRLTLT01DEM156N": "2007-09-28",
+        "IRLTLT01GBM156N": "2007-09-28"
+      },
+      "levels": {
+        "DGS10": 4.59,
+        "IRLTLT01JPM156N": 1.679,
+        "IRLTLT01DEM156N": 4.35,
+        "IRLTLT01GBM156N": 5.0194
+      }
+    },
+    {
+      "month": "2007-10",
+      "observation_dates": {
+        "DGS10": "2007-10-31",
+        "IRLTLT01JPM156N": "2007-10-31",
+        "IRLTLT01DEM156N": "2007-10-31",
+        "IRLTLT01GBM156N": "2007-10-31"
+      },
+      "levels": {
+        "DGS10": 4.48,
+        "IRLTLT01JPM156N": 1.615,
+        "IRLTLT01DEM156N": 4.21,
+        "IRLTLT01GBM156N": 4.9424
+      }
+    },
+    {
+      "month": "2007-11",
+      "observation_dates": {
+        "DGS10": "2007-11-30",
+        "IRLTLT01JPM156N": "2007-11-30",
+        "IRLTLT01DEM156N": "2007-11-30",
+        "IRLTLT01GBM156N": "2007-11-30"
+      },
+      "levels": {
+        "DGS10": 3.97,
+        "IRLTLT01JPM156N": 1.499,
+        "IRLTLT01DEM156N": 4.09,
+        "IRLTLT01GBM156N": 4.6842
+      }
+    },
+    {
+      "month": "2007-12",
+      "observation_dates": {
+        "DGS10": "2007-12-31",
+        "IRLTLT01JPM156N": "2007-12-28",
+        "IRLTLT01DEM156N": "2007-12-28",
+        "IRLTLT01GBM156N": "2007-12-31"
+      },
+      "levels": {
+        "DGS10": 4.04,
+        "IRLTLT01JPM156N": 1.502,
+        "IRLTLT01DEM156N": 4.37,
+        "IRLTLT01GBM156N": 4.5551
+      }
+    },
+    {
+      "month": "2008-01",
+      "observation_dates": {
+        "DGS10": "2008-01-31",
+        "IRLTLT01JPM156N": "2008-01-31",
+        "IRLTLT01DEM156N": "2008-01-31",
+        "IRLTLT01GBM156N": "2008-01-31"
+      },
+      "levels": {
+        "DGS10": 3.67,
+        "IRLTLT01JPM156N": 1.443,
+        "IRLTLT01DEM156N": 3.97,
+        "IRLTLT01GBM156N": 4.5145
+      }
+    },
+    {
+      "month": "2008-02",
+      "observation_dates": {
+        "DGS10": "2008-02-29",
+        "IRLTLT01JPM156N": "2008-02-29",
+        "IRLTLT01DEM156N": "2008-02-29",
+        "IRLTLT01GBM156N": "2008-02-29"
+      },
+      "levels": {
+        "DGS10": 3.53,
+        "IRLTLT01JPM156N": 1.373,
+        "IRLTLT01DEM156N": 3.96,
+        "IRLTLT01GBM156N": 4.5353
+      }
+    },
+    {
+      "month": "2008-03",
+      "observation_dates": {
+        "DGS10": "2008-03-31",
+        "IRLTLT01JPM156N": "2008-03-31",
+        "IRLTLT01DEM156N": "2008-03-31",
+        "IRLTLT01GBM156N": "2008-03-31"
+      },
+      "levels": {
+        "DGS10": 3.45,
+        "IRLTLT01JPM156N": 1.285,
+        "IRLTLT01DEM156N": 3.92,
+        "IRLTLT01GBM156N": 4.4114
+      }
+    },
+    {
+      "month": "2008-04",
+      "observation_dates": {
+        "DGS10": "2008-04-30",
+        "IRLTLT01JPM156N": "2008-04-30",
+        "IRLTLT01DEM156N": "2008-04-30",
+        "IRLTLT01GBM156N": "2008-04-30"
+      },
+      "levels": {
+        "DGS10": 3.77,
+        "IRLTLT01JPM156N": 1.564,
+        "IRLTLT01DEM156N": 4.13,
+        "IRLTLT01GBM156N": 4.7475
+      }
+    },
+    {
+      "month": "2008-05",
+      "observation_dates": {
+        "DGS10": "2008-05-30",
+        "IRLTLT01JPM156N": "2008-05-30",
+        "IRLTLT01DEM156N": "2008-05-30",
+        "IRLTLT01GBM156N": "2008-05-30"
+      },
+      "levels": {
+        "DGS10": 4.06,
+        "IRLTLT01JPM156N": 1.758,
+        "IRLTLT01DEM156N": 4.41,
+        "IRLTLT01GBM156N": 5.0536
+      }
+    },
+    {
+      "month": "2008-06",
+      "observation_dates": {
+        "DGS10": "2008-06-30",
+        "IRLTLT01JPM156N": "2008-06-30",
+        "IRLTLT01DEM156N": "2008-06-30",
+        "IRLTLT01GBM156N": "2008-06-30"
+      },
+      "levels": {
+        "DGS10": 3.99,
+        "IRLTLT01JPM156N": 1.606,
+        "IRLTLT01DEM156N": 4.58,
+        "IRLTLT01GBM156N": 5.2341
+      }
+    },
+    {
+      "month": "2008-07",
+      "observation_dates": {
+        "DGS10": "2008-07-31",
+        "IRLTLT01JPM156N": "2008-07-31",
+        "IRLTLT01DEM156N": "2008-07-31",
+        "IRLTLT01GBM156N": "2008-07-31"
+      },
+      "levels": {
+        "DGS10": 3.99,
+        "IRLTLT01JPM156N": 1.545,
+        "IRLTLT01DEM156N": 4.43,
+        "IRLTLT01GBM156N": 4.8939
+      }
+    },
+    {
+      "month": "2008-08",
+      "observation_dates": {
+        "DGS10": "2008-08-29",
+        "IRLTLT01JPM156N": "2008-08-29",
+        "IRLTLT01DEM156N": "2008-08-29",
+        "IRLTLT01GBM156N": "2008-08-29"
+      },
+      "levels": {
+        "DGS10": 3.83,
+        "IRLTLT01JPM156N": 1.421,
+        "IRLTLT01DEM156N": 4.14,
+        "IRLTLT01GBM156N": 4.5611
+      }
+    },
+    {
+      "month": "2008-09",
+      "observation_dates": {
+        "DGS10": "2008-09-30",
+        "IRLTLT01JPM156N": "2008-09-30",
+        "IRLTLT01DEM156N": "2008-09-30",
+        "IRLTLT01GBM156N": "2008-09-30"
+      },
+      "levels": {
+        "DGS10": 3.85,
+        "IRLTLT01JPM156N": 1.465,
+        "IRLTLT01DEM156N": 4.0,
+        "IRLTLT01GBM156N": 4.5192
+      }
+    },
+    {
+      "month": "2008-10",
+      "observation_dates": {
+        "DGS10": "2008-10-31",
+        "IRLTLT01JPM156N": "2008-10-31",
+        "IRLTLT01DEM156N": "2008-10-31",
+        "IRLTLT01GBM156N": "2008-10-31"
+      },
+      "levels": {
+        "DGS10": 4.01,
+        "IRLTLT01JPM156N": 1.473,
+        "IRLTLT01DEM156N": 3.77,
+        "IRLTLT01GBM156N": 4.6467
+      }
+    },
+    {
+      "month": "2008-11",
+      "observation_dates": {
+        "DGS10": "2008-11-28",
+        "IRLTLT01JPM156N": "2008-11-28",
+        "IRLTLT01DEM156N": "2008-11-28",
+        "IRLTLT01GBM156N": "2008-11-28"
+      },
+      "levels": {
+        "DGS10": 2.93,
+        "IRLTLT01JPM156N": 1.419,
+        "IRLTLT01DEM156N": 3.24,
+        "IRLTLT01GBM156N": 3.972
+      }
+    },
+    {
+      "month": "2008-12",
+      "observation_dates": {
+        "DGS10": "2008-12-31",
+        "IRLTLT01JPM156N": "2008-12-30",
+        "IRLTLT01DEM156N": "2008-12-30",
+        "IRLTLT01GBM156N": "2008-12-31"
+      },
+      "levels": {
+        "DGS10": 2.25,
+        "IRLTLT01JPM156N": 1.177,
+        "IRLTLT01DEM156N": 2.94,
+        "IRLTLT01GBM156N": 3.35
+      }
+    },
+    {
+      "month": "2009-01",
+      "observation_dates": {
+        "DGS10": "2009-01-30",
+        "IRLTLT01JPM156N": "2009-01-30",
+        "IRLTLT01DEM156N": "2009-01-30",
+        "IRLTLT01GBM156N": "2009-01-30"
+      },
+      "levels": {
+        "DGS10": 2.87,
+        "IRLTLT01JPM156N": 1.303,
+        "IRLTLT01DEM156N": 3.28,
+        "IRLTLT01GBM156N": 3.9577
+      }
+    },
+    {
+      "month": "2009-02",
+      "observation_dates": {
+        "DGS10": "2009-02-27",
+        "IRLTLT01JPM156N": "2009-02-27",
+        "IRLTLT01DEM156N": "2009-02-27",
+        "IRLTLT01GBM156N": "2009-02-27"
+      },
+      "levels": {
+        "DGS10": 3.02,
+        "IRLTLT01JPM156N": 1.295,
+        "IRLTLT01DEM156N": 3.09,
+        "IRLTLT01GBM156N": 3.6949
+      }
+    },
+    {
+      "month": "2009-03",
+      "observation_dates": {
+        "DGS10": "2009-03-31",
+        "IRLTLT01JPM156N": "2009-03-31",
+        "IRLTLT01DEM156N": "2009-03-31",
+        "IRLTLT01GBM156N": "2009-03-31"
+      },
+      "levels": {
+        "DGS10": 2.71,
+        "IRLTLT01JPM156N": 1.342,
+        "IRLTLT01DEM156N": 3.02,
+        "IRLTLT01GBM156N": 3.233
+      }
+    },
+    {
+      "month": "2009-04",
+      "observation_dates": {
+        "DGS10": "2009-04-30",
+        "IRLTLT01JPM156N": "2009-04-30",
+        "IRLTLT01DEM156N": "2009-04-30",
+        "IRLTLT01GBM156N": "2009-04-30"
+      },
+      "levels": {
+        "DGS10": 3.16,
+        "IRLTLT01JPM156N": 1.422,
+        "IRLTLT01DEM156N": 3.2,
+        "IRLTLT01GBM156N": 3.5321
+      }
+    },
+    {
+      "month": "2009-05",
+      "observation_dates": {
+        "DGS10": "2009-05-29",
+        "IRLTLT01JPM156N": "2009-05-29",
+        "IRLTLT01DEM156N": "2009-05-29",
+        "IRLTLT01GBM156N": "2009-05-29"
+      },
+      "levels": {
+        "DGS10": 3.47,
+        "IRLTLT01JPM156N": 1.496,
+        "IRLTLT01DEM156N": 3.6,
+        "IRLTLT01GBM156N": 3.6987
+      }
+    },
+    {
+      "month": "2009-06",
+      "observation_dates": {
+        "DGS10": "2009-06-30",
+        "IRLTLT01JPM156N": "2009-06-30",
+        "IRLTLT01DEM156N": "2009-06-30",
+        "IRLTLT01GBM156N": "2009-06-30"
+      },
+      "levels": {
+        "DGS10": 3.53,
+        "IRLTLT01JPM156N": 1.362,
+        "IRLTLT01DEM156N": 3.38,
+        "IRLTLT01GBM156N": 3.6291
+      }
+    },
+    {
+      "month": "2009-07",
+      "observation_dates": {
+        "DGS10": "2009-07-31",
+        "IRLTLT01JPM156N": "2009-07-31",
+        "IRLTLT01DEM156N": "2009-07-31",
+        "IRLTLT01GBM156N": "2009-07-31"
+      },
+      "levels": {
+        "DGS10": 3.52,
+        "IRLTLT01JPM156N": 1.421,
+        "IRLTLT01DEM156N": 3.37,
+        "IRLTLT01GBM156N": 3.8245
+      }
+    },
+    {
+      "month": "2009-08",
+      "observation_dates": {
+        "DGS10": "2009-08-31",
+        "IRLTLT01JPM156N": "2009-08-31",
+        "IRLTLT01DEM156N": "2009-08-31",
+        "IRLTLT01GBM156N": "2009-08-28"
+      },
+      "levels": {
+        "DGS10": 3.4,
+        "IRLTLT01JPM156N": 1.33,
+        "IRLTLT01DEM156N": 3.24,
+        "IRLTLT01GBM156N": 3.5396
+      }
+    },
+    {
+      "month": "2009-09",
+      "observation_dates": {
+        "DGS10": "2009-09-30",
+        "IRLTLT01JPM156N": "2009-09-30",
+        "IRLTLT01DEM156N": "2009-09-30",
+        "IRLTLT01GBM156N": "2009-09-30"
+      },
+      "levels": {
+        "DGS10": 3.31,
+        "IRLTLT01JPM156N": 1.3,
+        "IRLTLT01DEM156N": 3.23,
+        "IRLTLT01GBM156N": 3.6109
+      }
+    },
+    {
+      "month": "2009-10",
+      "observation_dates": {
+        "DGS10": "2009-10-30",
+        "IRLTLT01JPM156N": "2009-10-30",
+        "IRLTLT01DEM156N": "2009-10-30",
+        "IRLTLT01GBM156N": "2009-10-30"
+      },
+      "levels": {
+        "DGS10": 3.41,
+        "IRLTLT01JPM156N": 1.411,
+        "IRLTLT01DEM156N": 3.28,
+        "IRLTLT01GBM156N": 3.6679
+      }
+    },
+    {
+      "month": "2009-11",
+      "observation_dates": {
+        "DGS10": "2009-11-30",
+        "IRLTLT01JPM156N": "2009-11-30",
+        "IRLTLT01DEM156N": "2009-11-30",
+        "IRLTLT01GBM156N": "2009-11-30"
+      },
+      "levels": {
+        "DGS10": 3.21,
+        "IRLTLT01JPM156N": 1.29,
+        "IRLTLT01DEM156N": 3.15,
+        "IRLTLT01GBM156N": 3.5954
+      }
+    },
+    {
+      "month": "2009-12",
+      "observation_dates": {
+        "DGS10": "2009-12-31",
+        "IRLTLT01JPM156N": "2009-12-30",
+        "IRLTLT01DEM156N": "2009-12-30",
+        "IRLTLT01GBM156N": "2009-12-31"
+      },
+      "levels": {
+        "DGS10": 3.85,
+        "IRLTLT01JPM156N": 1.289,
+        "IRLTLT01DEM156N": 3.37,
+        "IRLTLT01GBM156N": 4.0669
+      }
+    },
+    {
+      "month": "2010-01",
+      "observation_dates": {
+        "DGS10": "2010-01-29",
+        "IRLTLT01JPM156N": "2010-01-29",
+        "IRLTLT01DEM156N": "2010-01-29",
+        "IRLTLT01GBM156N": "2010-01-29"
+      },
+      "levels": {
+        "DGS10": 3.63,
+        "IRLTLT01JPM156N": 1.33,
+        "IRLTLT01DEM156N": 3.2,
+        "IRLTLT01GBM156N": 3.9523
+      }
+    },
+    {
+      "month": "2010-02",
+      "observation_dates": {
+        "DGS10": "2010-02-26",
+        "IRLTLT01JPM156N": "2010-02-26",
+        "IRLTLT01DEM156N": "2010-02-26",
+        "IRLTLT01GBM156N": "2010-02-26"
+      },
+      "levels": {
+        "DGS10": 3.61,
+        "IRLTLT01JPM156N": 1.318,
+        "IRLTLT01DEM156N": 3.11,
+        "IRLTLT01GBM156N": 4.0815
+      }
+    },
+    {
+      "month": "2010-03",
+      "observation_dates": {
+        "DGS10": "2010-03-31",
+        "IRLTLT01JPM156N": "2010-03-31",
+        "IRLTLT01DEM156N": "2010-03-31",
+        "IRLTLT01GBM156N": "2010-03-31"
+      },
+      "levels": {
+        "DGS10": 3.84,
+        "IRLTLT01JPM156N": 1.395,
+        "IRLTLT01DEM156N": 3.1,
+        "IRLTLT01GBM156N": 4.0276
+      }
+    },
+    {
+      "month": "2010-04",
+      "observation_dates": {
+        "DGS10": "2010-04-30",
+        "IRLTLT01JPM156N": "2010-04-30",
+        "IRLTLT01DEM156N": "2010-04-30",
+        "IRLTLT01GBM156N": "2010-04-30"
+      },
+      "levels": {
+        "DGS10": 3.69,
+        "IRLTLT01JPM156N": 1.301,
+        "IRLTLT01DEM156N": 3.05,
+        "IRLTLT01GBM156N": 3.9632
+      }
+    },
+    {
+      "month": "2010-05",
+      "observation_dates": {
+        "DGS10": "2010-05-28",
+        "IRLTLT01JPM156N": "2010-05-31",
+        "IRLTLT01DEM156N": "2010-05-31",
+        "IRLTLT01GBM156N": "2010-05-28"
+      },
+      "levels": {
+        "DGS10": 3.31,
+        "IRLTLT01JPM156N": 1.284,
+        "IRLTLT01DEM156N": 2.67,
+        "IRLTLT01GBM156N": 3.6744
+      }
+    },
+    {
+      "month": "2010-06",
+      "observation_dates": {
+        "DGS10": "2010-06-30",
+        "IRLTLT01JPM156N": "2010-06-30",
+        "IRLTLT01DEM156N": "2010-06-30",
+        "IRLTLT01GBM156N": "2010-06-30"
+      },
+      "levels": {
+        "DGS10": 2.97,
+        "IRLTLT01JPM156N": 1.095,
+        "IRLTLT01DEM156N": 2.57,
+        "IRLTLT01GBM156N": 3.4867
+      }
+    },
+    {
+      "month": "2010-07",
+      "observation_dates": {
+        "DGS10": "2010-07-30",
+        "IRLTLT01JPM156N": "2010-07-30",
+        "IRLTLT01DEM156N": "2010-07-30",
+        "IRLTLT01GBM156N": "2010-07-30"
+      },
+      "levels": {
+        "DGS10": 2.94,
+        "IRLTLT01JPM156N": 1.081,
+        "IRLTLT01DEM156N": 2.68,
+        "IRLTLT01GBM156N": 3.48
+      }
+    },
+    {
+      "month": "2010-08",
+      "observation_dates": {
+        "DGS10": "2010-08-31",
+        "IRLTLT01JPM156N": "2010-08-31",
+        "IRLTLT01DEM156N": "2010-08-31",
+        "IRLTLT01GBM156N": "2010-08-31"
+      },
+      "levels": {
+        "DGS10": 2.47,
+        "IRLTLT01JPM156N": 0.992,
+        "IRLTLT01DEM156N": 2.1,
+        "IRLTLT01GBM156N": 2.94
+      }
+    },
+    {
+      "month": "2010-09",
+      "observation_dates": {
+        "DGS10": "2010-09-30",
+        "IRLTLT01JPM156N": "2010-09-30",
+        "IRLTLT01DEM156N": "2010-09-30",
+        "IRLTLT01GBM156N": "2010-09-30"
+      },
+      "levels": {
+        "DGS10": 2.53,
+        "IRLTLT01JPM156N": 0.937,
+        "IRLTLT01DEM156N": 2.22,
+        "IRLTLT01GBM156N": 3.0457
+      }
+    },
+    {
+      "month": "2010-10",
+      "observation_dates": {
+        "DGS10": "2010-10-29",
+        "IRLTLT01JPM156N": "2010-10-29",
+        "IRLTLT01DEM156N": "2010-10-29",
+        "IRLTLT01GBM156N": "2010-10-29"
+      },
+      "levels": {
+        "DGS10": 2.63,
+        "IRLTLT01JPM156N": 0.937,
+        "IRLTLT01DEM156N": 2.54,
+        "IRLTLT01GBM156N": 3.1897
+      }
+    },
+    {
+      "month": "2010-11",
+      "observation_dates": {
+        "DGS10": "2010-11-30",
+        "IRLTLT01JPM156N": "2010-11-30",
+        "IRLTLT01DEM156N": "2010-11-30",
+        "IRLTLT01GBM156N": "2010-11-30"
+      },
+      "levels": {
+        "DGS10": 2.81,
+        "IRLTLT01JPM156N": 1.19,
+        "IRLTLT01DEM156N": 2.69,
+        "IRLTLT01GBM156N": 3.3511
+      }
+    },
+    {
+      "month": "2010-12",
+      "observation_dates": {
+        "DGS10": "2010-12-31",
+        "IRLTLT01JPM156N": "2010-12-30",
+        "IRLTLT01DEM156N": "2010-12-30",
+        "IRLTLT01GBM156N": "2010-12-31"
+      },
+      "levels": {
+        "DGS10": 3.3,
+        "IRLTLT01JPM156N": 1.127,
+        "IRLTLT01DEM156N": 2.98,
+        "IRLTLT01GBM156N": 3.5154
+      }
+    },
+    {
+      "month": "2011-01",
+      "observation_dates": {
+        "DGS10": "2011-01-31",
+        "IRLTLT01JPM156N": "2011-01-31",
+        "IRLTLT01DEM156N": "2011-01-31",
+        "IRLTLT01GBM156N": "2011-01-31"
+      },
+      "levels": {
+        "DGS10": 3.42,
+        "IRLTLT01JPM156N": 1.22,
+        "IRLTLT01DEM156N": 3.15,
+        "IRLTLT01GBM156N": 3.7599
+      }
+    },
+    {
+      "month": "2011-02",
+      "observation_dates": {
+        "DGS10": "2011-02-28",
+        "IRLTLT01JPM156N": "2011-02-28",
+        "IRLTLT01DEM156N": "2011-02-28",
+        "IRLTLT01GBM156N": "2011-02-28"
+      },
+      "levels": {
+        "DGS10": 3.42,
+        "IRLTLT01JPM156N": 1.266,
+        "IRLTLT01DEM156N": 3.13,
+        "IRLTLT01GBM156N": 3.7765
+      }
+    },
+    {
+      "month": "2011-03",
+      "observation_dates": {
+        "DGS10": "2011-03-31",
+        "IRLTLT01JPM156N": "2011-03-31",
+        "IRLTLT01DEM156N": "2011-03-31",
+        "IRLTLT01GBM156N": "2011-03-31"
+      },
+      "levels": {
+        "DGS10": 3.47,
+        "IRLTLT01JPM156N": 1.255,
+        "IRLTLT01DEM156N": 3.35,
+        "IRLTLT01GBM156N": 3.7882
+      }
+    },
+    {
+      "month": "2011-04",
+      "observation_dates": {
+        "DGS10": "2011-04-29",
+        "IRLTLT01JPM156N": "2011-04-28",
+        "IRLTLT01DEM156N": "2011-04-29",
+        "IRLTLT01GBM156N": "2011-04-28"
+      },
+      "levels": {
+        "DGS10": 3.32,
+        "IRLTLT01JPM156N": 1.217,
+        "IRLTLT01DEM156N": 3.27,
+        "IRLTLT01GBM156N": 3.603
+      }
+    },
+    {
+      "month": "2011-05",
+      "observation_dates": {
+        "DGS10": "2011-05-31",
+        "IRLTLT01JPM156N": "2011-05-31",
+        "IRLTLT01DEM156N": "2011-05-31",
+        "IRLTLT01GBM156N": "2011-05-31"
+      },
+      "levels": {
+        "DGS10": 3.05,
+        "IRLTLT01JPM156N": 1.169,
+        "IRLTLT01DEM156N": 3.04,
+        "IRLTLT01GBM156N": 3.4583
+      }
+    },
+    {
+      "month": "2011-06",
+      "observation_dates": {
+        "DGS10": "2011-06-30",
+        "IRLTLT01JPM156N": "2011-06-30",
+        "IRLTLT01DEM156N": "2011-06-30",
+        "IRLTLT01GBM156N": "2011-06-30"
+      },
+      "levels": {
+        "DGS10": 3.18,
+        "IRLTLT01JPM156N": 1.138,
+        "IRLTLT01DEM156N": 2.98,
+        "IRLTLT01GBM156N": 3.5433
+      }
+    },
+    {
+      "month": "2011-07",
+      "observation_dates": {
+        "DGS10": "2011-07-29",
+        "IRLTLT01JPM156N": "2011-07-29",
+        "IRLTLT01DEM156N": "2011-07-29",
+        "IRLTLT01GBM156N": "2011-07-29"
+      },
+      "levels": {
+        "DGS10": 2.82,
+        "IRLTLT01JPM156N": 1.095,
+        "IRLTLT01DEM156N": 2.6,
+        "IRLTLT01GBM156N": 3.0773
+      }
+    },
+    {
+      "month": "2011-08",
+      "observation_dates": {
+        "DGS10": "2011-08-31",
+        "IRLTLT01JPM156N": "2011-08-31",
+        "IRLTLT01DEM156N": "2011-08-31",
+        "IRLTLT01GBM156N": "2011-08-31"
+      },
+      "levels": {
+        "DGS10": 2.23,
+        "IRLTLT01JPM156N": 1.056,
+        "IRLTLT01DEM156N": 2.18,
+        "IRLTLT01GBM156N": 2.8216
+      }
+    },
+    {
+      "month": "2011-09",
+      "observation_dates": {
+        "DGS10": "2011-09-30",
+        "IRLTLT01JPM156N": "2011-09-30",
+        "IRLTLT01DEM156N": "2011-09-30",
+        "IRLTLT01GBM156N": "2011-09-30"
+      },
+      "levels": {
+        "DGS10": 1.92,
+        "IRLTLT01JPM156N": 1.032,
+        "IRLTLT01DEM156N": 1.97,
+        "IRLTLT01GBM156N": 2.4559
+      }
+    },
+    {
+      "month": "2011-10",
+      "observation_dates": {
+        "DGS10": "2011-10-31",
+        "IRLTLT01JPM156N": "2011-10-31",
+        "IRLTLT01DEM156N": "2011-10-31",
+        "IRLTLT01GBM156N": "2011-10-31"
+      },
+      "levels": {
+        "DGS10": 2.17,
+        "IRLTLT01JPM156N": 1.056,
+        "IRLTLT01DEM156N": 2.11,
+        "IRLTLT01GBM156N": 2.4896
+      }
+    },
+    {
+      "month": "2011-11",
+      "observation_dates": {
+        "DGS10": "2011-11-30",
+        "IRLTLT01JPM156N": "2011-11-30",
+        "IRLTLT01DEM156N": "2011-11-30",
+        "IRLTLT01GBM156N": "2011-11-30"
+      },
+      "levels": {
+        "DGS10": 2.08,
+        "IRLTLT01JPM156N": 1.082,
+        "IRLTLT01DEM156N": 2.3,
+        "IRLTLT01GBM156N": 2.3467
+      }
+    },
+    {
+      "month": "2011-12",
+      "observation_dates": {
+        "DGS10": "2011-12-30",
+        "IRLTLT01JPM156N": "2011-12-30",
+        "IRLTLT01DEM156N": "2011-12-30",
+        "IRLTLT01GBM156N": "2011-12-30"
+      },
+      "levels": {
+        "DGS10": 1.89,
+        "IRLTLT01JPM156N": 0.987,
+        "IRLTLT01DEM156N": 1.83,
+        "IRLTLT01GBM156N": 2.0604
+      }
+    },
+    {
+      "month": "2012-01",
+      "observation_dates": {
+        "DGS10": "2012-01-31",
+        "IRLTLT01JPM156N": "2012-01-31",
+        "IRLTLT01DEM156N": "2012-01-31",
+        "IRLTLT01GBM156N": "2012-01-31"
+      },
+      "levels": {
+        "DGS10": 1.83,
+        "IRLTLT01JPM156N": 0.974,
+        "IRLTLT01DEM156N": 1.83,
+        "IRLTLT01GBM156N": 2.043
+      }
+    },
+    {
+      "month": "2012-02",
+      "observation_dates": {
+        "DGS10": "2012-02-29",
+        "IRLTLT01JPM156N": "2012-02-29",
+        "IRLTLT01DEM156N": "2012-02-29",
+        "IRLTLT01GBM156N": "2012-02-29"
+      },
+      "levels": {
+        "DGS10": 1.98,
+        "IRLTLT01JPM156N": 0.977,
+        "IRLTLT01DEM156N": 1.83,
+        "IRLTLT01GBM156N": 2.1951
+      }
+    },
+    {
+      "month": "2012-03",
+      "observation_dates": {
+        "DGS10": "2012-03-30",
+        "IRLTLT01JPM156N": "2012-03-30",
+        "IRLTLT01DEM156N": "2012-03-30",
+        "IRLTLT01GBM156N": "2012-03-30"
+      },
+      "levels": {
+        "DGS10": 2.23,
+        "IRLTLT01JPM156N": 0.988,
+        "IRLTLT01DEM156N": 1.81,
+        "IRLTLT01GBM156N": 2.2792
+      }
+    },
+    {
+      "month": "2012-04",
+      "observation_dates": {
+        "DGS10": "2012-04-30",
+        "IRLTLT01JPM156N": "2012-04-27",
+        "IRLTLT01DEM156N": "2012-04-30",
+        "IRLTLT01GBM156N": "2012-04-30"
+      },
+      "levels": {
+        "DGS10": 1.95,
+        "IRLTLT01JPM156N": 0.902,
+        "IRLTLT01DEM156N": 1.69,
+        "IRLTLT01GBM156N": 2.2154
+      }
+    },
+    {
+      "month": "2012-05",
+      "observation_dates": {
+        "DGS10": "2012-05-31",
+        "IRLTLT01JPM156N": "2012-05-31",
+        "IRLTLT01DEM156N": "2012-05-31",
+        "IRLTLT01GBM156N": "2012-05-31"
+      },
+      "levels": {
+        "DGS10": 1.59,
+        "IRLTLT01JPM156N": 0.848,
+        "IRLTLT01DEM156N": 1.29,
+        "IRLTLT01GBM156N": 1.6511
+      }
+    },
+    {
+      "month": "2012-06",
+      "observation_dates": {
+        "DGS10": "2012-06-29",
+        "IRLTLT01JPM156N": "2012-06-29",
+        "IRLTLT01DEM156N": "2012-06-29",
+        "IRLTLT01GBM156N": "2012-06-29"
+      },
+      "levels": {
+        "DGS10": 1.67,
+        "IRLTLT01JPM156N": 0.839,
+        "IRLTLT01DEM156N": 1.6,
+        "IRLTLT01GBM156N": 1.8224
+      }
+    },
+    {
+      "month": "2012-07",
+      "observation_dates": {
+        "DGS10": "2012-07-31",
+        "IRLTLT01JPM156N": "2012-07-31",
+        "IRLTLT01DEM156N": "2012-07-31",
+        "IRLTLT01GBM156N": "2012-07-31"
+      },
+      "levels": {
+        "DGS10": 1.51,
+        "IRLTLT01JPM156N": 0.802,
+        "IRLTLT01DEM156N": 1.35,
+        "IRLTLT01GBM156N": 1.575
+      }
+    },
+    {
+      "month": "2012-08",
+      "observation_dates": {
+        "DGS10": "2012-08-31",
+        "IRLTLT01JPM156N": "2012-08-31",
+        "IRLTLT01DEM156N": "2012-08-31",
+        "IRLTLT01GBM156N": "2012-08-31"
+      },
+      "levels": {
+        "DGS10": 1.57,
+        "IRLTLT01JPM156N": 0.817,
+        "IRLTLT01DEM156N": 1.35,
+        "IRLTLT01GBM156N": 1.6
+      }
+    },
+    {
+      "month": "2012-09",
+      "observation_dates": {
+        "DGS10": "2012-09-28",
+        "IRLTLT01JPM156N": "2012-09-28",
+        "IRLTLT01DEM156N": "2012-09-28",
+        "IRLTLT01GBM156N": "2012-09-28"
+      },
+      "levels": {
+        "DGS10": 1.65,
+        "IRLTLT01JPM156N": 0.774,
+        "IRLTLT01DEM156N": 1.45,
+        "IRLTLT01GBM156N": 1.6637
+      }
+    },
+    {
+      "month": "2012-10",
+      "observation_dates": {
+        "DGS10": "2012-10-31",
+        "IRLTLT01JPM156N": "2012-10-31",
+        "IRLTLT01DEM156N": "2012-10-31",
+        "IRLTLT01GBM156N": "2012-10-31"
+      },
+      "levels": {
+        "DGS10": 1.72,
+        "IRLTLT01JPM156N": 0.784,
+        "IRLTLT01DEM156N": 1.51,
+        "IRLTLT01GBM156N": 1.8304
+      }
+    },
+    {
+      "month": "2012-11",
+      "observation_dates": {
+        "DGS10": "2012-11-30",
+        "IRLTLT01JPM156N": "2012-11-30",
+        "IRLTLT01DEM156N": "2012-11-30",
+        "IRLTLT01GBM156N": "2012-11-30"
+      },
+      "levels": {
+        "DGS10": 1.62,
+        "IRLTLT01JPM156N": 0.73,
+        "IRLTLT01DEM156N": 1.37,
+        "IRLTLT01GBM156N": 1.7501
+      }
+    },
+    {
+      "month": "2012-12",
+      "observation_dates": {
+        "DGS10": "2012-12-31",
+        "IRLTLT01JPM156N": "2012-12-28",
+        "IRLTLT01DEM156N": "2012-12-28",
+        "IRLTLT01GBM156N": "2012-12-31"
+      },
+      "levels": {
+        "DGS10": 1.78,
+        "IRLTLT01JPM156N": 0.794,
+        "IRLTLT01DEM156N": 1.3,
+        "IRLTLT01GBM156N": 1.8378
+      }
+    },
+    {
+      "month": "2013-01",
+      "observation_dates": {
+        "DGS10": "2013-01-31",
+        "IRLTLT01JPM156N": "2013-01-31",
+        "IRLTLT01DEM156N": "2013-01-31",
+        "IRLTLT01GBM156N": "2013-01-31"
+      },
+      "levels": {
+        "DGS10": 2.02,
+        "IRLTLT01JPM156N": 0.763,
+        "IRLTLT01DEM156N": 1.67,
+        "IRLTLT01GBM156N": 2.1341
+      }
+    },
+    {
+      "month": "2013-02",
+      "observation_dates": {
+        "DGS10": "2013-02-28",
+        "IRLTLT01JPM156N": "2013-02-28",
+        "IRLTLT01DEM156N": "2013-02-28",
+        "IRLTLT01GBM156N": "2013-02-28"
+      },
+      "levels": {
+        "DGS10": 1.89,
+        "IRLTLT01JPM156N": 0.681,
+        "IRLTLT01DEM156N": 1.46,
+        "IRLTLT01GBM156N": 2.0514
+      }
+    },
+    {
+      "month": "2013-03",
+      "observation_dates": {
+        "DGS10": "2013-03-28",
+        "IRLTLT01JPM156N": "2013-03-29",
+        "IRLTLT01DEM156N": "2013-03-28",
+        "IRLTLT01GBM156N": "2013-03-28"
+      },
+      "levels": {
+        "DGS10": 1.87,
+        "IRLTLT01JPM156N": 0.564,
+        "IRLTLT01DEM156N": 1.26,
+        "IRLTLT01GBM156N": 1.8401
+      }
+    },
+    {
+      "month": "2013-04",
+      "observation_dates": {
+        "DGS10": "2013-04-30",
+        "IRLTLT01JPM156N": "2013-04-30",
+        "IRLTLT01DEM156N": "2013-04-30",
+        "IRLTLT01GBM156N": "2013-04-30"
+      },
+      "levels": {
+        "DGS10": 1.7,
+        "IRLTLT01JPM156N": 0.611,
+        "IRLTLT01DEM156N": 1.2,
+        "IRLTLT01GBM156N": 1.7478
+      }
+    },
+    {
+      "month": "2013-05",
+      "observation_dates": {
+        "DGS10": "2013-05-31",
+        "IRLTLT01JPM156N": "2013-05-31",
+        "IRLTLT01DEM156N": "2013-05-31",
+        "IRLTLT01GBM156N": "2013-05-31"
+      },
+      "levels": {
+        "DGS10": 2.16,
+        "IRLTLT01JPM156N": 0.865,
+        "IRLTLT01DEM156N": 1.47,
+        "IRLTLT01GBM156N": 2.0944
+      }
+    },
+    {
+      "month": "2013-06",
+      "observation_dates": {
+        "DGS10": "2013-06-28",
+        "IRLTLT01JPM156N": "2013-06-28",
+        "IRLTLT01DEM156N": "2013-06-28",
+        "IRLTLT01GBM156N": "2013-06-28"
+      },
+      "levels": {
+        "DGS10": 2.52,
+        "IRLTLT01JPM156N": 0.845,
+        "IRLTLT01DEM156N": 1.71,
+        "IRLTLT01GBM156N": 2.5351
+      }
+    },
+    {
+      "month": "2013-07",
+      "observation_dates": {
+        "DGS10": "2013-07-31",
+        "IRLTLT01JPM156N": "2013-07-31",
+        "IRLTLT01DEM156N": "2013-07-31",
+        "IRLTLT01GBM156N": "2013-07-31"
+      },
+      "levels": {
+        "DGS10": 2.6,
+        "IRLTLT01JPM156N": 0.797,
+        "IRLTLT01DEM156N": 1.69,
+        "IRLTLT01GBM156N": 2.4734
+      }
+    },
+    {
+      "month": "2013-08",
+      "observation_dates": {
+        "DGS10": "2013-08-30",
+        "IRLTLT01JPM156N": "2013-08-30",
+        "IRLTLT01DEM156N": "2013-08-30",
+        "IRLTLT01GBM156N": "2013-08-30"
+      },
+      "levels": {
+        "DGS10": 2.78,
+        "IRLTLT01JPM156N": 0.735,
+        "IRLTLT01DEM156N": 1.84,
+        "IRLTLT01GBM156N": 2.7429
+      }
+    },
+    {
+      "month": "2013-09",
+      "observation_dates": {
+        "DGS10": "2013-09-30",
+        "IRLTLT01JPM156N": "2013-09-30",
+        "IRLTLT01DEM156N": "2013-09-30",
+        "IRLTLT01GBM156N": "2013-09-30"
+      },
+      "levels": {
+        "DGS10": 2.64,
+        "IRLTLT01JPM156N": 0.685,
+        "IRLTLT01DEM156N": 1.77,
+        "IRLTLT01GBM156N": 2.6788
+      }
+    },
+    {
+      "month": "2013-10",
+      "observation_dates": {
+        "DGS10": "2013-10-31",
+        "IRLTLT01JPM156N": "2013-10-31",
+        "IRLTLT01DEM156N": "2013-10-31",
+        "IRLTLT01GBM156N": "2013-10-31"
+      },
+      "levels": {
+        "DGS10": 2.57,
+        "IRLTLT01JPM156N": 0.603,
+        "IRLTLT01DEM156N": 1.66,
+        "IRLTLT01GBM156N": 2.6283
+      }
+    },
+    {
+      "month": "2013-11",
+      "observation_dates": {
+        "DGS10": "2013-11-29",
+        "IRLTLT01JPM156N": "2013-11-29",
+        "IRLTLT01DEM156N": "2013-11-29",
+        "IRLTLT01GBM156N": "2013-11-29"
+      },
+      "levels": {
+        "DGS10": 2.75,
+        "IRLTLT01JPM156N": 0.611,
+        "IRLTLT01DEM156N": 1.69,
+        "IRLTLT01GBM156N": 2.7939
+      }
+    },
+    {
+      "month": "2013-12",
+      "observation_dates": {
+        "DGS10": "2013-12-31",
+        "IRLTLT01JPM156N": "2013-12-30",
+        "IRLTLT01DEM156N": "2013-12-30",
+        "IRLTLT01GBM156N": "2013-12-31"
+      },
+      "levels": {
+        "DGS10": 3.04,
+        "IRLTLT01JPM156N": 0.736,
+        "IRLTLT01DEM156N": 1.96,
+        "IRLTLT01GBM156N": 3.0466
+      }
+    },
+    {
+      "month": "2014-01",
+      "observation_dates": {
+        "DGS10": "2014-01-31",
+        "IRLTLT01JPM156N": "2014-01-31",
+        "IRLTLT01DEM156N": "2014-01-31",
+        "IRLTLT01GBM156N": "2014-01-31"
+      },
+      "levels": {
+        "DGS10": 2.67,
+        "IRLTLT01JPM156N": 0.627,
+        "IRLTLT01DEM156N": 1.67,
+        "IRLTLT01GBM156N": 2.7847
+      }
+    },
+    {
+      "month": "2014-02",
+      "observation_dates": {
+        "DGS10": "2014-02-28",
+        "IRLTLT01JPM156N": "2014-02-28",
+        "IRLTLT01DEM156N": "2014-02-28",
+        "IRLTLT01GBM156N": "2014-02-28"
+      },
+      "levels": {
+        "DGS10": 2.66,
+        "IRLTLT01JPM156N": 0.594,
+        "IRLTLT01DEM156N": 1.61,
+        "IRLTLT01GBM156N": 2.8093
+      }
+    },
+    {
+      "month": "2014-03",
+      "observation_dates": {
+        "DGS10": "2014-03-31",
+        "IRLTLT01JPM156N": "2014-03-31",
+        "IRLTLT01DEM156N": "2014-03-31",
+        "IRLTLT01GBM156N": "2014-03-31"
+      },
+      "levels": {
+        "DGS10": 2.73,
+        "IRLTLT01JPM156N": 0.641,
+        "IRLTLT01DEM156N": 1.57,
+        "IRLTLT01GBM156N": 2.7899
+      }
+    },
+    {
+      "month": "2014-04",
+      "observation_dates": {
+        "DGS10": "2014-04-30",
+        "IRLTLT01JPM156N": "2014-04-30",
+        "IRLTLT01DEM156N": "2014-04-30",
+        "IRLTLT01GBM156N": "2014-04-30"
+      },
+      "levels": {
+        "DGS10": 2.67,
+        "IRLTLT01JPM156N": 0.623,
+        "IRLTLT01DEM156N": 1.52,
+        "IRLTLT01GBM156N": 2.7658
+      }
+    },
+    {
+      "month": "2014-05",
+      "observation_dates": {
+        "DGS10": "2014-05-30",
+        "IRLTLT01JPM156N": "2014-05-30",
+        "IRLTLT01DEM156N": "2014-05-30",
+        "IRLTLT01GBM156N": "2014-05-30"
+      },
+      "levels": {
+        "DGS10": 2.48,
+        "IRLTLT01JPM156N": 0.589,
+        "IRLTLT01DEM156N": 1.37,
+        "IRLTLT01GBM156N": 2.6507
+      }
+    },
+    {
+      "month": "2014-06",
+      "observation_dates": {
+        "DGS10": "2014-06-30",
+        "IRLTLT01JPM156N": "2014-06-30",
+        "IRLTLT01DEM156N": "2014-06-30",
+        "IRLTLT01GBM156N": "2014-06-30"
+      },
+      "levels": {
+        "DGS10": 2.53,
+        "IRLTLT01JPM156N": 0.564,
+        "IRLTLT01DEM156N": 1.25,
+        "IRLTLT01GBM156N": 2.7673
+      }
+    },
+    {
+      "month": "2014-07",
+      "observation_dates": {
+        "DGS10": "2014-07-31",
+        "IRLTLT01JPM156N": "2014-07-31",
+        "IRLTLT01DEM156N": "2014-07-31",
+        "IRLTLT01GBM156N": "2014-07-31"
+      },
+      "levels": {
+        "DGS10": 2.58,
+        "IRLTLT01JPM156N": 0.542,
+        "IRLTLT01DEM156N": 1.15,
+        "IRLTLT01GBM156N": 2.7179
+      }
+    },
+    {
+      "month": "2014-08",
+      "observation_dates": {
+        "DGS10": "2014-08-29",
+        "IRLTLT01JPM156N": "2014-08-29",
+        "IRLTLT01DEM156N": "2014-08-29",
+        "IRLTLT01GBM156N": "2014-08-29"
+      },
+      "levels": {
+        "DGS10": 2.35,
+        "IRLTLT01JPM156N": 0.508,
+        "IRLTLT01DEM156N": 0.9,
+        "IRLTLT01GBM156N": 2.375
+      }
+    },
+    {
+      "month": "2014-09",
+      "observation_dates": {
+        "DGS10": "2014-09-30",
+        "IRLTLT01JPM156N": "2014-09-30",
+        "IRLTLT01DEM156N": "2014-09-30",
+        "IRLTLT01GBM156N": "2014-09-30"
+      },
+      "levels": {
+        "DGS10": 2.52,
+        "IRLTLT01JPM156N": 0.522,
+        "IRLTLT01DEM156N": 0.97,
+        "IRLTLT01GBM156N": 2.4504
+      }
+    },
+    {
+      "month": "2014-10",
+      "observation_dates": {
+        "DGS10": "2014-10-31",
+        "IRLTLT01JPM156N": "2014-10-31",
+        "IRLTLT01DEM156N": "2014-10-31",
+        "IRLTLT01GBM156N": "2014-10-31"
+      },
+      "levels": {
+        "DGS10": 2.35,
+        "IRLTLT01JPM156N": 0.466,
+        "IRLTLT01DEM156N": 0.84,
+        "IRLTLT01GBM156N": 2.284
+      }
+    },
+    {
+      "month": "2014-11",
+      "observation_dates": {
+        "DGS10": "2014-11-28",
+        "IRLTLT01JPM156N": "2014-11-28",
+        "IRLTLT01DEM156N": "2014-11-28",
+        "IRLTLT01GBM156N": "2014-11-28"
+      },
+      "levels": {
+        "DGS10": 2.18,
+        "IRLTLT01JPM156N": 0.431,
+        "IRLTLT01DEM156N": 0.7,
+        "IRLTLT01GBM156N": 1.9575
+      }
+    },
+    {
+      "month": "2014-12",
+      "observation_dates": {
+        "DGS10": "2014-12-31",
+        "IRLTLT01JPM156N": "2014-12-30",
+        "IRLTLT01DEM156N": "2014-12-30",
+        "IRLTLT01GBM156N": "2014-12-31"
+      },
+      "levels": {
+        "DGS10": 2.17,
+        "IRLTLT01JPM156N": 0.325,
+        "IRLTLT01DEM156N": 0.56,
+        "IRLTLT01GBM156N": 1.8155
+      }
+    },
+    {
+      "month": "2015-01",
+      "observation_dates": {
+        "DGS10": "2015-01-30",
+        "IRLTLT01JPM156N": "2015-01-30",
+        "IRLTLT01DEM156N": "2015-01-30",
+        "IRLTLT01GBM156N": "2015-01-30"
+      },
+      "levels": {
+        "DGS10": 1.68,
+        "IRLTLT01JPM156N": 0.288,
+        "IRLTLT01DEM156N": 0.35,
+        "IRLTLT01GBM156N": 1.3979
+      }
+    },
+    {
+      "month": "2015-02",
+      "observation_dates": {
+        "DGS10": "2015-02-27",
+        "IRLTLT01JPM156N": "2015-02-27",
+        "IRLTLT01DEM156N": "2015-02-27",
+        "IRLTLT01GBM156N": "2015-02-27"
+      },
+      "levels": {
+        "DGS10": 2.0,
+        "IRLTLT01JPM156N": 0.349,
+        "IRLTLT01DEM156N": 0.33,
+        "IRLTLT01GBM156N": 1.8615
+      }
+    },
+    {
+      "month": "2015-03",
+      "observation_dates": {
+        "DGS10": "2015-03-31",
+        "IRLTLT01JPM156N": "2015-03-31",
+        "IRLTLT01DEM156N": "2015-03-31",
+        "IRLTLT01GBM156N": "2015-03-31"
+      },
+      "levels": {
+        "DGS10": 1.94,
+        "IRLTLT01JPM156N": 0.398,
+        "IRLTLT01DEM156N": 0.21,
+        "IRLTLT01GBM156N": 1.6969
+      }
+    },
+    {
+      "month": "2015-04",
+      "observation_dates": {
+        "DGS10": "2015-04-30",
+        "IRLTLT01JPM156N": "2015-04-30",
+        "IRLTLT01DEM156N": "2015-04-30",
+        "IRLTLT01GBM156N": "2015-04-30"
+      },
+      "levels": {
+        "DGS10": 2.05,
+        "IRLTLT01JPM156N": 0.336,
+        "IRLTLT01DEM156N": 0.33,
+        "IRLTLT01GBM156N": 1.9531
+      }
+    },
+    {
+      "month": "2015-05",
+      "observation_dates": {
+        "DGS10": "2015-05-29",
+        "IRLTLT01JPM156N": "2015-05-29",
+        "IRLTLT01DEM156N": "2015-05-29",
+        "IRLTLT01GBM156N": "2015-05-29"
+      },
+      "levels": {
+        "DGS10": 2.12,
+        "IRLTLT01JPM156N": 0.406,
+        "IRLTLT01DEM156N": 0.51,
+        "IRLTLT01GBM156N": 1.9324
+      }
+    },
+    {
+      "month": "2015-06",
+      "observation_dates": {
+        "DGS10": "2015-06-30",
+        "IRLTLT01JPM156N": "2015-06-30",
+        "IRLTLT01DEM156N": "2015-06-30",
+        "IRLTLT01GBM156N": "2015-06-30"
+      },
+      "levels": {
+        "DGS10": 2.35,
+        "IRLTLT01JPM156N": 0.451,
+        "IRLTLT01DEM156N": 0.78,
+        "IRLTLT01GBM156N": 2.1373
+      }
+    },
+    {
+      "month": "2015-07",
+      "observation_dates": {
+        "DGS10": "2015-07-31",
+        "IRLTLT01JPM156N": "2015-07-31",
+        "IRLTLT01DEM156N": "2015-07-31",
+        "IRLTLT01GBM156N": "2015-07-31"
+      },
+      "levels": {
+        "DGS10": 2.2,
+        "IRLTLT01JPM156N": 0.414,
+        "IRLTLT01DEM156N": 0.67,
+        "IRLTLT01GBM156N": 2.016
+      }
+    },
+    {
+      "month": "2015-08",
+      "observation_dates": {
+        "DGS10": "2015-08-31",
+        "IRLTLT01JPM156N": "2015-08-31",
+        "IRLTLT01DEM156N": "2015-08-31",
+        "IRLTLT01GBM156N": "2015-08-28"
+      },
+      "levels": {
+        "DGS10": 2.21,
+        "IRLTLT01JPM156N": 0.392,
+        "IRLTLT01DEM156N": 0.73,
+        "IRLTLT01GBM156N": 1.9884
+      }
+    },
+    {
+      "month": "2015-09",
+      "observation_dates": {
+        "DGS10": "2015-09-30",
+        "IRLTLT01JPM156N": "2015-09-30",
+        "IRLTLT01DEM156N": "2015-09-30",
+        "IRLTLT01GBM156N": "2015-09-30"
+      },
+      "levels": {
+        "DGS10": 2.06,
+        "IRLTLT01JPM156N": 0.348,
+        "IRLTLT01DEM156N": 0.6,
+        "IRLTLT01GBM156N": 1.8137
+      }
+    },
+    {
+      "month": "2015-10",
+      "observation_dates": {
+        "DGS10": "2015-10-30",
+        "IRLTLT01JPM156N": "2015-10-30",
+        "IRLTLT01DEM156N": "2015-10-30",
+        "IRLTLT01GBM156N": "2015-10-30"
+      },
+      "levels": {
+        "DGS10": 2.16,
+        "IRLTLT01JPM156N": 0.306,
+        "IRLTLT01DEM156N": 0.51,
+        "IRLTLT01GBM156N": 1.9393
+      }
+    },
+    {
+      "month": "2015-11",
+      "observation_dates": {
+        "DGS10": "2015-11-30",
+        "IRLTLT01JPM156N": "2015-11-30",
+        "IRLTLT01DEM156N": "2015-11-30",
+        "IRLTLT01GBM156N": "2015-11-30"
+      },
+      "levels": {
+        "DGS10": 2.21,
+        "IRLTLT01JPM156N": 0.317,
+        "IRLTLT01DEM156N": 0.47,
+        "IRLTLT01GBM156N": 1.8788
+      }
+    },
+    {
+      "month": "2015-12",
+      "observation_dates": {
+        "DGS10": "2015-12-31",
+        "IRLTLT01JPM156N": "2015-12-30",
+        "IRLTLT01DEM156N": "2015-12-30",
+        "IRLTLT01GBM156N": "2015-12-31"
+      },
+      "levels": {
+        "DGS10": 2.27,
+        "IRLTLT01JPM156N": 0.267,
+        "IRLTLT01DEM156N": 0.64,
+        "IRLTLT01GBM156N": 2.0248
+      }
+    },
+    {
+      "month": "2016-01",
+      "observation_dates": {
+        "DGS10": "2016-01-29",
+        "IRLTLT01JPM156N": "2016-01-29",
+        "IRLTLT01DEM156N": "2016-01-29",
+        "IRLTLT01GBM156N": "2016-01-29"
+      },
+      "levels": {
+        "DGS10": 1.94,
+        "IRLTLT01JPM156N": 0.104,
+        "IRLTLT01DEM156N": 0.36,
+        "IRLTLT01GBM156N": 1.6305
+      }
+    },
+    {
+      "month": "2016-02",
+      "observation_dates": {
+        "DGS10": "2016-02-29",
+        "IRLTLT01JPM156N": "2016-02-29",
+        "IRLTLT01DEM156N": "2016-02-29",
+        "IRLTLT01GBM156N": "2016-02-29"
+      },
+      "levels": {
+        "DGS10": 1.74,
+        "IRLTLT01JPM156N": -0.055,
+        "IRLTLT01DEM156N": 0.11,
+        "IRLTLT01GBM156N": 1.4032
+      }
+    },
+    {
+      "month": "2016-03",
+      "observation_dates": {
+        "DGS10": "2016-03-31",
+        "IRLTLT01JPM156N": "2016-03-31",
+        "IRLTLT01DEM156N": "2016-03-31",
+        "IRLTLT01GBM156N": "2016-03-31"
+      },
+      "levels": {
+        "DGS10": 1.78,
+        "IRLTLT01JPM156N": -0.049,
+        "IRLTLT01DEM156N": 0.14,
+        "IRLTLT01GBM156N": 1.4963
+      }
+    },
+    {
+      "month": "2016-04",
+      "observation_dates": {
+        "DGS10": "2016-04-29",
+        "IRLTLT01JPM156N": "2016-04-28",
+        "IRLTLT01DEM156N": "2016-04-29",
+        "IRLTLT01GBM156N": "2016-04-29"
+      },
+      "levels": {
+        "DGS10": 1.83,
+        "IRLTLT01JPM156N": -0.082,
+        "IRLTLT01DEM156N": 0.24,
+        "IRLTLT01GBM156N": 1.678
+      }
+    },
+    {
+      "month": "2016-05",
+      "observation_dates": {
+        "DGS10": "2016-05-31",
+        "IRLTLT01JPM156N": "2016-05-31",
+        "IRLTLT01DEM156N": "2016-05-31",
+        "IRLTLT01GBM156N": "2016-05-31"
+      },
+      "levels": {
+        "DGS10": 1.84,
+        "IRLTLT01JPM156N": -0.112,
+        "IRLTLT01DEM156N": 0.18,
+        "IRLTLT01GBM156N": 1.5465
+      }
+    },
+    {
+      "month": "2016-06",
+      "observation_dates": {
+        "DGS10": "2016-06-30",
+        "IRLTLT01JPM156N": "2016-06-30",
+        "IRLTLT01DEM156N": "2016-06-30",
+        "IRLTLT01GBM156N": "2016-06-30"
+      },
+      "levels": {
+        "DGS10": 1.49,
+        "IRLTLT01JPM156N": -0.237,
+        "IRLTLT01DEM156N": -0.1,
+        "IRLTLT01GBM156N": 1.0416
+      }
+    },
+    {
+      "month": "2016-07",
+      "observation_dates": {
+        "DGS10": "2016-07-29",
+        "IRLTLT01JPM156N": "2016-07-29",
+        "IRLTLT01DEM156N": "2016-07-29",
+        "IRLTLT01GBM156N": "2016-07-29"
+      },
+      "levels": {
+        "DGS10": 1.46,
+        "IRLTLT01JPM156N": -0.178,
+        "IRLTLT01DEM156N": -0.07,
+        "IRLTLT01GBM156N": 0.8623
+      }
+    },
+    {
+      "month": "2016-08",
+      "observation_dates": {
+        "DGS10": "2016-08-31",
+        "IRLTLT01JPM156N": "2016-08-31",
+        "IRLTLT01DEM156N": "2016-08-31",
+        "IRLTLT01GBM156N": "2016-08-31"
+      },
+      "levels": {
+        "DGS10": 1.58,
+        "IRLTLT01JPM156N": -0.058,
+        "IRLTLT01DEM156N": -0.09,
+        "IRLTLT01GBM156N": 0.7286
+      }
+    },
+    {
+      "month": "2016-09",
+      "observation_dates": {
+        "DGS10": "2016-09-30",
+        "IRLTLT01JPM156N": "2016-09-30",
+        "IRLTLT01DEM156N": "2016-09-30",
+        "IRLTLT01GBM156N": "2016-09-30"
+      },
+      "levels": {
+        "DGS10": 1.6,
+        "IRLTLT01JPM156N": -0.084,
+        "IRLTLT01DEM156N": -0.15,
+        "IRLTLT01GBM156N": 0.8233
+      }
+    },
+    {
+      "month": "2016-10",
+      "observation_dates": {
+        "DGS10": "2016-10-31",
+        "IRLTLT01JPM156N": "2016-10-31",
+        "IRLTLT01DEM156N": "2016-10-31",
+        "IRLTLT01GBM156N": "2016-10-31"
+      },
+      "levels": {
+        "DGS10": 1.84,
+        "IRLTLT01JPM156N": -0.049,
+        "IRLTLT01DEM156N": 0.16,
+        "IRLTLT01GBM156N": 1.2705
+      }
+    },
+    {
+      "month": "2016-11",
+      "observation_dates": {
+        "DGS10": "2016-11-30",
+        "IRLTLT01JPM156N": "2016-11-30",
+        "IRLTLT01DEM156N": "2016-11-30",
+        "IRLTLT01GBM156N": "2016-11-30"
+      },
+      "levels": {
+        "DGS10": 2.37,
+        "IRLTLT01JPM156N": 0.021,
+        "IRLTLT01DEM156N": 0.21,
+        "IRLTLT01GBM156N": 1.4528
+      }
+    },
+    {
+      "month": "2016-12",
+      "observation_dates": {
+        "DGS10": "2016-12-30",
+        "IRLTLT01JPM156N": "2016-12-30",
+        "IRLTLT01DEM156N": "2016-12-30",
+        "IRLTLT01GBM156N": "2016-12-30"
+      },
+      "levels": {
+        "DGS10": 2.45,
+        "IRLTLT01JPM156N": 0.043,
+        "IRLTLT01DEM156N": 0.19,
+        "IRLTLT01GBM156N": 1.2817
+      }
+    },
+    {
+      "month": "2017-01",
+      "observation_dates": {
+        "DGS10": "2017-01-31",
+        "IRLTLT01JPM156N": "2017-01-31",
+        "IRLTLT01DEM156N": "2017-01-31",
+        "IRLTLT01GBM156N": "2017-01-31"
+      },
+      "levels": {
+        "DGS10": 2.45,
+        "IRLTLT01JPM156N": 0.087,
+        "IRLTLT01DEM156N": 0.48,
+        "IRLTLT01GBM156N": 1.4604
+      }
+    },
+    {
+      "month": "2017-02",
+      "observation_dates": {
+        "DGS10": "2017-02-28",
+        "IRLTLT01JPM156N": "2017-02-28",
+        "IRLTLT01DEM156N": "2017-02-28",
+        "IRLTLT01GBM156N": "2017-02-28"
+      },
+      "levels": {
+        "DGS10": 2.36,
+        "IRLTLT01JPM156N": 0.059,
+        "IRLTLT01DEM156N": 0.21,
+        "IRLTLT01GBM156N": 1.1227
+      }
+    },
+    {
+      "month": "2017-03",
+      "observation_dates": {
+        "DGS10": "2017-03-31",
+        "IRLTLT01JPM156N": "2017-03-31",
+        "IRLTLT01DEM156N": "2017-03-31",
+        "IRLTLT01GBM156N": "2017-03-31"
+      },
+      "levels": {
+        "DGS10": 2.4,
+        "IRLTLT01JPM156N": 0.067,
+        "IRLTLT01DEM156N": 0.34,
+        "IRLTLT01GBM156N": 1.122
+      }
+    },
+    {
+      "month": "2017-04",
+      "observation_dates": {
+        "DGS10": "2017-04-28",
+        "IRLTLT01JPM156N": "2017-04-28",
+        "IRLTLT01DEM156N": "2017-04-28",
+        "IRLTLT01GBM156N": "2017-04-28"
+      },
+      "levels": {
+        "DGS10": 2.29,
+        "IRLTLT01JPM156N": 0.016,
+        "IRLTLT01DEM156N": 0.33,
+        "IRLTLT01GBM156N": 1.1015
+      }
+    },
+    {
+      "month": "2017-05",
+      "observation_dates": {
+        "DGS10": "2017-05-31",
+        "IRLTLT01JPM156N": "2017-05-31",
+        "IRLTLT01DEM156N": "2017-05-31",
+        "IRLTLT01GBM156N": "2017-05-31"
+      },
+      "levels": {
+        "DGS10": 2.21,
+        "IRLTLT01JPM156N": 0.05,
+        "IRLTLT01DEM156N": 0.3,
+        "IRLTLT01GBM156N": 1.0607
+      }
+    },
+    {
+      "month": "2017-06",
+      "observation_dates": {
+        "DGS10": "2017-06-30",
+        "IRLTLT01JPM156N": "2017-06-30",
+        "IRLTLT01DEM156N": "2017-06-30",
+        "IRLTLT01GBM156N": "2017-06-30"
+      },
+      "levels": {
+        "DGS10": 2.31,
+        "IRLTLT01JPM156N": 0.086,
+        "IRLTLT01DEM156N": 0.43,
+        "IRLTLT01GBM156N": 1.284
+      }
+    },
+    {
+      "month": "2017-07",
+      "observation_dates": {
+        "DGS10": "2017-07-31",
+        "IRLTLT01JPM156N": "2017-07-31",
+        "IRLTLT01DEM156N": "2017-07-31",
+        "IRLTLT01GBM156N": "2017-07-31"
+      },
+      "levels": {
+        "DGS10": 2.3,
+        "IRLTLT01JPM156N": 0.078,
+        "IRLTLT01DEM156N": 0.55,
+        "IRLTLT01GBM156N": 1.2454
+      }
+    },
+    {
+      "month": "2017-08",
+      "observation_dates": {
+        "DGS10": "2017-08-31",
+        "IRLTLT01JPM156N": "2017-08-31",
+        "IRLTLT01DEM156N": "2017-08-31",
+        "IRLTLT01GBM156N": "2017-08-31"
+      },
+      "levels": {
+        "DGS10": 2.12,
+        "IRLTLT01JPM156N": 0.008,
+        "IRLTLT01DEM156N": 0.37,
+        "IRLTLT01GBM156N": 1.0688
+      }
+    },
+    {
+      "month": "2017-09",
+      "observation_dates": {
+        "DGS10": "2017-09-29",
+        "IRLTLT01JPM156N": "2017-09-29",
+        "IRLTLT01DEM156N": "2017-09-29",
+        "IRLTLT01GBM156N": "2017-09-29"
+      },
+      "levels": {
+        "DGS10": 2.33,
+        "IRLTLT01JPM156N": 0.062,
+        "IRLTLT01DEM156N": 0.45,
+        "IRLTLT01GBM156N": 1.3828
+      }
+    },
+    {
+      "month": "2017-10",
+      "observation_dates": {
+        "DGS10": "2017-10-31",
+        "IRLTLT01JPM156N": "2017-10-31",
+        "IRLTLT01DEM156N": "2017-10-30",
+        "IRLTLT01GBM156N": "2017-10-31"
+      },
+      "levels": {
+        "DGS10": 2.38,
+        "IRLTLT01JPM156N": 0.071,
+        "IRLTLT01DEM156N": 0.38,
+        "IRLTLT01GBM156N": 1.376
+      }
+    },
+    {
+      "month": "2017-11",
+      "observation_dates": {
+        "DGS10": "2017-11-30",
+        "IRLTLT01JPM156N": "2017-11-30",
+        "IRLTLT01DEM156N": "2017-11-30",
+        "IRLTLT01GBM156N": "2017-11-30"
+      },
+      "levels": {
+        "DGS10": 2.42,
+        "IRLTLT01JPM156N": 0.04,
+        "IRLTLT01DEM156N": 0.38,
+        "IRLTLT01GBM156N": 1.3711
+      }
+    },
+    {
+      "month": "2017-12",
+      "observation_dates": {
+        "DGS10": "2017-12-29",
+        "IRLTLT01JPM156N": "2017-12-29",
+        "IRLTLT01DEM156N": "2017-12-29",
+        "IRLTLT01GBM156N": "2017-12-29"
+      },
+      "levels": {
+        "DGS10": 2.4,
+        "IRLTLT01JPM156N": 0.047,
+        "IRLTLT01DEM156N": 0.42,
+        "IRLTLT01GBM156N": 1.2536
+      }
+    },
+    {
+      "month": "2018-01",
+      "observation_dates": {
+        "DGS10": "2018-01-31",
+        "IRLTLT01JPM156N": "2018-01-31",
+        "IRLTLT01DEM156N": "2018-01-31",
+        "IRLTLT01GBM156N": "2018-01-31"
+      },
+      "levels": {
+        "DGS10": 2.72,
+        "IRLTLT01JPM156N": 0.085,
+        "IRLTLT01DEM156N": 0.67,
+        "IRLTLT01GBM156N": 1.5281
+      }
+    },
+    {
+      "month": "2018-02",
+      "observation_dates": {
+        "DGS10": "2018-02-28",
+        "IRLTLT01JPM156N": "2018-02-28",
+        "IRLTLT01DEM156N": "2018-02-28",
+        "IRLTLT01GBM156N": "2018-02-28"
+      },
+      "levels": {
+        "DGS10": 2.87,
+        "IRLTLT01JPM156N": 0.054,
+        "IRLTLT01DEM156N": 0.67,
+        "IRLTLT01GBM156N": 1.5533
+      }
+    },
+    {
+      "month": "2018-03",
+      "observation_dates": {
+        "DGS10": "2018-03-29",
+        "IRLTLT01JPM156N": "2018-03-30",
+        "IRLTLT01DEM156N": "2018-03-29",
+        "IRLTLT01GBM156N": "2018-03-29"
+      },
+      "levels": {
+        "DGS10": 2.74,
+        "IRLTLT01JPM156N": 0.043,
+        "IRLTLT01DEM156N": 0.5,
+        "IRLTLT01GBM156N": 1.4096
+      }
+    },
+    {
+      "month": "2018-04",
+      "observation_dates": {
+        "DGS10": "2018-04-30",
+        "IRLTLT01JPM156N": "2018-04-27",
+        "IRLTLT01DEM156N": "2018-04-30",
+        "IRLTLT01GBM156N": "2018-04-30"
+      },
+      "levels": {
+        "DGS10": 2.95,
+        "IRLTLT01JPM156N": 0.055,
+        "IRLTLT01DEM156N": 0.57,
+        "IRLTLT01GBM156N": 1.4902
+      }
+    },
+    {
+      "month": "2018-05",
+      "observation_dates": {
+        "DGS10": "2018-05-31",
+        "IRLTLT01JPM156N": "2018-05-31",
+        "IRLTLT01DEM156N": "2018-05-31",
+        "IRLTLT01GBM156N": "2018-05-31"
+      },
+      "levels": {
+        "DGS10": 2.83,
+        "IRLTLT01JPM156N": 0.039,
+        "IRLTLT01DEM156N": 0.4,
+        "IRLTLT01GBM156N": 1.3247
+      }
+    },
+    {
+      "month": "2018-06",
+      "observation_dates": {
+        "DGS10": "2018-06-29",
+        "IRLTLT01JPM156N": "2018-06-29",
+        "IRLTLT01DEM156N": "2018-06-29",
+        "IRLTLT01GBM156N": "2018-06-29"
+      },
+      "levels": {
+        "DGS10": 2.85,
+        "IRLTLT01JPM156N": 0.04,
+        "IRLTLT01DEM156N": 0.34,
+        "IRLTLT01GBM156N": 1.3821
+      }
+    },
+    {
+      "month": "2018-07",
+      "observation_dates": {
+        "DGS10": "2018-07-31",
+        "IRLTLT01JPM156N": "2018-07-31",
+        "IRLTLT01DEM156N": "2018-07-31",
+        "IRLTLT01GBM156N": "2018-07-31"
+      },
+      "levels": {
+        "DGS10": 2.96,
+        "IRLTLT01JPM156N": 0.05,
+        "IRLTLT01DEM156N": 0.44,
+        "IRLTLT01GBM156N": 1.4297
+      }
+    },
+    {
+      "month": "2018-08",
+      "observation_dates": {
+        "DGS10": "2018-08-31",
+        "IRLTLT01JPM156N": "2018-08-31",
+        "IRLTLT01DEM156N": "2018-08-31",
+        "IRLTLT01GBM156N": "2018-08-31"
+      },
+      "levels": {
+        "DGS10": 2.86,
+        "IRLTLT01JPM156N": 0.11,
+        "IRLTLT01DEM156N": 0.35,
+        "IRLTLT01GBM156N": 1.408
+      }
+    },
+    {
+      "month": "2018-09",
+      "observation_dates": {
+        "DGS10": "2018-09-28",
+        "IRLTLT01JPM156N": "2018-09-28",
+        "IRLTLT01DEM156N": "2018-09-28",
+        "IRLTLT01GBM156N": "2018-09-28"
+      },
+      "levels": {
+        "DGS10": 3.05,
+        "IRLTLT01JPM156N": 0.134,
+        "IRLTLT01DEM156N": 0.49,
+        "IRLTLT01GBM156N": 1.5588
+      }
+    },
+    {
+      "month": "2018-10",
+      "observation_dates": {
+        "DGS10": "2018-10-31",
+        "IRLTLT01JPM156N": "2018-10-31",
+        "IRLTLT01DEM156N": "2018-10-31",
+        "IRLTLT01GBM156N": "2018-10-31"
+      },
+      "levels": {
+        "DGS10": 3.15,
+        "IRLTLT01JPM156N": 0.127,
+        "IRLTLT01DEM156N": 0.38,
+        "IRLTLT01GBM156N": 1.431
+      }
+    },
+    {
+      "month": "2018-11",
+      "observation_dates": {
+        "DGS10": "2018-11-30",
+        "IRLTLT01JPM156N": "2018-11-30",
+        "IRLTLT01DEM156N": "2018-11-30",
+        "IRLTLT01GBM156N": "2018-11-30"
+      },
+      "levels": {
+        "DGS10": 3.01,
+        "IRLTLT01JPM156N": 0.097,
+        "IRLTLT01DEM156N": 0.31,
+        "IRLTLT01GBM156N": 1.43
+      }
+    },
+    {
+      "month": "2018-12",
+      "observation_dates": {
+        "DGS10": "2018-12-31",
+        "IRLTLT01JPM156N": "2018-12-28",
+        "IRLTLT01DEM156N": "2018-12-28",
+        "IRLTLT01GBM156N": "2018-12-31"
+      },
+      "levels": {
+        "DGS10": 2.69,
+        "IRLTLT01JPM156N": 0.013,
+        "IRLTLT01DEM156N": 0.23,
+        "IRLTLT01GBM156N": 1.3339
+      }
+    },
+    {
+      "month": "2019-01",
+      "observation_dates": {
+        "DGS10": "2019-01-31",
+        "IRLTLT01JPM156N": "2019-01-31",
+        "IRLTLT01DEM156N": "2019-01-31",
+        "IRLTLT01GBM156N": "2019-01-31"
+      },
+      "levels": {
+        "DGS10": 2.63,
+        "IRLTLT01JPM156N": 0.006,
+        "IRLTLT01DEM156N": 0.17,
+        "IRLTLT01GBM156N": 1.2531
+      }
+    },
+    {
+      "month": "2019-02",
+      "observation_dates": {
+        "DGS10": "2019-02-28",
+        "IRLTLT01JPM156N": "2019-02-28",
+        "IRLTLT01DEM156N": "2019-02-28",
+        "IRLTLT01GBM156N": "2019-02-28"
+      },
+      "levels": {
+        "DGS10": 2.73,
+        "IRLTLT01JPM156N": -0.019,
+        "IRLTLT01DEM156N": 0.16,
+        "IRLTLT01GBM156N": 1.3366
+      }
+    },
+    {
+      "month": "2019-03",
+      "observation_dates": {
+        "DGS10": "2019-03-29",
+        "IRLTLT01JPM156N": "2019-03-29",
+        "IRLTLT01DEM156N": "2019-03-29",
+        "IRLTLT01GBM156N": "2019-03-29"
+      },
+      "levels": {
+        "DGS10": 2.41,
+        "IRLTLT01JPM156N": -0.082,
+        "IRLTLT01DEM156N": -0.06,
+        "IRLTLT01GBM156N": 1.0945
+      }
+    },
+    {
+      "month": "2019-04",
+      "observation_dates": {
+        "DGS10": "2019-04-30",
+        "IRLTLT01JPM156N": "2019-04-26",
+        "IRLTLT01DEM156N": "2019-04-30",
+        "IRLTLT01GBM156N": "2019-04-30"
+      },
+      "levels": {
+        "DGS10": 2.51,
+        "IRLTLT01JPM156N": -0.045,
+        "IRLTLT01DEM156N": 0.04,
+        "IRLTLT01GBM156N": 1.2238
+      }
+    },
+    {
+      "month": "2019-05",
+      "observation_dates": {
+        "DGS10": "2019-05-31",
+        "IRLTLT01JPM156N": "2019-05-31",
+        "IRLTLT01DEM156N": "2019-05-31",
+        "IRLTLT01GBM156N": "2019-05-31"
+      },
+      "levels": {
+        "DGS10": 2.14,
+        "IRLTLT01JPM156N": -0.092,
+        "IRLTLT01DEM156N": -0.21,
+        "IRLTLT01GBM156N": 0.9775
+      }
+    },
+    {
+      "month": "2019-06",
+      "observation_dates": {
+        "DGS10": "2019-06-28",
+        "IRLTLT01JPM156N": "2019-06-28",
+        "IRLTLT01DEM156N": "2019-06-28",
+        "IRLTLT01GBM156N": "2019-06-28"
+      },
+      "levels": {
+        "DGS10": 2.0,
+        "IRLTLT01JPM156N": -0.156,
+        "IRLTLT01DEM156N": -0.32,
+        "IRLTLT01GBM156N": 0.9509
+      }
+    },
+    {
+      "month": "2019-07",
+      "observation_dates": {
+        "DGS10": "2019-07-31",
+        "IRLTLT01JPM156N": "2019-07-31",
+        "IRLTLT01DEM156N": "2019-07-31",
+        "IRLTLT01GBM156N": "2019-07-31"
+      },
+      "levels": {
+        "DGS10": 2.02,
+        "IRLTLT01JPM156N": -0.157,
+        "IRLTLT01DEM156N": -0.41,
+        "IRLTLT01GBM156N": 0.7313
+      }
+    },
+    {
+      "month": "2019-08",
+      "observation_dates": {
+        "DGS10": "2019-08-30",
+        "IRLTLT01JPM156N": "2019-08-30",
+        "IRLTLT01DEM156N": "2019-08-30",
+        "IRLTLT01GBM156N": "2019-08-30"
+      },
+      "levels": {
+        "DGS10": 1.5,
+        "IRLTLT01JPM156N": -0.275,
+        "IRLTLT01DEM156N": -0.7,
+        "IRLTLT01GBM156N": 0.5161
+      }
+    },
+    {
+      "month": "2019-09",
+      "observation_dates": {
+        "DGS10": "2019-09-30",
+        "IRLTLT01JPM156N": "2019-09-30",
+        "IRLTLT01DEM156N": "2019-09-30",
+        "IRLTLT01GBM156N": "2019-09-30"
+      },
+      "levels": {
+        "DGS10": 1.68,
+        "IRLTLT01JPM156N": -0.206,
+        "IRLTLT01DEM156N": -0.56,
+        "IRLTLT01GBM156N": 0.5092
+      }
+    },
+    {
+      "month": "2019-10",
+      "observation_dates": {
+        "DGS10": "2019-10-31",
+        "IRLTLT01JPM156N": "2019-10-31",
+        "IRLTLT01DEM156N": "2019-10-31",
+        "IRLTLT01GBM156N": "2019-10-31"
+      },
+      "levels": {
+        "DGS10": 1.69,
+        "IRLTLT01JPM156N": -0.139,
+        "IRLTLT01DEM156N": -0.41,
+        "IRLTLT01GBM156N": 0.653
+      }
+    },
+    {
+      "month": "2019-11",
+      "observation_dates": {
+        "DGS10": "2019-11-29",
+        "IRLTLT01JPM156N": "2019-11-29",
+        "IRLTLT01DEM156N": "2019-11-29",
+        "IRLTLT01GBM156N": "2019-11-29"
+      },
+      "levels": {
+        "DGS10": 1.78,
+        "IRLTLT01JPM156N": -0.075,
+        "IRLTLT01DEM156N": -0.37,
+        "IRLTLT01GBM156N": 0.7387
+      }
+    },
+    {
+      "month": "2019-12",
+      "observation_dates": {
+        "DGS10": "2019-12-31",
+        "IRLTLT01JPM156N": "2019-12-30",
+        "IRLTLT01DEM156N": "2019-12-30",
+        "IRLTLT01GBM156N": "2019-12-31"
+      },
+      "levels": {
+        "DGS10": 1.92,
+        "IRLTLT01JPM156N": -0.015,
+        "IRLTLT01DEM156N": -0.21,
+        "IRLTLT01GBM156N": 0.9129
+      }
+    },
+    {
+      "month": "2020-01",
+      "observation_dates": {
+        "DGS10": "2020-01-31",
+        "IRLTLT01JPM156N": "2020-01-31",
+        "IRLTLT01DEM156N": "2020-01-31",
+        "IRLTLT01GBM156N": "2020-01-31"
+      },
+      "levels": {
+        "DGS10": 1.51,
+        "IRLTLT01JPM156N": -0.061,
+        "IRLTLT01DEM156N": -0.41,
+        "IRLTLT01GBM156N": 0.6128
+      }
+    },
+    {
+      "month": "2020-02",
+      "observation_dates": {
+        "DGS10": "2020-02-28",
+        "IRLTLT01JPM156N": "2020-02-28",
+        "IRLTLT01DEM156N": "2020-02-28",
+        "IRLTLT01GBM156N": "2020-02-28"
+      },
+      "levels": {
+        "DGS10": 1.13,
+        "IRLTLT01JPM156N": -0.153,
+        "IRLTLT01DEM156N": -0.61,
+        "IRLTLT01GBM156N": 0.5035
+      }
+    },
+    {
+      "month": "2020-03",
+      "observation_dates": {
+        "DGS10": "2020-03-31",
+        "IRLTLT01JPM156N": "2020-03-31",
+        "IRLTLT01DEM156N": "2020-03-31",
+        "IRLTLT01GBM156N": "2020-03-31"
+      },
+      "levels": {
+        "DGS10": 0.7,
+        "IRLTLT01JPM156N": 0.031,
+        "IRLTLT01DEM156N": -0.48,
+        "IRLTLT01GBM156N": 0.419
+      }
+    },
+    {
+      "month": "2020-04",
+      "observation_dates": {
+        "DGS10": "2020-04-30",
+        "IRLTLT01JPM156N": "2020-04-30",
+        "IRLTLT01DEM156N": "2020-04-30",
+        "IRLTLT01GBM156N": "2020-04-30"
+      },
+      "levels": {
+        "DGS10": 0.64,
+        "IRLTLT01JPM156N": -0.036,
+        "IRLTLT01DEM156N": -0.51,
+        "IRLTLT01GBM156N": 0.325
+      }
+    },
+    {
+      "month": "2020-05",
+      "observation_dates": {
+        "DGS10": "2020-05-29",
+        "IRLTLT01JPM156N": "2020-05-29",
+        "IRLTLT01DEM156N": "2020-05-29",
+        "IRLTLT01GBM156N": "2020-05-29"
+      },
+      "levels": {
+        "DGS10": 0.65,
+        "IRLTLT01JPM156N": 0.009,
+        "IRLTLT01DEM156N": -0.43,
+        "IRLTLT01GBM156N": 0.2292
+      }
+    },
+    {
+      "month": "2020-06",
+      "observation_dates": {
+        "DGS10": "2020-06-30",
+        "IRLTLT01JPM156N": "2020-06-30",
+        "IRLTLT01DEM156N": "2020-06-30",
+        "IRLTLT01GBM156N": "2020-06-30"
+      },
+      "levels": {
+        "DGS10": 0.66,
+        "IRLTLT01JPM156N": 0.042,
+        "IRLTLT01DEM156N": -0.48,
+        "IRLTLT01GBM156N": 0.2074
+      }
+    },
+    {
+      "month": "2020-07",
+      "observation_dates": {
+        "DGS10": "2020-07-31",
+        "IRLTLT01JPM156N": "2020-07-31",
+        "IRLTLT01DEM156N": "2020-07-31",
+        "IRLTLT01GBM156N": "2020-07-31"
+      },
+      "levels": {
+        "DGS10": 0.55,
+        "IRLTLT01JPM156N": 0.018,
+        "IRLTLT01DEM156N": -0.55,
+        "IRLTLT01GBM156N": 0.1702
+      }
+    },
+    {
+      "month": "2020-08",
+      "observation_dates": {
+        "DGS10": "2020-08-31",
+        "IRLTLT01JPM156N": "2020-08-31",
+        "IRLTLT01DEM156N": "2020-08-31",
+        "IRLTLT01GBM156N": "2020-08-28"
+      },
+      "levels": {
+        "DGS10": 0.72,
+        "IRLTLT01JPM156N": 0.056,
+        "IRLTLT01DEM156N": -0.39,
+        "IRLTLT01GBM156N": 0.3763
+      }
+    },
+    {
+      "month": "2020-09",
+      "observation_dates": {
+        "DGS10": "2020-09-30",
+        "IRLTLT01JPM156N": "2020-09-30",
+        "IRLTLT01DEM156N": "2020-09-30",
+        "IRLTLT01GBM156N": "2020-09-30"
+      },
+      "levels": {
+        "DGS10": 0.69,
+        "IRLTLT01JPM156N": 0.027,
+        "IRLTLT01DEM156N": -0.55,
+        "IRLTLT01GBM156N": 0.2774
+      }
+    },
+    {
+      "month": "2020-10",
+      "observation_dates": {
+        "DGS10": "2020-10-30",
+        "IRLTLT01JPM156N": "2020-10-30",
+        "IRLTLT01DEM156N": "2020-10-30",
+        "IRLTLT01GBM156N": "2020-10-30"
+      },
+      "levels": {
+        "DGS10": 0.88,
+        "IRLTLT01JPM156N": 0.041,
+        "IRLTLT01DEM156N": -0.63,
+        "IRLTLT01GBM156N": 0.3074
+      }
+    },
+    {
+      "month": "2020-11",
+      "observation_dates": {
+        "DGS10": "2020-11-30",
+        "IRLTLT01JPM156N": "2020-11-30",
+        "IRLTLT01DEM156N": "2020-11-30",
+        "IRLTLT01GBM156N": "2020-11-30"
+      },
+      "levels": {
+        "DGS10": 0.84,
+        "IRLTLT01JPM156N": 0.034,
+        "IRLTLT01DEM156N": -0.59,
+        "IRLTLT01GBM156N": 0.3639
+      }
+    },
+    {
+      "month": "2020-12",
+      "observation_dates": {
+        "DGS10": "2020-12-31",
+        "IRLTLT01JPM156N": "2020-12-30",
+        "IRLTLT01DEM156N": "2020-12-30",
+        "IRLTLT01GBM156N": "2020-12-31"
+      },
+      "levels": {
+        "DGS10": 0.93,
+        "IRLTLT01JPM156N": 0.035,
+        "IRLTLT01DEM156N": -0.56,
+        "IRLTLT01GBM156N": 0.2513
+      }
+    },
+    {
+      "month": "2021-01",
+      "observation_dates": {
+        "DGS10": "2021-01-29",
+        "IRLTLT01JPM156N": "2021-01-29",
+        "IRLTLT01DEM156N": "2021-01-29",
+        "IRLTLT01GBM156N": "2021-01-29"
+      },
+      "levels": {
+        "DGS10": 1.11,
+        "IRLTLT01JPM156N": 0.056,
+        "IRLTLT01DEM156N": -0.52,
+        "IRLTLT01GBM156N": 0.4196
+      }
+    },
+    {
+      "month": "2021-02",
+      "observation_dates": {
+        "DGS10": "2021-02-26",
+        "IRLTLT01JPM156N": "2021-02-26",
+        "IRLTLT01DEM156N": "2021-02-26",
+        "IRLTLT01GBM156N": "2021-02-26"
+      },
+      "levels": {
+        "DGS10": 1.44,
+        "IRLTLT01JPM156N": 0.168,
+        "IRLTLT01DEM156N": -0.25,
+        "IRLTLT01GBM156N": 0.8767
+      }
+    },
+    {
+      "month": "2021-03",
+      "observation_dates": {
+        "DGS10": "2021-03-31",
+        "IRLTLT01JPM156N": "2021-03-31",
+        "IRLTLT01DEM156N": "2021-03-31",
+        "IRLTLT01GBM156N": "2021-03-31"
+      },
+      "levels": {
+        "DGS10": 1.74,
+        "IRLTLT01JPM156N": 0.104,
+        "IRLTLT01DEM156N": -0.27,
+        "IRLTLT01GBM156N": 0.9108
+      }
+    },
+    {
+      "month": "2021-04",
+      "observation_dates": {
+        "DGS10": "2021-04-30",
+        "IRLTLT01JPM156N": "2021-04-30",
+        "IRLTLT01DEM156N": "2021-04-30",
+        "IRLTLT01GBM156N": "2021-04-30"
+      },
+      "levels": {
+        "DGS10": 1.65,
+        "IRLTLT01JPM156N": 0.095,
+        "IRLTLT01DEM156N": -0.2,
+        "IRLTLT01GBM156N": 0.9139
+      }
+    },
+    {
+      "month": "2021-05",
+      "observation_dates": {
+        "DGS10": "2021-05-28",
+        "IRLTLT01JPM156N": "2021-05-31",
+        "IRLTLT01DEM156N": "2021-05-31",
+        "IRLTLT01GBM156N": "2021-05-28"
+      },
+      "levels": {
+        "DGS10": 1.58,
+        "IRLTLT01JPM156N": 0.084,
+        "IRLTLT01DEM156N": -0.16,
+        "IRLTLT01GBM156N": 0.8741
+      }
+    },
+    {
+      "month": "2021-06",
+      "observation_dates": {
+        "DGS10": "2021-06-30",
+        "IRLTLT01JPM156N": "2021-06-30",
+        "IRLTLT01DEM156N": "2021-06-30",
+        "IRLTLT01GBM156N": "2021-06-30"
+      },
+      "levels": {
+        "DGS10": 1.45,
+        "IRLTLT01JPM156N": 0.07,
+        "IRLTLT01DEM156N": -0.19,
+        "IRLTLT01GBM156N": 0.8229
+      }
+    },
+    {
+      "month": "2021-07",
+      "observation_dates": {
+        "DGS10": "2021-07-30",
+        "IRLTLT01JPM156N": "2021-07-30",
+        "IRLTLT01DEM156N": "2021-07-30",
+        "IRLTLT01GBM156N": "2021-07-30"
+      },
+      "levels": {
+        "DGS10": 1.24,
+        "IRLTLT01JPM156N": 0.022,
+        "IRLTLT01DEM156N": -0.45,
+        "IRLTLT01GBM156N": 0.6471
+      }
+    },
+    {
+      "month": "2021-08",
+      "observation_dates": {
+        "DGS10": "2021-08-31",
+        "IRLTLT01JPM156N": "2021-08-31",
+        "IRLTLT01DEM156N": "2021-08-31",
+        "IRLTLT01GBM156N": "2021-08-31"
+      },
+      "levels": {
+        "DGS10": 1.3,
+        "IRLTLT01JPM156N": 0.03,
+        "IRLTLT01DEM156N": -0.43,
+        "IRLTLT01GBM156N": 0.7103
+      }
+    },
+    {
+      "month": "2021-09",
+      "observation_dates": {
+        "DGS10": "2021-09-30",
+        "IRLTLT01JPM156N": "2021-09-30",
+        "IRLTLT01DEM156N": "2021-09-30",
+        "IRLTLT01GBM156N": "2021-09-30"
+      },
+      "levels": {
+        "DGS10": 1.52,
+        "IRLTLT01JPM156N": 0.081,
+        "IRLTLT01DEM156N": -0.22,
+        "IRLTLT01GBM156N": 1.0313
+      }
+    },
+    {
+      "month": "2021-10",
+      "observation_dates": {
+        "DGS10": "2021-10-29",
+        "IRLTLT01JPM156N": "2021-10-29",
+        "IRLTLT01DEM156N": "2021-10-29",
+        "IRLTLT01GBM156N": "2021-10-29"
+      },
+      "levels": {
+        "DGS10": 1.55,
+        "IRLTLT01JPM156N": 0.101,
+        "IRLTLT01DEM156N": -0.1,
+        "IRLTLT01GBM156N": 1.0507
+      }
+    },
+    {
+      "month": "2021-11",
+      "observation_dates": {
+        "DGS10": "2021-11-30",
+        "IRLTLT01JPM156N": "2021-11-30",
+        "IRLTLT01DEM156N": "2021-11-30",
+        "IRLTLT01GBM156N": "2021-11-30"
+      },
+      "levels": {
+        "DGS10": 1.43,
+        "IRLTLT01JPM156N": 0.067,
+        "IRLTLT01DEM156N": -0.36,
+        "IRLTLT01GBM156N": 0.841
+      }
+    },
+    {
+      "month": "2021-12",
+      "observation_dates": {
+        "DGS10": "2021-12-31",
+        "IRLTLT01JPM156N": "2021-12-30",
+        "IRLTLT01DEM156N": "2021-12-30",
+        "IRLTLT01GBM156N": "2021-12-31"
+      },
+      "levels": {
+        "DGS10": 1.52,
+        "IRLTLT01JPM156N": 0.089,
+        "IRLTLT01DEM156N": -0.21,
+        "IRLTLT01GBM156N": 1.013
+      }
+    },
+    {
+      "month": "2022-01",
+      "observation_dates": {
+        "DGS10": "2022-01-31",
+        "IRLTLT01JPM156N": "2022-01-31",
+        "IRLTLT01DEM156N": "2022-01-31",
+        "IRLTLT01GBM156N": "2022-01-31"
+      },
+      "levels": {
+        "DGS10": 1.79,
+        "IRLTLT01JPM156N": 0.177,
+        "IRLTLT01DEM156N": -0.02,
+        "IRLTLT01GBM156N": 1.3348
+      }
+    },
+    {
+      "month": "2022-02",
+      "observation_dates": {
+        "DGS10": "2022-02-28",
+        "IRLTLT01JPM156N": "2022-02-28",
+        "IRLTLT01DEM156N": "2022-02-28",
+        "IRLTLT01GBM156N": "2022-02-28"
+      },
+      "levels": {
+        "DGS10": 1.83,
+        "IRLTLT01JPM156N": 0.191,
+        "IRLTLT01DEM156N": 0.19,
+        "IRLTLT01GBM156N": 1.4233
+      }
+    },
+    {
+      "month": "2022-03",
+      "observation_dates": {
+        "DGS10": "2022-03-31",
+        "IRLTLT01JPM156N": "2022-03-31",
+        "IRLTLT01DEM156N": "2022-03-31",
+        "IRLTLT01GBM156N": "2022-03-31"
+      },
+      "levels": {
+        "DGS10": 2.32,
+        "IRLTLT01JPM156N": 0.218,
+        "IRLTLT01DEM156N": 0.6,
+        "IRLTLT01GBM156N": 1.6696
+      }
+    },
+    {
+      "month": "2022-04",
+      "observation_dates": {
+        "DGS10": "2022-04-29",
+        "IRLTLT01JPM156N": "2022-04-28",
+        "IRLTLT01DEM156N": "2022-04-29",
+        "IRLTLT01GBM156N": "2022-04-29"
+      },
+      "levels": {
+        "DGS10": 2.89,
+        "IRLTLT01JPM156N": 0.22,
+        "IRLTLT01DEM156N": 0.9,
+        "IRLTLT01GBM156N": 1.9376
+      }
+    },
+    {
+      "month": "2022-05",
+      "observation_dates": {
+        "DGS10": "2022-05-31",
+        "IRLTLT01JPM156N": "2022-05-31",
+        "IRLTLT01DEM156N": "2022-05-31",
+        "IRLTLT01GBM156N": "2022-05-31"
+      },
+      "levels": {
+        "DGS10": 2.85,
+        "IRLTLT01JPM156N": 0.246,
+        "IRLTLT01DEM156N": 1.07,
+        "IRLTLT01GBM156N": 2.1072
+      }
+    },
+    {
+      "month": "2022-06",
+      "observation_dates": {
+        "DGS10": "2022-06-30",
+        "IRLTLT01JPM156N": "2022-06-30",
+        "IRLTLT01DEM156N": "2022-06-30",
+        "IRLTLT01GBM156N": "2022-06-30"
+      },
+      "levels": {
+        "DGS10": 2.98,
+        "IRLTLT01JPM156N": 0.242,
+        "IRLTLT01DEM156N": 1.44,
+        "IRLTLT01GBM156N": 2.2806
+      }
+    },
+    {
+      "month": "2022-07",
+      "observation_dates": {
+        "DGS10": "2022-07-29",
+        "IRLTLT01JPM156N": "2022-07-29",
+        "IRLTLT01DEM156N": "2022-07-29",
+        "IRLTLT01GBM156N": "2022-07-29"
+      },
+      "levels": {
+        "DGS10": 2.67,
+        "IRLTLT01JPM156N": 0.185,
+        "IRLTLT01DEM156N": 0.91,
+        "IRLTLT01GBM156N": 1.9637
+      }
+    },
+    {
+      "month": "2022-08",
+      "observation_dates": {
+        "DGS10": "2022-08-31",
+        "IRLTLT01JPM156N": "2022-08-31",
+        "IRLTLT01DEM156N": "2022-08-31",
+        "IRLTLT01GBM156N": "2022-08-31"
+      },
+      "levels": {
+        "DGS10": 3.15,
+        "IRLTLT01JPM156N": 0.235,
+        "IRLTLT01DEM156N": 1.54,
+        "IRLTLT01GBM156N": 2.9196
+      }
+    },
+    {
+      "month": "2022-09",
+      "observation_dates": {
+        "DGS10": "2022-09-30",
+        "IRLTLT01JPM156N": "2022-09-30",
+        "IRLTLT01DEM156N": "2022-09-30",
+        "IRLTLT01GBM156N": "2022-09-30"
+      },
+      "levels": {
+        "DGS10": 3.83,
+        "IRLTLT01JPM156N": 0.277,
+        "IRLTLT01DEM156N": 2.12,
+        "IRLTLT01GBM156N": 4.163
+      }
+    },
+    {
+      "month": "2022-10",
+      "observation_dates": {
+        "DGS10": "2022-10-31",
+        "IRLTLT01JPM156N": "2022-10-31",
+        "IRLTLT01DEM156N": "2022-10-31",
+        "IRLTLT01GBM156N": "2022-10-31"
+      },
+      "levels": {
+        "DGS10": 4.1,
+        "IRLTLT01JPM156N": 0.253,
+        "IRLTLT01DEM156N": 2.15,
+        "IRLTLT01GBM156N": 3.6952
+      }
+    },
+    {
+      "month": "2022-11",
+      "observation_dates": {
+        "DGS10": "2022-11-30",
+        "IRLTLT01JPM156N": "2022-11-30",
+        "IRLTLT01DEM156N": "2022-11-30",
+        "IRLTLT01GBM156N": "2022-11-30"
+      },
+      "levels": {
+        "DGS10": 3.68,
+        "IRLTLT01JPM156N": 0.276,
+        "IRLTLT01DEM156N": 1.94,
+        "IRLTLT01GBM156N": 3.3672
+      }
+    },
+    {
+      "month": "2022-12",
+      "observation_dates": {
+        "DGS10": "2022-12-30",
+        "IRLTLT01JPM156N": "2022-12-30",
+        "IRLTLT01DEM156N": "2022-12-30",
+        "IRLTLT01GBM156N": "2022-12-30"
+      },
+      "levels": {
+        "DGS10": 3.88,
+        "IRLTLT01JPM156N": 0.454,
+        "IRLTLT01DEM156N": 2.51,
+        "IRLTLT01GBM156N": 3.7992
+      }
+    },
+    {
+      "month": "2023-01",
+      "observation_dates": {
+        "DGS10": "2023-01-31",
+        "IRLTLT01JPM156N": "2023-01-31",
+        "IRLTLT01DEM156N": "2023-01-31",
+        "IRLTLT01GBM156N": "2023-01-31"
+      },
+      "levels": {
+        "DGS10": 3.52,
+        "IRLTLT01JPM156N": 0.511,
+        "IRLTLT01DEM156N": 2.3,
+        "IRLTLT01GBM156N": 3.4598
+      }
+    },
+    {
+      "month": "2023-02",
+      "observation_dates": {
+        "DGS10": "2023-02-28",
+        "IRLTLT01JPM156N": "2023-02-28",
+        "IRLTLT01DEM156N": "2023-02-28",
+        "IRLTLT01GBM156N": "2023-02-28"
+      },
+      "levels": {
+        "DGS10": 3.92,
+        "IRLTLT01JPM156N": 0.524,
+        "IRLTLT01DEM156N": 2.64,
+        "IRLTLT01GBM156N": 3.86
+      }
+    },
+    {
+      "month": "2023-03",
+      "observation_dates": {
+        "DGS10": "2023-03-31",
+        "IRLTLT01JPM156N": "2023-03-31",
+        "IRLTLT01DEM156N": "2023-03-31",
+        "IRLTLT01GBM156N": "2023-03-31"
+      },
+      "levels": {
+        "DGS10": 3.48,
+        "IRLTLT01JPM156N": 0.389,
+        "IRLTLT01DEM156N": 2.36,
+        "IRLTLT01GBM156N": 3.5401
+      }
+    },
+    {
+      "month": "2023-04",
+      "observation_dates": {
+        "DGS10": "2023-04-28",
+        "IRLTLT01JPM156N": "2023-04-28",
+        "IRLTLT01DEM156N": "2023-04-28",
+        "IRLTLT01GBM156N": "2023-04-28"
+      },
+      "levels": {
+        "DGS10": 3.44,
+        "IRLTLT01JPM156N": 0.403,
+        "IRLTLT01DEM156N": 2.36,
+        "IRLTLT01GBM156N": 3.7415
+      }
+    },
+    {
+      "month": "2023-05",
+      "observation_dates": {
+        "DGS10": "2023-05-31",
+        "IRLTLT01JPM156N": "2023-05-31",
+        "IRLTLT01DEM156N": "2023-05-31",
+        "IRLTLT01GBM156N": "2023-05-31"
+      },
+      "levels": {
+        "DGS10": 3.64,
+        "IRLTLT01JPM156N": 0.448,
+        "IRLTLT01DEM156N": 2.27,
+        "IRLTLT01GBM156N": 4.2038
+      }
+    },
+    {
+      "month": "2023-06",
+      "observation_dates": {
+        "DGS10": "2023-06-30",
+        "IRLTLT01JPM156N": "2023-06-30",
+        "IRLTLT01DEM156N": "2023-06-30",
+        "IRLTLT01GBM156N": "2023-06-30"
+      },
+      "levels": {
+        "DGS10": 3.81,
+        "IRLTLT01JPM156N": 0.426,
+        "IRLTLT01DEM156N": 2.44,
+        "IRLTLT01GBM156N": 4.4449
+      }
+    },
+    {
+      "month": "2023-07",
+      "observation_dates": {
+        "DGS10": "2023-07-31",
+        "IRLTLT01JPM156N": "2023-07-31",
+        "IRLTLT01DEM156N": "2023-07-31",
+        "IRLTLT01GBM156N": "2023-07-31"
+      },
+      "levels": {
+        "DGS10": 3.97,
+        "IRLTLT01JPM156N": 0.605,
+        "IRLTLT01DEM156N": 2.52,
+        "IRLTLT01GBM156N": 4.2896
+      }
+    },
+    {
+      "month": "2023-08",
+      "observation_dates": {
+        "DGS10": "2023-08-31",
+        "IRLTLT01JPM156N": "2023-08-31",
+        "IRLTLT01DEM156N": "2023-08-31",
+        "IRLTLT01GBM156N": "2023-08-31"
+      },
+      "levels": {
+        "DGS10": 4.09,
+        "IRLTLT01JPM156N": 0.657,
+        "IRLTLT01DEM156N": 2.5,
+        "IRLTLT01GBM156N": 4.3927
+      }
+    },
+    {
+      "month": "2023-09",
+      "observation_dates": {
+        "DGS10": "2023-09-29",
+        "IRLTLT01JPM156N": "2023-09-29",
+        "IRLTLT01DEM156N": "2023-09-29",
+        "IRLTLT01GBM156N": "2023-09-29"
+      },
+      "levels": {
+        "DGS10": 4.59,
+        "IRLTLT01JPM156N": 0.774,
+        "IRLTLT01DEM156N": 2.86,
+        "IRLTLT01GBM156N": 4.4498
+      }
+    },
+    {
+      "month": "2023-10",
+      "observation_dates": {
+        "DGS10": "2023-10-31",
+        "IRLTLT01JPM156N": "2023-10-31",
+        "IRLTLT01DEM156N": "2023-10-31",
+        "IRLTLT01GBM156N": "2023-10-31"
+      },
+      "levels": {
+        "DGS10": 4.88,
+        "IRLTLT01JPM156N": 0.952,
+        "IRLTLT01DEM156N": 2.78,
+        "IRLTLT01GBM156N": 4.5325
+      }
+    },
+    {
+      "month": "2023-11",
+      "observation_dates": {
+        "DGS10": "2023-11-30",
+        "IRLTLT01JPM156N": "2023-11-30",
+        "IRLTLT01DEM156N": "2023-11-30",
+        "IRLTLT01GBM156N": "2023-11-30"
+      },
+      "levels": {
+        "DGS10": 4.37,
+        "IRLTLT01JPM156N": 0.691,
+        "IRLTLT01DEM156N": 2.42,
+        "IRLTLT01GBM156N": 4.2231
+      }
+    },
+    {
+      "month": "2023-12",
+      "observation_dates": {
+        "DGS10": "2023-12-29",
+        "IRLTLT01JPM156N": "2023-12-29",
+        "IRLTLT01DEM156N": "2023-12-29",
+        "IRLTLT01GBM156N": "2023-12-29"
+      },
+      "levels": {
+        "DGS10": 3.88,
+        "IRLTLT01JPM156N": 0.647,
+        "IRLTLT01DEM156N": 2.02,
+        "IRLTLT01GBM156N": 3.6206
+      }
+    },
+    {
+      "month": "2024-01",
+      "observation_dates": {
+        "DGS10": "2024-01-31",
+        "IRLTLT01JPM156N": "2024-01-31",
+        "IRLTLT01DEM156N": "2024-01-31",
+        "IRLTLT01GBM156N": "2024-01-31"
+      },
+      "levels": {
+        "DGS10": 3.99,
+        "IRLTLT01JPM156N": 0.737,
+        "IRLTLT01DEM156N": 2.22,
+        "IRLTLT01GBM156N": 3.8953
+      }
+    },
+    {
+      "month": "2024-02",
+      "observation_dates": {
+        "DGS10": "2024-02-29",
+        "IRLTLT01JPM156N": "2024-02-29",
+        "IRLTLT01DEM156N": "2024-02-29",
+        "IRLTLT01GBM156N": "2024-02-29"
+      },
+      "levels": {
+        "DGS10": 4.25,
+        "IRLTLT01JPM156N": 0.724,
+        "IRLTLT01DEM156N": 2.51,
+        "IRLTLT01GBM156N": 4.1372
+      }
+    },
+    {
+      "month": "2024-03",
+      "observation_dates": {
+        "DGS10": "2024-03-28",
+        "IRLTLT01JPM156N": "2024-03-29",
+        "IRLTLT01DEM156N": "2024-03-28",
+        "IRLTLT01GBM156N": "2024-03-28"
+      },
+      "levels": {
+        "DGS10": 4.2,
+        "IRLTLT01JPM156N": 0.75,
+        "IRLTLT01DEM156N": 2.31,
+        "IRLTLT01GBM156N": 3.9457
+      }
+    },
+    {
+      "month": "2024-04",
+      "observation_dates": {
+        "DGS10": "2024-04-30",
+        "IRLTLT01JPM156N": "2024-04-30",
+        "IRLTLT01DEM156N": "2024-04-30",
+        "IRLTLT01GBM156N": "2024-04-30"
+      },
+      "levels": {
+        "DGS10": 4.69,
+        "IRLTLT01JPM156N": 0.879,
+        "IRLTLT01DEM156N": 2.55,
+        "IRLTLT01GBM156N": 4.3695
+      }
+    },
+    {
+      "month": "2024-05",
+      "observation_dates": {
+        "DGS10": "2024-05-31",
+        "IRLTLT01JPM156N": "2024-05-31",
+        "IRLTLT01DEM156N": "2024-05-31",
+        "IRLTLT01GBM156N": "2024-05-31"
+      },
+      "levels": {
+        "DGS10": 4.51,
+        "IRLTLT01JPM156N": 1.08,
+        "IRLTLT01DEM156N": 2.7,
+        "IRLTLT01GBM156N": 4.3167
+      }
+    },
+    {
+      "month": "2024-06",
+      "observation_dates": {
+        "DGS10": "2024-06-28",
+        "IRLTLT01JPM156N": "2024-06-28",
+        "IRLTLT01DEM156N": "2024-06-28",
+        "IRLTLT01GBM156N": "2024-06-28"
+      },
+      "levels": {
+        "DGS10": 4.36,
+        "IRLTLT01JPM156N": 1.062,
+        "IRLTLT01DEM156N": 2.46,
+        "IRLTLT01GBM156N": 4.195
+      }
+    },
+    {
+      "month": "2024-07",
+      "observation_dates": {
+        "DGS10": "2024-07-31",
+        "IRLTLT01JPM156N": "2024-07-31",
+        "IRLTLT01DEM156N": "2024-07-31",
+        "IRLTLT01GBM156N": "2024-07-31"
+      },
+      "levels": {
+        "DGS10": 4.09,
+        "IRLTLT01JPM156N": 1.07,
+        "IRLTLT01DEM156N": 2.33,
+        "IRLTLT01GBM156N": 4.0037
+      }
+    },
+    {
+      "month": "2024-08",
+      "observation_dates": {
+        "DGS10": "2024-08-30",
+        "IRLTLT01JPM156N": "2024-08-30",
+        "IRLTLT01DEM156N": "2024-08-30",
+        "IRLTLT01GBM156N": "2024-08-30"
+      },
+      "levels": {
+        "DGS10": 3.91,
+        "IRLTLT01JPM156N": 0.922,
+        "IRLTLT01DEM156N": 2.26,
+        "IRLTLT01GBM156N": 4.0003
+      }
+    },
+    {
+      "month": "2024-09",
+      "observation_dates": {
+        "DGS10": "2024-09-30",
+        "IRLTLT01JPM156N": "2024-09-30",
+        "IRLTLT01DEM156N": "2024-09-30",
+        "IRLTLT01GBM156N": "2024-09-30"
+      },
+      "levels": {
+        "DGS10": 3.81,
+        "IRLTLT01JPM156N": 0.894,
+        "IRLTLT01DEM156N": 2.16,
+        "IRLTLT01GBM156N": 4.0204
+      }
+    },
+    {
+      "month": "2024-10",
+      "observation_dates": {
+        "DGS10": "2024-10-31",
+        "IRLTLT01JPM156N": "2024-10-31",
+        "IRLTLT01DEM156N": "2024-10-31",
+        "IRLTLT01GBM156N": "2024-10-31"
+      },
+      "levels": {
+        "DGS10": 4.28,
+        "IRLTLT01JPM156N": 0.947,
+        "IRLTLT01DEM156N": 2.41,
+        "IRLTLT01GBM156N": 4.4102
+      }
+    },
+    {
+      "month": "2024-11",
+      "observation_dates": {
+        "DGS10": "2024-11-29",
+        "IRLTLT01JPM156N": "2024-11-29",
+        "IRLTLT01DEM156N": "2024-11-29",
+        "IRLTLT01GBM156N": "2024-11-29"
+      },
+      "levels": {
+        "DGS10": 4.18,
+        "IRLTLT01JPM156N": 1.064,
+        "IRLTLT01DEM156N": 2.11,
+        "IRLTLT01GBM156N": 4.2484
+      }
+    },
+    {
+      "month": "2024-12",
+      "observation_dates": {
+        "DGS10": "2024-12-31",
+        "IRLTLT01JPM156N": "2024-12-30",
+        "IRLTLT01DEM156N": "2024-12-30",
+        "IRLTLT01GBM156N": "2024-12-31"
+      },
+      "levels": {
+        "DGS10": 4.58,
+        "IRLTLT01JPM156N": 1.111,
+        "IRLTLT01DEM156N": 2.39,
+        "IRLTLT01GBM156N": 4.5173
+      }
+    },
+    {
+      "month": "2025-01",
+      "observation_dates": {
+        "DGS10": "2025-01-31",
+        "IRLTLT01JPM156N": "2025-01-31",
+        "IRLTLT01DEM156N": "2025-01-31",
+        "IRLTLT01GBM156N": "2025-01-31"
+      },
+      "levels": {
+        "DGS10": 4.58,
+        "IRLTLT01JPM156N": 1.25,
+        "IRLTLT01DEM156N": 2.48,
+        "IRLTLT01GBM156N": 4.5072
+      }
+    },
+    {
+      "month": "2025-02",
+      "observation_dates": {
+        "DGS10": "2025-02-28",
+        "IRLTLT01JPM156N": "2025-02-28",
+        "IRLTLT01DEM156N": "2025-02-28",
+        "IRLTLT01GBM156N": "2025-02-28"
+      },
+      "levels": {
+        "DGS10": 4.24,
+        "IRLTLT01JPM156N": 1.378,
+        "IRLTLT01DEM156N": 2.38,
+        "IRLTLT01GBM156N": 4.5004
+      }
+    },
+    {
+      "month": "2025-03",
+      "observation_dates": {
+        "DGS10": "2025-03-31",
+        "IRLTLT01JPM156N": "2025-03-31",
+        "IRLTLT01DEM156N": "2025-03-31",
+        "IRLTLT01GBM156N": "2025-03-31"
+      },
+      "levels": {
+        "DGS10": 4.23,
+        "IRLTLT01JPM156N": 1.497,
+        "IRLTLT01DEM156N": 2.69,
+        "IRLTLT01GBM156N": 4.653
+      }
+    },
+    {
+      "month": "2025-04",
+      "observation_dates": {
+        "DGS10": "2025-04-30",
+        "IRLTLT01JPM156N": "2025-04-30",
+        "IRLTLT01DEM156N": "2025-04-30",
+        "IRLTLT01GBM156N": "2025-04-30"
+      },
+      "levels": {
+        "DGS10": 4.17,
+        "IRLTLT01JPM156N": 1.33,
+        "IRLTLT01DEM156N": 2.46,
+        "IRLTLT01GBM156N": 4.4072
+      }
+    },
+    {
+      "month": "2025-05",
+      "observation_dates": {
+        "DGS10": "2025-05-30",
+        "IRLTLT01JPM156N": "2025-05-30",
+        "IRLTLT01DEM156N": "2025-05-30",
+        "IRLTLT01GBM156N": "2025-05-30"
+      },
+      "levels": {
+        "DGS10": 4.41,
+        "IRLTLT01JPM156N": 1.518,
+        "IRLTLT01DEM156N": 2.53,
+        "IRLTLT01GBM156N": 4.5907
+      }
+    },
+    {
+      "month": "2025-06",
+      "observation_dates": {
+        "DGS10": "2025-06-30",
+        "IRLTLT01JPM156N": "2025-06-30",
+        "IRLTLT01DEM156N": "2025-06-30",
+        "IRLTLT01GBM156N": "2025-06-30"
+      },
+      "levels": {
+        "DGS10": 4.24,
+        "IRLTLT01JPM156N": 1.462,
+        "IRLTLT01DEM156N": 2.58,
+        "IRLTLT01GBM156N": 4.4412
+      }
+    },
+    {
+      "month": "2025-07",
+      "observation_dates": {
+        "DGS10": "2025-07-31",
+        "IRLTLT01JPM156N": "2025-07-31",
+        "IRLTLT01DEM156N": "2025-07-31",
+        "IRLTLT01GBM156N": "2025-07-31"
+      },
+      "levels": {
+        "DGS10": 4.37,
+        "IRLTLT01JPM156N": 1.559,
+        "IRLTLT01DEM156N": 2.69,
+        "IRLTLT01GBM156N": 4.5773
+      }
+    },
+    {
+      "month": "2025-08",
+      "observation_dates": {
+        "DGS10": "2025-08-29",
+        "IRLTLT01JPM156N": "2025-08-29",
+        "IRLTLT01DEM156N": "2025-08-29",
+        "IRLTLT01GBM156N": "2025-08-29"
+      },
+      "levels": {
+        "DGS10": 4.23,
+        "IRLTLT01JPM156N": 1.613,
+        "IRLTLT01DEM156N": 2.71,
+        "IRLTLT01GBM156N": 4.7238
+      }
+    },
+    {
+      "month": "2025-09",
+      "observation_dates": {
+        "DGS10": "2025-09-30",
+        "IRLTLT01JPM156N": "2025-09-30",
+        "IRLTLT01DEM156N": "2025-09-30",
+        "IRLTLT01GBM156N": "2025-09-30"
+      },
+      "levels": {
+        "DGS10": 4.16,
+        "IRLTLT01JPM156N": 1.662,
+        "IRLTLT01DEM156N": 2.71,
+        "IRLTLT01GBM156N": 4.6909
+      }
+    },
+    {
+      "month": "2025-10",
+      "observation_dates": {
+        "DGS10": "2025-10-31",
+        "IRLTLT01JPM156N": "2025-10-31",
+        "IRLTLT01DEM156N": "2025-10-31",
+        "IRLTLT01GBM156N": "2025-10-31"
+      },
+      "levels": {
+        "DGS10": 4.11,
+        "IRLTLT01JPM156N": 1.67,
+        "IRLTLT01DEM156N": 2.64,
+        "IRLTLT01GBM156N": 4.4234
+      }
+    },
+    {
+      "month": "2025-11",
+      "observation_dates": {
+        "DGS10": "2025-11-28",
+        "IRLTLT01JPM156N": "2025-11-28",
+        "IRLTLT01DEM156N": "2025-11-28",
+        "IRLTLT01GBM156N": "2025-11-28"
+      },
+      "levels": {
+        "DGS10": 4.02,
+        "IRLTLT01JPM156N": 1.812,
+        "IRLTLT01DEM156N": 2.69,
+        "IRLTLT01GBM156N": 4.4703
+      }
+    },
+    {
+      "month": "2025-12",
+      "observation_dates": {
+        "DGS10": "2025-12-31",
+        "IRLTLT01JPM156N": "2025-12-30",
+        "IRLTLT01DEM156N": "2025-12-30",
+        "IRLTLT01GBM156N": "2025-12-31"
+      },
+      "levels": {
+        "DGS10": 4.18,
+        "IRLTLT01JPM156N": 2.066,
+        "IRLTLT01DEM156N": 2.85,
+        "IRLTLT01GBM156N": 4.4664
+      }
+    },
+    {
+      "month": "2026-01",
+      "observation_dates": {
+        "DGS10": "2026-01-30",
+        "IRLTLT01JPM156N": "2026-01-30",
+        "IRLTLT01DEM156N": "2026-01-30",
+        "IRLTLT01GBM156N": "2026-01-30"
+      },
+      "levels": {
+        "DGS10": 4.26,
+        "IRLTLT01JPM156N": 2.247,
+        "IRLTLT01DEM156N": 2.85,
+        "IRLTLT01GBM156N": 4.518
+      }
+    },
+    {
+      "month": "2026-02",
+      "observation_dates": {
+        "DGS10": "2026-02-27",
+        "IRLTLT01JPM156N": "2026-02-27",
+        "IRLTLT01DEM156N": "2026-02-27",
+        "IRLTLT01GBM156N": "2026-02-27"
+      },
+      "levels": {
+        "DGS10": 3.97,
+        "IRLTLT01JPM156N": 2.132,
+        "IRLTLT01DEM156N": 2.69,
+        "IRLTLT01GBM156N": 4.2935
+      }
+    },
+    {
+      "month": "2026-03",
+      "observation_dates": {
+        "DGS10": "2026-03-31",
+        "IRLTLT01JPM156N": "2026-03-31",
+        "IRLTLT01DEM156N": "2026-03-31",
+        "IRLTLT01GBM156N": "2026-03-31"
+      },
+      "levels": {
+        "DGS10": 4.3,
+        "IRLTLT01JPM156N": 2.366,
+        "IRLTLT01DEM156N": 3.03,
+        "IRLTLT01GBM156N": 4.8615
+      }
+    },
+    {
+      "month": "2026-04",
+      "observation_dates": {
+        "DGS10": "2026-04-30",
+        "IRLTLT01JPM156N": "2026-04-30",
+        "IRLTLT01DEM156N": "2026-04-30",
+        "IRLTLT01GBM156N": "2026-04-30"
+      },
+      "levels": {
+        "DGS10": 4.4,
+        "IRLTLT01JPM156N": 2.52,
+        "IRLTLT01DEM156N": 3.11,
+        "IRLTLT01GBM156N": 4.9609
+      }
+    },
+    {
+      "month": "2026-05",
+      "observation_dates": {
+        "DGS10": "2026-05-29",
+        "IRLTLT01JPM156N": "2026-05-29",
+        "IRLTLT01DEM156N": "2026-05-29",
+        "IRLTLT01GBM156N": "2026-05-29"
+      },
+      "levels": {
+        "DGS10": 4.45,
+        "IRLTLT01JPM156N": 2.657,
+        "IRLTLT01DEM156N": 2.95,
+        "IRLTLT01GBM156N": 4.776
+      }
+    },
+    {
+      "month": "2026-06",
+      "observation_dates": {
+        "DGS10": "2026-06-30",
+        "IRLTLT01JPM156N": "2026-06-30",
+        "IRLTLT01DEM156N": "2026-06-30",
+        "IRLTLT01GBM156N": "2026-06-30"
+      },
+      "levels": {
+        "DGS10": 4.44,
+        "IRLTLT01JPM156N": 2.69,
+        "IRLTLT01DEM156N": 2.84,
+        "IRLTLT01GBM156N": 4.742
+      }
+    },
+    {
+      "month": "2026-07",
+      "observation_dates": {
+        "DGS10": "2026-07-31",
+        "IRLTLT01JPM156N": "2026-07-31",
+        "IRLTLT01DEM156N": "2026-07-31",
+        "IRLTLT01GBM156N": "2026-07-31"
+      },
+      "levels": {
+        "DGS10": 4.75,
+        "IRLTLT01JPM156N": 2.801,
+        "IRLTLT01DEM156N": 3.16,
+        "IRLTLT01GBM156N": 5.0257
+      }
+    }
+  ]
+}

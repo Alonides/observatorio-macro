@@ -1,0 +1,211 @@
+schema_version: 1
+
+methodology:
+  id: MEIR-MON-OBS
+  version: 0.2.0-dev
+  status: development
+  created_on: 2026-08-21
+  effective_from: null
+  calibration_cutoff: 2026-08-20
+  canonical_hash: sha256-json-c14n-v1
+  semantic_reference:
+    id: MEIR-MON-002-A1
+    title: El precio del privilegio
+    version: 0.5
+  rule: >-
+    El ensayo fija el significado de las hipotesis. Este archivo y el codigo
+    determinista fijan el resultado operativo. La prosa no puede sustituir ni
+    corregir manualmente una salida calculada.
+
+governance:
+  preserve_historical_outputs: true
+  prospective_only: true
+  require_parameter_freeze_date: true
+  disagreement_policy: report_conflict
+  event_and_state_must_remain_separate: true
+
+hypotheses:
+  H0:
+    title: Prima estadounidense de oferta y plazo
+    definition: >-
+      Aumento especificamente estadounidense del coste de la duracion explicado
+      por oferta fiscal, composicion de vencimientos o prima por plazo, sin
+      evidencia suficiente de perdida de confianza institucional.
+  H1:
+    title: Perdida especifica de confianza institucional estadounidense
+    definition: >-
+      Deterioro simultaneo del dolar, del precio real de la promesa fiscal y de
+      la compensacion inflacionaria, especificamente estadounidense, persistente
+      y confirmado por variables independientes.
+  H2:
+    title: Reprecio global de la duracion
+    definition: >-
+      Aumento sincronico del coste de la duracion en varios mercados soberanos,
+      sin residuo estadounidense excepcional.
+  MIXED:
+    title: Choque global con componente estadounidense
+    definition: Concurrencia de H2 y evidencia compatible con H1.
+  INDETERMINATE:
+    title: Evidencia insuficiente o contradictoria
+    definition: Ninguna hipotesis alcanza sus condiciones positivas.
+
+event_engine:
+  primary_window_days: 92
+  context_windows_days: [183, 365]
+  context_windows_are_classifiers: false
+
+  triple_alert:
+    dollar_change_pct_max:
+      value: -3.0
+      unit: percent
+      direction: less_or_equal
+      frozen_on: 2026-08-21
+      calibration_start: 2003-01-01
+      calibration_end: 2026-08-20
+      rationale: Umbral recalibrado; la triple coincidencia aparecio en junio de 2009 y febrero de 2011.
+    real_10y_change_pp_min:
+      value: 0.25
+      unit: percentage_points
+      direction: greater_or_equal
+      frozen_on: 2026-08-21
+      calibration_start: 2003-01-01
+      calibration_end: 2026-08-20
+      rationale: Umbral recalibrado para alarma rara, no para veredicto H1.
+    breakeven_10y_change_pp_min:
+      value: 0.20
+      unit: percentage_points
+      direction: greater_or_equal
+      frozen_on: 2026-08-21
+      calibration_start: 2003-01-01
+      calibration_end: 2026-08-20
+      rationale: Umbral recalibrado para alarma rara, no para veredicto H1.
+
+  confirmations:
+    sofr_iorb_spread_pp_min:
+      value: 0.20
+      unit: percentage_points
+      direction: greater_or_equal
+      frozen_on: 2026-08-21
+      calibration_start: null
+      calibration_end: 2026-08-20
+      status: provisional
+      rationale: Indicador de tension monetaria; pendiente de calibracion historica propia.
+    vix_stress_min:
+      value: 35.0
+      unit: index_points
+      direction: greater_or_equal
+      frozen_on: 2026-08-21
+      calibration_start: null
+      calibration_end: 2026-08-20
+      status: provisional
+      rationale: Contexto de estres general; no prueba perdida de funcion refugio.
+
+  global_duration:
+    market_series: [DGS10, IRLTLT01JPM156N, IRLTLT01DEM156N, IRLTLT01GBM156N]
+    minimum_markets_rising:
+      value: 3
+      unit: markets
+      direction: greater_or_equal
+      frozen_on: 2026-08-21
+      calibration_start: 2003-01-01
+      calibration_end: 2024-12-31
+      rationale: Regla de sincronismo internacional del ensayo v0.5.
+    minimum_rise_pp:
+      value: 0.0
+      unit: percentage_points
+      direction: greater_than
+      frozen_on: 2026-08-21
+      calibration_start: 2003-01-01
+      calibration_end: 2024-12-31
+      status: directional
+      rationale: Mide direccion; la magnitud relativa se adjudica mediante el residuo estadounidense.
+
+  us_specific:
+    model: ols_monthly_relative_residual_v02
+    peer_series: [IRLTLT01JPM156N, IRLTLT01DEM156N, IRLTLT01GBM156N]
+    transition_excess_change_pp_min:
+      value: 0.35
+      unit: percentage_points
+      direction: greater_or_equal
+      frozen_on: 2026-08-21
+      calibration_start: null
+      calibration_end: 2026-08-20
+      status: retired
+      rationale: >-
+        Regla provisional heredada de v0.1, conservada solo como cicatriz de
+        auditoria. Desde el 22 de agosto de 2026 no interviene en el resultado.
+    target_model:
+      type: ols_monthly_change
+      specification_frozen_on: 2026-08-22
+      preregistration_commit: 3a03a35d9e89b7047e7c31addf5f78417896c312
+      calibration_start: 2003-01-01
+      calibration_end: 2024-12-31
+      out_of_sample_start: 2025-01-01
+      dependent_series: DGS10
+      frequency: month_end
+      observation_rule: last_available_in_closed_calendar_month
+      currency_treatment: local_currency_yield_changes
+      missing_data: complete_cases_no_imputation
+      regression:
+        intercept: true
+        predictors: [IRLTLT01JPM156N, IRLTLT01DEM156N, IRLTLT01GBM156N]
+        estimator: ordinary_least_squares
+      classifier:
+        horizon_months: 3
+        statistic: rolling_sum_of_monthly_residuals
+        quantile_method: nearest_rank
+        selection_across_windows: prohibited
+      h0_percentile: 90
+      h1_percentile: 95
+      h1_persistence_months: 2
+      sensitivity_horizons_months: [2, 4]
+      artifact: data/calibration/us_relative_v02.json
+      artifact_sha256: 41acfe0c60eeb73e3a4e7944e54492c32b372f2af26b13d0d2fef5e391a90c36
+      status: calibrated_candidate
+      estimated_on: 2026-08-22
+      calibration_result:
+        observations: 263
+        intercept_pp: 0.004184739228
+        betas:
+          IRLTLT01JPM156N: 0.327697699029
+          IRLTLT01DEM156N: 0.445419000888
+          IRLTLT01GBM156N: 0.500077472509
+        r_squared: 0.685088436504
+        rmse_pp: 0.145117150899
+        h0_p90_pp: 0.255450704639
+        h1_p95_pp: 0.358694243008
+        calibration_p90_observations: 27
+        calibration_p95_observations: 14
+        calibration_persistent_p95_observations: 6
+        out_of_sample_end: 2026-07
+        out_of_sample_p90_observations: 0
+        out_of_sample_p95_observations: 0
+
+  risk_context:
+    status: transitional
+    series: [SP500, BAMLC0A0CM, BAMLC0A0CMEY]
+    frozen_on: 2026-08-21
+    rule: >-
+      La direccion a 92 dias de renta variable, OAS y rendimiento corporativo
+      distingue contextos compatibles con reflacion, refugio privado o fractura
+      sistemica. Ninguna regla simple bolsa-abajo es condicion necesaria de H1.
+      El OAS se acompana del rendimiento corporativo absoluto porque el propio
+      Treasury contamina el diferencial.
+
+state_engine:
+  status: partial_implementation
+  implemented_on: 2026-08-21
+  combine_with_event_score: false
+  dimensions:
+    - real_yield_level
+    - debt_held_by_public_to_gdp
+    - bill_share_of_marketable_debt
+    - interest_burden
+    - foreign_official_holdings_trend
+    - dollar_reserve_share
+
+data_policy:
+  missing_values_are_zero: false
+  observation_fields: [period_date, published_at, retrieved_at, value]
+  monthly_stale_after_days: 65
+  quarterly_stale_after_days: 160

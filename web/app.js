@@ -18,6 +18,14 @@ function valueText(value, unit = '') {
   return value == null ? '—' : `${fmt.format(value)} ${unit}`.trim();
 }
 
+function timestampText(value) {
+  if (!value) return '—';
+  const parsed = new Date(value);
+  return Number.isNaN(parsed.getTime()) ? escapeHtml(value) : parsed.toLocaleString('es-ES', {
+    timeZone: 'Europe/Oslo', dateStyle: 'short', timeStyle: 'short',
+  });
+}
+
 function safeSource(url, label) {
   if (!String(url || '').startsWith('https://')) return escapeHtml(label || '—');
   return `<a href="${escapeHtml(url)}" target="_blank" rel="noreferrer">${escapeHtml(label || 'Fuente')}</a>`;
@@ -48,13 +56,44 @@ function renderHealth(data) {
 
 function renderRegime(data) {
   const regime = data.regime || {};
+  const method = data.methodology || regime.methodology || {};
+  const evidence = {
+    insufficient: 'evidencia insuficiente', compatible: 'evidencia compatible',
+    candidate: 'hipótesis candidata', supported: 'hipótesis apoyada',
+  }[regime.evidence_level] || regime.evidence_level || 'sin calificar';
+  const risk = {
+    REFLATION_COMPATIBLE: 'contexto compatible con reflación',
+    SYSTEMIC_STRESS_COMPATIBLE: 'contexto compatible con estrés sistémico',
+    DIVERGENT: 'bolsa y crédito divergen', UNAVAILABLE: 'contexto de riesgo sin datos',
+  }[regime.risk_context?.classification] || 'contexto no clasificado';
   const card = document.querySelector('#regime');
   card.className = `card regime-card regime-${String(regime.regime || '').toLowerCase()}`;
   card.innerHTML = `
     <div class="regime-top"><p class="eyebrow">RÉGIMEN OBSERVADO</p><span>${regime.triple_active ?? 0}/3 señal triple</span></div>
     <div class="regime-code">${escapeHtml(regime.regime || '—')}</div>
     <h2>${escapeHtml(regime.label || 'Pendiente de datos')}</h2>
-    <p class="method">${escapeHtml(regime.method_note || 'La clasificación se activará cuando exista historia suficiente.')}</p>`;
+    <div class="regime-meta"><span>${escapeHtml(evidence)}</span><span>${escapeHtml(risk)}</span></div>
+    <p class="method">${escapeHtml(regime.method_note || 'La clasificación se activará cuando exista historia suficiente.')}</p>
+    <p class="method-id">Método ${escapeHtml(method.version || '—')} · ${escapeHtml(String(method.sha256 || '').slice(0, 12) || 'sin huella')}</p>`;
+}
+
+function renderStructuralState(data) {
+  const structural = data.structural_state || {};
+  const dimensions = structural.dimensions || [];
+  document.querySelector('#structural-state').innerHTML = dimensions.map(item => {
+    const available = item.status === 'available';
+    const detail = item.key === 'real_yield_level' && item.percentile_available_sample != null
+      ? `Percentil ${fmt.format(item.percentile_available_sample)} de la muestra disponible · ${escapeHtml(item.coverage_status || '')}`
+      : item.key === 'debt_held_by_public_to_gdp' && item.gross_debt_context_pct != null
+        ? `Bruta: ${fmt.format(item.gross_debt_context_pct)} % · PIB ${escapeHtml(item.denominator_date || '—')}`
+        : escapeHtml(item.note || `Dato ${item.numerator_date || item.sample_end || 'sin fecha'}`);
+    return `<article class="state-item ${available ? 'available' : 'pending'}">
+      <span>${available ? 'Disponible' : 'Pendiente de fuente'}</span>
+      <strong>${valueText(item.value, item.unit)}</strong>
+      <h3>${escapeHtml(item.title)}</h3>
+      <p>${detail}</p>
+    </article>`;
+  }).join('') || '<p class="empty">El vector estructural todavía no está disponible.</p>';
 }
 
 function renderDerived(data) {
@@ -127,11 +166,12 @@ function renderGroups(query = '') {
     <details class="group" ${index < 3 || needle ? 'open' : ''}>
       <summary><span>${escapeHtml(group)}</span><small>${items.filter(item => item.value != null).length}/${items.length}</small></summary>
       <div class="table-wrap"><table>
-        <thead><tr><th>Variable</th><th>Valor</th><th>Observación</th><th>Fuente</th><th>Estado</th></tr></thead>
+        <thead><tr><th>Variable</th><th>Valor</th><th>Periodo</th><th>Recogida</th><th>Fuente</th><th>Estado</th></tr></thead>
         <tbody>${items.map(row => `<tr>
           <td>${escapeHtml(row.title)}<br><small>${escapeHtml(row.id)}</small></td>
           <td class="numeric">${valueText(row.value, row.unit)}</td>
-          <td>${escapeHtml(row.observation_date || '—')}</td>
+          <td>${escapeHtml(row.period_date || row.observation_date || '—')}</td>
+          <td>${timestampText(row.retrieved_at)}</td>
           <td>${safeSource(row.source_url, row.source)}</td>
           <td><span class="quality ${escapeHtml(row.quality)}">${escapeHtml(qualityLabel(row))}</span></td>
         </tr>`).join('')}</tbody>
@@ -229,8 +269,14 @@ function renderCharts() {
     { id: 'GOLDAMGBD228NLBM', label: 'Oro', color: COLORS.gold },
     { id: 'CBBTCUSD', label: 'Bitcoin', color: COLORS.orange },
   ] });
+  renderLineChart('#chart-gold', { normalized: true, series: [
+    { id: 'SP500_XAU', label: 'S&P 500/oro', color: COLORS.blue },
+    { id: 'BTC_XAU', label: 'Bitcoin/oro', color: COLORS.orange },
+    { id: 'US_PUBLIC_DEBT_XAU', label: 'Deuda pública/oro', color: COLORS.silver },
+  ] });
   renderLineChart('#chart-norway', { normalized: true, series: [
     { id: 'DEXNOUS', label: 'NOK/USD', color: COLORS.red },
+    { id: 'XAU_NOK', label: 'Oro en NOK', color: COLORS.violet },
     { id: 'IRLTLT01NOM156N', label: 'Bono 10a', color: COLORS.green },
     { id: 'DCOILBRENTEU', label: 'Brent', color: COLORS.gold },
   ] });
@@ -241,11 +287,15 @@ function render() {
   renderHealth(data);
   renderRegime(data);
   renderDerived(data);
+  renderStructuralState(data);
   renderSignals(data);
   renderCapex(data);
   renderErrors(data);
   renderGroups(document.querySelector('#filter').value);
   renderCharts();
+  const method = data.methodology || {};
+  const commit = data.code_commit ? ` · código ${String(data.code_commit).slice(0, 7)}` : '';
+  document.querySelector('#methodology-foot').textContent = `Método ${method.version || '—'} · ${String(method.sha256 || '').slice(0, 12) || 'sin huella'}${commit}.`;
 }
 
 document.querySelector('#filter').addEventListener('input', event => renderGroups(event.target.value));

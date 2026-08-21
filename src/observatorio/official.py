@@ -130,15 +130,19 @@ def _dedupe(points: list[dict]) -> list[dict]:
 def parse_treasury_csv(text: str) -> dict[str, list[dict]]:
     output: dict[str, list[dict]] = {}
     for row in csv.DictReader(io.StringIO(text)):
-        day = _iso_day(row.get("Date") or "")
+        date_column = next((column for column in row if str(column).strip().lower() == "date"), None)
+        day = _iso_day(row.get(date_column) or "") if date_column else None
         if not day:
             continue
         for column, raw in row.items():
-            if column == "Date":
+            if str(column).strip().lower() == "date":
                 continue
             value = _numeric(raw)
             if value is not None:
-                output.setdefault(column.strip(), []).append({"date": day, "value": value})
+                # Los consolidados escriben ``10 yr`` y los anuales ``10 Yr``.
+                # Se normaliza antes de unirlos para no perder el histórico.
+                key = str(column).strip().upper()
+                output.setdefault(key, []).append({"date": day, "value": value})
     return {column: _dedupe(points) for column, points in output.items()}
 
 
@@ -159,6 +163,27 @@ def parse_fed_ddp_csv(text: str) -> dict[str, list[dict]]:
             if value is not None:
                 output.setdefault(column.strip(), []).append({"date": day, "value": value})
     return {column: _dedupe(points) for column, points in output.items()}
+
+
+def parse_fred_bundle_csv(text: str) -> dict[str, list[dict]]:
+    reader = csv.DictReader(io.StringIO(text.lstrip("\ufeff")))
+    if not reader.fieldnames:
+        raise SourceError("FRED: CSV sin cabecera")
+    date_column = next((column for column in ("observation_date", "DATE") if column in reader.fieldnames), None)
+    if date_column is None:
+        raise SourceError(f"FRED: columna de fecha no reconocida: {reader.fieldnames}")
+    output: dict[str, list[dict]] = {
+        column: [] for column in reader.fieldnames if column != date_column
+    }
+    for row in reader:
+        day = _iso_day(row.get(date_column) or "")
+        if not day:
+            continue
+        for series_id in output:
+            value = _numeric(row.get(series_id))
+            if value is not None:
+                output[series_id].append({"date": day, "value": value})
+    return {series_id: _dedupe(points) for series_id, points in output.items()}
 
 
 def parse_sofr_json(payload: dict) -> list[dict]:
@@ -438,11 +463,29 @@ def parse_capex_tracker_csv(text: str) -> dict[str, list[dict]]:
     return {series_id: _dedupe(points) for series_id, points in output.items()}
 
 
+TREASURY_ARCHIVES = {
+    "daily_treasury_yield_curve": "par-yield-curve-rates-1990-2023.csv",
+    "daily_treasury_real_yield_curve": "par-real-yield-curve-rates-2003-2023.csv",
+}
+
+
 def _treasury(kind: str) -> dict[str, list[dict]]:
     def load():
         merged: dict[str, list[dict]] = {}
         current_year = date.today().year
-        for year in (current_year - 1, current_year):
+        archive_name = TREASURY_ARCHIVES.get(kind)
+        if archive_name:
+            archive_url = (
+                "https://home.treasury.gov/resource-center/data-chart-center/interest-rates/"
+                f"daily-treasury-rate-archives/{archive_name}"
+            )
+            for column, points in parse_treasury_csv(_text(archive_url)).items():
+                merged.setdefault(column, []).extend(points)
+
+        # Los archivos consolidados terminan en 2023. Se añaden los años
+        # posteriores por separado para que el histórico sea autorreparable
+        # en un clon nuevo y siga incorporando la observación corriente.
+        for year in range(2024, current_year + 1):
             url = (
                 f"https://home.treasury.gov/resource-center/data-chart-center/interest-rates/"
                 f"daily-treasury-rates.csv/{year}/all?type={kind}&field_tdr_date_value={year}"
@@ -469,7 +512,19 @@ def _fed_package(release: str, package: str, observations: int = 500) -> dict[st
             f"rel={release}&series={series}&lastobs={observations}"
             "&filetype=csv&label=include&layout=seriescolumn"
         )
-        return parse_fed_ddp_csv(_text(url))
+        # Data Download puede responder HTTP 200 con cuerpo vacio durante
+        # episodios breves de carga. ``_read`` no puede distinguir ese caso
+        # de una descarga valida, de modo que el adaptador reintenta tambien
+        # los errores de contenido y nunca convierte el vacio en cero.
+        last_error: SourceError | None = None
+        for attempt in range(3):
+            try:
+                return parse_fed_ddp_csv(_text(url))
+            except SourceError as exc:
+                last_error = exc
+                if attempt < 2:
+                    time.sleep(1.25 * (attempt + 1))
+        raise last_error or SourceError("Federal Reserve DDP: respuesta vacia")
     return _memo(f"fed:{release}:{package}", load)
 
 
@@ -499,19 +554,32 @@ def _h41() -> dict[str, list[dict]]:
     )
 
 
-def _fiscal_debt() -> list[dict]:
+def _fiscal_debt_package() -> dict[str, list[dict]]:
     def load():
         url = (
             "https://api.fiscaldata.treasury.gov/services/api/fiscal_service/v2/"
             "accounting/od/debt_to_penny?sort=-record_date&page%5Bsize%5D=500"
         )
-        points = []
+        output = {"GFDEBTN": [], "US_DEBT_HELD_PUBLIC": []}
         for row in _json(url).get("data", []):
-            value = _numeric(row.get("tot_pub_debt_out_amt"))
-            if value is not None:
-                points.append({"date": row["record_date"], "value": value / 1_000_000})
-        return _dedupe(points)
+            total = _numeric(row.get("tot_pub_debt_out_amt"))
+            public = _numeric(row.get("debt_held_public_amt"))
+            if total is not None:
+                output["GFDEBTN"].append({"date": row["record_date"], "value": total / 1_000_000})
+            if public is not None:
+                output["US_DEBT_HELD_PUBLIC"].append({"date": row["record_date"], "value": public / 1_000_000})
+        return {series_id: _dedupe(points) for series_id, points in output.items()}
     return _memo("fiscal:debt", load)
+
+
+FRED_MARKET_IDS = ("SP500", "BAMLC0A0CM", "BAMLC0A0CMEY")
+
+
+def _fred_market_package() -> dict[str, list[dict]]:
+    def load():
+        query = urlencode({"id": ",".join(FRED_MARKET_IDS)})
+        return parse_fred_bundle_csv(_text(f"https://fred.stlouisfed.org/graph/fredgraph.csv?{query}"))
+    return _memo("fred:market-context", load)
 
 
 def _gold() -> list[dict]:
@@ -599,8 +667,7 @@ def _eia(route: str, series: str) -> list[dict]:
 
 
 def _japan_10y() -> list[dict]:
-    def load():
-        raw = _read("https://www.mof.go.jp/english/policy/jgbs/reference/interest_rate/jgbcme.csv")
+    def decode(raw: bytes) -> list[dict]:
         for encoding in ("utf-8-sig", "cp932", "shift_jis"):
             try:
                 points = parse_mof_csv(raw.decode(encoding))
@@ -608,28 +675,47 @@ def _japan_10y() -> list[dict]:
                     return points
             except (UnicodeDecodeError, SourceError):
                 continue
-        raise SourceError("MOF Japan: no se pudo decodificar o interpretar jgbcme.csv")
+        raise SourceError("MOF Japan: no se pudo decodificar o interpretar el CSV")
+
+    def load():
+        base = "https://www.mof.go.jp/english/policy/jgbs/reference/interest_rate/"
+        # El fichero corriente solo contiene el mes abierto. Se une con el
+        # historico oficial para que la ventana de 92 dias sea evaluable.
+        historical = decode(_read(base + "historical/jgbcme_all.csv"))
+        current = decode(_read(base + "jgbcme.csv"))
+        return _dedupe(historical + current)
     return _memo("mof:jgb-10y", load)
 
 
 def _germany_10y() -> list[dict]:
+    start = (date.today() - timedelta(days=500)).isoformat()
+    return germany_10y_history(start)
+
+
+def germany_10y_history(start: str = "2003-01-01", end: str | None = None) -> list[dict]:
     def load():
-        start = (date.today() - timedelta(days=500)).isoformat()
-        query = urlencode({"format": "sdmx_csv", "lang": "en", "startPeriod": start})
+        parameters = {"format": "sdmx_csv", "lang": "en", "startPeriod": start}
+        if end:
+            parameters["endPeriod"] = end
+        query = urlencode(parameters)
         return parse_sdmx_csv(_text(
             "https://api.statistiken.bundesbank.de/rest/data/BBSSY/"
             "D.REN.EUR.A630.000000WT1010.A?" + query
         ))
-    return _memo("bundesbank:bund-10y", load)
+    return _memo(f"bundesbank:bund-10y:{start}:{end or 'latest'}", load)
 
 
 def _uk_10y() -> list[dict]:
+    start = f"01/Jan/{date.today().year - 2}"
+    return uk_10y_history(start)
+
+
+def uk_10y_history(start: str = "01/Jan/2003", end: str = "now") -> list[dict]:
     def load():
-        start = f"01/Jan/{date.today().year - 2}"
         query = urlencode({
             "csv.x": "yes",
             "Datefrom": start,
-            "Dateto": "now",
+            "Dateto": end,
             "SeriesCodes": "IUDMNPY",
             "CSVF": "TN",
             "UsingCodes": "Y",
@@ -639,7 +725,26 @@ def _uk_10y() -> list[dict]:
         return parse_boe_csv(_text(
             "https://www.bankofengland.co.uk/boeapps/database/_iadb-fromshowcolumns.asp?" + query
         ), "IUDMNPY")
-    return _memo("boe:gilt-10y", load)
+    return _memo(f"boe:gilt-10y:{start}:{end}", load)
+
+
+def relative_model_history(end: date | None = None) -> dict[str, list[dict]]:
+    """Descarga los cuatro insumos congelados del modelo relativo.
+
+    Esta función se usa para la calibración reproducible, no en cada consulta
+    del visor. Las fuentes son los productores declarados en el catálogo.
+    """
+    end = end or date.today()
+    boe_end = end.strftime("%d/%b/%Y")
+    return {
+        "DGS10": [
+            point for point in _treasury("daily_treasury_yield_curve").get("10 YR", [])
+            if point["date"] <= end.isoformat()
+        ],
+        "IRLTLT01JPM156N": [point for point in _japan_10y() if point["date"] <= end.isoformat()],
+        "IRLTLT01DEM156N": germany_10y_history("2003-01-01", end.isoformat()),
+        "IRLTLT01GBM156N": uk_10y_history("01/Jan/2003", boe_end),
+    }
 
 
 def _norway_10y() -> list[dict]:
@@ -691,7 +796,7 @@ def _capex(series_id: str) -> list[dict]:
     return _capex_package().get(series_id, [])
 
 
-NOMINAL_MAP = {"DGS3MO": "3 Mo", "DGS2": "2 Yr", "DGS10": "10 Yr", "DGS30": "30 Yr"}
+NOMINAL_MAP = {"DGS3MO": "3 MO", "DGS2": "2 YR", "DGS10": "10 YR", "DGS30": "30 YR"}
 H10_RATES_MAP = {
     "DEXUSEU": "RXI$US_N.B.EU",
     "DEXNOUS": "RXI_N.B.NO",
@@ -721,14 +826,16 @@ def fetch_series(series_id: str) -> list[dict]:
         points = _rrp()
     elif series_id in {"WALCL", "WTREGEN"}:
         points = _h41().get(series_id, [])
-    elif series_id == "GFDEBTN":
-        points = _fiscal_debt()
+    elif series_id in {"GFDEBTN", "US_DEBT_HELD_PUBLIC"}:
+        points = _fiscal_debt_package().get(series_id, [])
     elif series_id == "GOLDAMGBD228NLBM":
         points = _gold()
     elif series_id == "CBBTCUSD":
         points = _bitcoin()
     elif series_id == "VIXCLS":
         points = _vix()
+    elif series_id in FRED_MARKET_IDS:
+        points = _fred_market_package().get(series_id, [])
     elif series_id == "CPIAUCSL":
         points = _bls().get("CUSR0000SA0", [])
     elif series_id == "UNRATE":
