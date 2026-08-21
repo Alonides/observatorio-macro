@@ -1,0 +1,51 @@
+name: Publish public macro dashboard
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "index.html"
+      - "web/**"
+      - "data/**"
+      - ".github/workflows/pages.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: github-pages
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Assemble public site
+        run: |
+          mkdir -p _site/web _site/data
+          cp index.html _site/index.html
+          cp web/app.js web/styles.css _site/web/
+          cp data/latest.json data/series.json _site/data/
+          touch _site/.nojekyll
+
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload public artifact
+        uses: actions/upload-pages-artifact@v4
+        with:
+          path: _site
+
+      - name: Deploy
+        id: deployment
+        uses: actions/deploy-pages@v4
