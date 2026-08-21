@@ -18,7 +18,7 @@ THRESHOLDS = {
     "real_10y_change_pp_min": 0.50,
     "breakeven_10y_change_pp_min": 0.30,
     "sofr_iorb_spread_pp_min": 0.20,
-    "financial_stress_min": 1.0,
+    "vix_stress_min": 35.0,
     "global_peer_median_change_pp_min": 0.30,
     "us_vs_peer_excess_change_pp_min": 0.35,
 }
@@ -67,7 +67,7 @@ def evaluate(series: dict[str, list[dict]]) -> dict:
     sofr = _latest(series.get("SOFR", []))
     iorb = _latest(series.get("IORB", []))
     spread = None if sofr is None or iorb is None else sofr - iorb
-    stress = _latest(series.get("STLFSI4", []))
+    stress = _latest(series.get("VIXCLS", []))
 
     triple = [
         _signal("dollar", "Dólar amplio a la baja", dollar_change,
@@ -84,9 +84,9 @@ def evaluate(series: dict[str, list[dict]]) -> dict:
         _signal("repo", "Tensión monetaria SOFR−IORB", spread,
                 lambda x: x >= THRESHOLDS["sofr_iorb_spread_pp_min"],
                 "≥ +20 pb", "Confirma tensión de financiación, no solo movimiento de precios."),
-        _signal("stress", "Tensión financiera sistémica", stress,
-                lambda x: x >= THRESHOLDS["financial_stress_min"],
-                "STLFSI4 ≥ 1", "Confirma que el choque alcanza la intermediación financiera."),
+        _signal("stress", "Pérdida de la función refugio / estrés", stress,
+                lambda x: x >= THRESHOLDS["vix_stress_min"],
+                "VIX ≥ 35", "Filtro conservador: exige estrés de mercado además del movimiento de precios."),
     ]
 
     us_change = _change(series.get("DGS10", []))
@@ -132,7 +132,7 @@ def evaluate(series: dict[str, list[dict]]) -> dict:
         "confirmation_active": confirmation_active,
         "signals": [s.to_dict() for s in triple + confirmations + [global_signal, us_specific]],
         "thresholds": THRESHOLDS,
-        "method_note": "H1 exige la señal triple y al menos una confirmación de liquidez/tensión o prima relativa. H2 exige además un choque global de duración.",
+        "method_note": "H1 exige la señal triple y al menos una confirmación de liquidez, estrés o prima relativa. H2 exige además un choque global de duración.",
     }
 
 
@@ -150,5 +150,14 @@ def derived_metrics(series: dict[str, list[dict]]) -> list[dict]:
     if debt is not None and gdp is not None and gdp:
         # Ambas series están en millones/miles de millones respectivamente.
         metrics.append({"id": "US_DEBT_GDP", "title": "Deuda federal bruta / PIB", "value": round(debt / (gdp * 1000) * 100, 1), "unit": "%"})
+    capex_ids = ("CAPEX_MSFT", "CAPEX_GOOG", "CAPEX_AMZN", "CAPEX_META", "CAPEX_ORCL")
+    capex = [current(series_id) for series_id in capex_ids]
+    capex_available = [value for value in capex if value is not None]
+    if len(capex_available) >= 3:
+        metrics.append({
+            "id": "AI_CAPEX_FY",
+            "title": f"Capex último ejercicio · {len(capex_available)}/5 hyperscalers",
+            "value": round(sum(capex_available), 1),
+            "unit": "miles de millones USD",
+        })
     return metrics
-
