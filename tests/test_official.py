@@ -8,6 +8,7 @@ from observatorio.official import (
     parse_bea_nipa,
     parse_bls_json,
     parse_boe_csv,
+    parse_dbnomics_json,
     parse_eia_json,
     parse_fed_ddp_csv,
     parse_h41_html,
@@ -55,11 +56,11 @@ class OfficialSourceParserTests(unittest.TestCase):
 
     def test_mof_and_boe_csv(self):
         self.assertEqual(
-            parse_mof_csv("Date,10-year\n2026/08/20,2.95\n"),
+            parse_mof_csv("Interest rates,,,,\nDate,10-year\n2026/08/20,2.95\n"),
             [{"date": "2026-08-20", "value": 2.95}],
         )
         self.assertEqual(
-            parse_boe_csv("DATE,IUDERB\n20 Aug 2026,4.71\n"),
+            parse_boe_csv("DATE,IUDMNPY\n20 Aug 2026,4.71\n"),
             [{"date": "2026-08-20", "value": 4.71}],
         )
 
@@ -96,6 +97,11 @@ class OfficialSourceParserTests(unittest.TestCase):
             "TimePeriod": "2026Q2", "DataValue": "31,250.4",
         }]}}}
         self.assertEqual(parse_bea_nipa(bea, "Gross domestic product"), [{"date": "2026-06-30", "value": 31250.4}])
+        dbnomics = {"series": {"docs": [{"period": ["2026-Q1", "2026-Q2"], "value": [31000, 31250.4]}]}}
+        self.assertEqual(parse_dbnomics_json(dbnomics)[-1], {"date": "2026-06-30", "value": 31250.4})
+        scaled = parse_dbnomics_json(dbnomics, divisor=1_000)[-1]
+        self.assertEqual(scaled["date"], "2026-06-30")
+        self.assertAlmostEqual(scaled["value"], 31.2504)
 
     def test_sec_capex_uses_latest_filing_for_each_fiscal_year(self):
         payload = {"facts": {"us-gaap": {"PaymentsToAcquirePropertyPlantAndEquipment": {"units": {"USD": [
