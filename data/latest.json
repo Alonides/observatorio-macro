@@ -1,93 +1,12 @@
 {
-  "schema_version": 1,
-  "generated_at": "2026-08-21T15:32:17.219090+00:00",
-  "status": "operational_partial",
+  "schema_version": 2,
+  "generated_at": "2026-08-21T16:14:42.956103+00:00",
+  "status": "ok",
   "operational": true,
   "missing_core": [],
-  "series_ok": 16,
-  "series_total": 32,
-  "errors": [
-    {
-      "series_id": "A091RC1Q027SBEA",
-      "error": "A091RC1Q027SBEA: fuente oficial aún no incorporada en v0.2",
-      "fallback_used": false
-    },
-    {
-      "series_id": "CPIAUCSL",
-      "error": "CPIAUCSL: fuente oficial aún no incorporada en v0.2",
-      "fallback_used": false
-    },
-    {
-      "series_id": "DCOILBRENTEU",
-      "error": "DCOILBRENTEU: fuente oficial aún no incorporada en v0.2",
-      "fallback_used": false
-    },
-    {
-      "series_id": "DHHNGSP",
-      "error": "DHHNGSP: fuente oficial aún no incorporada en v0.2",
-      "fallback_used": false
-    },
-    {
-      "series_id": "GDP",
-      "error": "GDP: fuente oficial aún no incorporada en v0.2",
-      "fallback_used": false
-    },
-    {
-      "series_id": "IORB",
-      "error": "IORB: fuente oficial aún no incorporada en v0.2",
-      "fallback_used": false
-    },
-    {
-      "series_id": "IRLTLT01DEM156N",
-      "error": "IRLTLT01DEM156N: fuente oficial aún no incorporada en v0.2",
-      "fallback_used": false
-    },
-    {
-      "series_id": "IRLTLT01EZM156N",
-      "error": "IRLTLT01EZM156N: fuente oficial aún no incorporada en v0.2",
-      "fallback_used": false
-    },
-    {
-      "series_id": "IRLTLT01GBM156N",
-      "error": "IRLTLT01GBM156N: fuente oficial aún no incorporada en v0.2",
-      "fallback_used": false
-    },
-    {
-      "series_id": "IRLTLT01JPM156N",
-      "error": "IRLTLT01JPM156N: fuente oficial aún no incorporada en v0.2",
-      "fallback_used": false
-    },
-    {
-      "series_id": "IRLTLT01NOM156N",
-      "error": "IRLTLT01NOM156N: fuente oficial aún no incorporada en v0.2",
-      "fallback_used": false
-    },
-    {
-      "series_id": "RRPONTSYD",
-      "error": "RRPONTSYD: fuente oficial aún no incorporada en v0.2",
-      "fallback_used": false
-    },
-    {
-      "series_id": "STLFSI4",
-      "error": "STLFSI4: fuente oficial aún no incorporada en v0.2",
-      "fallback_used": false
-    },
-    {
-      "series_id": "UNRATE",
-      "error": "UNRATE: fuente oficial aún no incorporada en v0.2",
-      "fallback_used": false
-    },
-    {
-      "series_id": "WALCL",
-      "error": "WALCL: fuente oficial aún no incorporada en v0.2",
-      "fallback_used": false
-    },
-    {
-      "series_id": "WTREGEN",
-      "error": "WTREGEN: fuente oficial aún no incorporada en v0.2",
-      "fallback_used": false
-    }
-  ],
+  "series_ok": 36,
+  "series_total": 36,
+  "errors": [],
   "derived": [
     {
       "id": "US_2S10S",
@@ -100,6 +19,18 @@
       "title": "Pendiente EE. UU. 2–30",
       "value": 104.0,
       "unit": "pb"
+    },
+    {
+      "id": "US_DEBT_GDP",
+      "title": "Deuda federal bruta / PIB",
+      "value": 123.2,
+      "unit": "%"
+    },
+    {
+      "id": "AI_CAPEX_QUARTER",
+      "title": "Capex último trimestre disponible · 5/5 hyperscalers",
+      "value": 187.1,
+      "unit": "miles de millones USD"
     }
   ],
   "regime": {
@@ -135,32 +66,32 @@
       {
         "key": "repo",
         "label": "Tensión monetaria SOFR−IORB",
-        "active": null,
-        "value": null,
+        "active": false,
+        "value": -0.020000000000000018,
         "threshold": "≥ +20 pb",
         "explanation": "Confirma tensión de financiación, no solo movimiento de precios."
       },
       {
         "key": "stress",
-        "label": "Tensión financiera sistémica",
-        "active": null,
-        "value": null,
-        "threshold": "STLFSI4 ≥ 1",
-        "explanation": "Confirma que el choque alcanza la intermediación financiera."
+        "label": "Pérdida de la función refugio / estrés",
+        "active": false,
+        "value": 16.01,
+        "threshold": "VIX ≥ 35",
+        "explanation": "Filtro conservador: exige estrés de mercado además del movimiento de precios."
       },
       {
         "key": "global_duration",
         "label": "Reprecio global de duración",
-        "active": null,
-        "value": null,
+        "active": false,
+        "value": 0.022292284349999747,
         "threshold": "mediana pares ≥ +30 pb en 92 días",
         "explanation": "Japón, Alemania, Reino Unido, Noruega y eurozona sirven como cesta de pares."
       },
       {
         "key": "us_specific",
         "label": "Prima estadounidense relativa",
-        "active": null,
-        "value": null,
+        "active": false,
+        "value": 0.09770771565000036,
         "threshold": "EE. UU.−pares ≥ +35 pb en 92 días",
         "explanation": "Busca deterioro relativo y no solo un movimiento mundial de duración."
       }
@@ -170,11 +101,11 @@
       "real_10y_change_pp_min": 0.5,
       "breakeven_10y_change_pp_min": 0.3,
       "sofr_iorb_spread_pp_min": 0.2,
-      "financial_stress_min": 1.0,
+      "vix_stress_min": 35.0,
       "global_peer_median_change_pp_min": 0.3,
       "us_vs_peer_excess_change_pp_min": 0.35
     },
-    "method_note": "H1 exige la señal triple y al menos una confirmación de liquidez/tensión o prima relativa. H2 exige además un choque global de duración."
+    "method_note": "H1 exige la señal triple y al menos una confirmación de liquidez, estrés o prima relativa. H2 exige además un choque global de duración."
   },
   "series": [
     {
@@ -184,7 +115,8 @@
       "unit": "%",
       "frequency": "daily",
       "stale_after_days": 7,
-      "source": "FRED",
+      "source": "U.S. Treasury",
+      "source_url": "https://home.treasury.gov/resource-center/data-chart-center/interest-rates",
       "value": 3.87,
       "observation_date": "2026-08-20",
       "age_days": 1,
@@ -197,7 +129,8 @@
       "unit": "%",
       "frequency": "daily",
       "stale_after_days": 7,
-      "source": "FRED",
+      "source": "U.S. Treasury",
+      "source_url": "https://home.treasury.gov/resource-center/data-chart-center/interest-rates",
       "value": 4.19,
       "observation_date": "2026-08-20",
       "age_days": 1,
@@ -210,7 +143,8 @@
       "unit": "%",
       "frequency": "daily",
       "stale_after_days": 7,
-      "source": "FRED",
+      "source": "U.S. Treasury",
+      "source_url": "https://home.treasury.gov/resource-center/data-chart-center/interest-rates",
       "value": 4.69,
       "observation_date": "2026-08-20",
       "age_days": 1,
@@ -223,7 +157,8 @@
       "unit": "%",
       "frequency": "daily",
       "stale_after_days": 7,
-      "source": "FRED",
+      "source": "U.S. Treasury",
+      "source_url": "https://home.treasury.gov/resource-center/data-chart-center/interest-rates",
       "value": 5.23,
       "observation_date": "2026-08-20",
       "age_days": 1,
@@ -236,7 +171,8 @@
       "unit": "% real",
       "frequency": "daily",
       "stale_after_days": 7,
-      "source": "FRED",
+      "source": "U.S. Treasury",
+      "source_url": "https://home.treasury.gov/resource-center/data-chart-center/interest-rates",
       "value": 2.35,
       "observation_date": "2026-08-20",
       "age_days": 1,
@@ -249,7 +185,8 @@
       "unit": "%",
       "frequency": "daily",
       "stale_after_days": 7,
-      "source": "FRED",
+      "source": "Derivado Treasury nominal − real",
+      "source_url": "https://home.treasury.gov/resource-center/data-chart-center/interest-rates",
       "value": 2.3400000000000003,
       "observation_date": "2026-08-20",
       "age_days": 1,
@@ -262,7 +199,8 @@
       "unit": "%",
       "frequency": "daily",
       "stale_after_days": 7,
-      "source": "FRED",
+      "source": "Federal Reserve Bank of New York",
+      "source_url": "https://markets.newyorkfed.org/",
       "value": 3.63,
       "observation_date": "2026-08-20",
       "age_days": 1,
@@ -275,11 +213,12 @@
       "unit": "%",
       "frequency": "daily",
       "stale_after_days": 7,
-      "source": "FRED",
-      "value": null,
-      "observation_date": null,
-      "age_days": null,
-      "quality": "missing"
+      "source": "Federal Reserve Board",
+      "source_url": "https://www.federalreserve.gov/datadownload/",
+      "value": 3.65,
+      "observation_date": "2026-08-21",
+      "age_days": 0,
+      "quality": "ok"
     },
     {
       "id": "RRPONTSYD",
@@ -288,11 +227,12 @@
       "unit": "miles de millones USD",
       "frequency": "daily",
       "stale_after_days": 7,
-      "source": "FRED",
-      "value": null,
-      "observation_date": null,
-      "age_days": null,
-      "quality": "missing"
+      "source": "Federal Reserve Bank of New York",
+      "source_url": "https://markets.newyorkfed.org/",
+      "value": 0.225,
+      "observation_date": "2026-08-20",
+      "age_days": 1,
+      "quality": "ok"
     },
     {
       "id": "WALCL",
@@ -301,11 +241,12 @@
       "unit": "millones USD",
       "frequency": "weekly",
       "stale_after_days": 14,
-      "source": "FRED",
-      "value": null,
-      "observation_date": null,
-      "age_days": null,
-      "quality": "missing"
+      "source": "Federal Reserve Board H.4.1",
+      "source_url": "https://www.federalreserve.gov/releases/h41/current/h41.htm",
+      "value": 6745699.0,
+      "observation_date": "2026-08-19",
+      "age_days": 2,
+      "quality": "ok"
     },
     {
       "id": "WTREGEN",
@@ -314,24 +255,12 @@
       "unit": "millones USD",
       "frequency": "weekly",
       "stale_after_days": 14,
-      "source": "FRED",
-      "value": null,
-      "observation_date": null,
-      "age_days": null,
-      "quality": "missing"
-    },
-    {
-      "id": "STLFSI4",
-      "title": "Índice de tensión financiera St. Louis",
-      "group": "Liquidez",
-      "unit": "índice",
-      "frequency": "weekly",
-      "stale_after_days": 14,
-      "source": "FRED",
-      "value": null,
-      "observation_date": null,
-      "age_days": null,
-      "quality": "missing"
+      "source": "Federal Reserve Board H.4.1",
+      "source_url": "https://www.federalreserve.gov/releases/h41/current/h41.htm",
+      "value": 936406.0,
+      "observation_date": "2026-08-19",
+      "age_days": 2,
+      "quality": "ok"
     },
     {
       "id": "VIXCLS",
@@ -340,7 +269,8 @@
       "unit": "índice",
       "frequency": "daily",
       "stale_after_days": 7,
-      "source": "FRED",
+      "source": "Cboe Global Markets",
+      "source_url": "https://www.cboe.com/tradable_products/vix/vix_historical_data/",
       "value": 16.01,
       "observation_date": "2026-08-20",
       "age_days": 1,
@@ -353,7 +283,8 @@
       "unit": "índice",
       "frequency": "daily",
       "stale_after_days": 7,
-      "source": "FRED",
+      "source": "Federal Reserve Board H.10",
+      "source_url": "https://www.federalreserve.gov/releases/h10/current/",
       "value": 118.9028,
       "observation_date": "2026-08-14",
       "age_days": 7,
@@ -366,7 +297,8 @@
       "unit": "USD/EUR",
       "frequency": "daily",
       "stale_after_days": 7,
-      "source": "FRED",
+      "source": "Federal Reserve Board H.10",
+      "source_url": "https://www.federalreserve.gov/releases/h10/current/",
       "value": 1.1581,
       "observation_date": "2026-08-14",
       "age_days": 7,
@@ -379,7 +311,8 @@
       "unit": "NOK/USD",
       "frequency": "daily",
       "stale_after_days": 7,
-      "source": "FRED",
+      "source": "Federal Reserve Board H.10",
+      "source_url": "https://www.federalreserve.gov/releases/h10/current/",
       "value": 9.4314,
       "observation_date": "2026-08-14",
       "age_days": 7,
@@ -392,7 +325,8 @@
       "unit": "JPY/USD",
       "frequency": "daily",
       "stale_after_days": 7,
-      "source": "FRED",
+      "source": "Federal Reserve Board H.10",
+      "source_url": "https://www.federalreserve.gov/releases/h10/current/",
       "value": 159.21,
       "observation_date": "2026-08-14",
       "age_days": 7,
@@ -405,7 +339,8 @@
       "unit": "CNY/USD",
       "frequency": "daily",
       "stale_after_days": 7,
-      "source": "FRED",
+      "source": "Federal Reserve Board H.10",
+      "source_url": "https://www.federalreserve.gov/releases/h10/current/",
       "value": 6.7412,
       "observation_date": "2026-08-14",
       "age_days": 7,
@@ -418,7 +353,8 @@
       "unit": "USD/onza",
       "frequency": "daily",
       "stale_after_days": 7,
-      "source": "FRED",
+      "source": "LBMA",
+      "source_url": "https://www.lbma.org.uk/prices-and-data/precious-metal-prices",
       "value": 4487.6,
       "observation_date": "2026-08-20",
       "age_days": 1,
@@ -431,8 +367,9 @@
       "unit": "USD/BTC",
       "frequency": "daily",
       "stale_after_days": 7,
-      "source": "FRED",
-      "value": 77583.12134525142,
+      "source": "CoinGecko",
+      "source_url": "https://www.coingecko.com/en/coins/bitcoin",
+      "value": 76976.9781437926,
       "observation_date": "2026-08-21",
       "age_days": 0,
       "quality": "ok"
@@ -443,12 +380,13 @@
       "group": "Energía",
       "unit": "USD/barril",
       "frequency": "daily",
-      "stale_after_days": 7,
-      "source": "FRED",
-      "value": null,
-      "observation_date": null,
-      "age_days": null,
-      "quality": "missing"
+      "stale_after_days": 10,
+      "source": "U.S. Energy Information Administration",
+      "source_url": "https://www.eia.gov/opendata/",
+      "value": 95.29,
+      "observation_date": "2026-08-18",
+      "age_days": 3,
+      "quality": "ok"
     },
     {
       "id": "DHHNGSP",
@@ -456,86 +394,93 @@
       "group": "Energía",
       "unit": "USD/MMBtu",
       "frequency": "daily",
-      "stale_after_days": 7,
-      "source": "FRED",
-      "value": null,
-      "observation_date": null,
-      "age_days": null,
-      "quality": "missing"
+      "stale_after_days": 10,
+      "source": "U.S. Energy Information Administration",
+      "source_url": "https://www.eia.gov/opendata/",
+      "value": 2.82,
+      "observation_date": "2026-08-18",
+      "age_days": 3,
+      "quality": "ok"
     },
     {
       "id": "IRLTLT01JPM156N",
-      "title": "Japón: bono público largo",
+      "title": "Japón: JGB 10 años",
       "group": "Duración global",
       "unit": "%",
-      "frequency": "monthly",
-      "stale_after_days": 62,
-      "source": "FRED",
-      "value": null,
-      "observation_date": null,
-      "age_days": null,
-      "quality": "missing"
+      "frequency": "daily",
+      "stale_after_days": 10,
+      "source": "Ministry of Finance Japan",
+      "source_url": "https://www.mof.go.jp/english/policy/jgbs/reference/interest_rate/",
+      "value": 2.854,
+      "observation_date": "2026-08-20",
+      "age_days": 1,
+      "quality": "ok"
     },
     {
       "id": "IRLTLT01DEM156N",
-      "title": "Alemania: bono público largo",
+      "title": "Alemania: Bund 10 años",
       "group": "Duración global",
       "unit": "%",
-      "frequency": "monthly",
-      "stale_after_days": 62,
-      "source": "FRED",
-      "value": null,
-      "observation_date": null,
-      "age_days": null,
-      "quality": "missing"
+      "frequency": "daily",
+      "stale_after_days": 10,
+      "source": "Deutsche Bundesbank",
+      "source_url": "https://www.bundesbank.de/en/statistics/money-and-capital-markets/interest-rates-and-yields",
+      "value": 3.24,
+      "observation_date": "2026-08-21",
+      "age_days": 0,
+      "quality": "ok"
     },
     {
       "id": "IRLTLT01GBM156N",
-      "title": "Reino Unido: bono público largo",
+      "title": "Reino Unido: gilt 10 años",
       "group": "Duración global",
       "unit": "%",
-      "frequency": "monthly",
-      "stale_after_days": 62,
-      "source": "FRED",
-      "value": null,
-      "observation_date": null,
-      "age_days": null,
-      "quality": "missing"
+      "frequency": "daily",
+      "stale_after_days": 10,
+      "source": "Bank of England",
+      "source_url": "https://www.bankofengland.co.uk/boeapps/database/",
+      "value": 5.0401,
+      "observation_date": "2026-08-19",
+      "age_days": 2,
+      "quality": "ok"
     },
     {
       "id": "IRLTLT01NOM156N",
-      "title": "Noruega: bono público largo",
+      "title": "Noruega: bono público 10 años",
       "group": "Noruega",
       "unit": "%",
-      "frequency": "monthly",
-      "stale_after_days": 62,
-      "source": "FRED",
-      "value": null,
-      "observation_date": null,
-      "age_days": null,
-      "quality": "missing"
+      "frequency": "daily",
+      "stale_after_days": 10,
+      "source": "Norges Bank",
+      "source_url": "https://www.norges-bank.no/en/topics/Statistics/norwegian-government-securities/generiske-statsrenter/",
+      "value": 4.394,
+      "observation_date": "2026-08-20",
+      "age_days": 1,
+      "quality": "ok"
     },
     {
       "id": "IRLTLT01EZM156N",
-      "title": "Eurozona: bono público largo",
+      "title": "Eurozona: spot soberano AAA 10 años",
       "group": "Duración global",
       "unit": "%",
-      "frequency": "monthly",
-      "stale_after_days": 62,
-      "source": "FRED",
-      "value": null,
-      "observation_date": null,
-      "age_days": null,
-      "quality": "missing"
+      "frequency": "daily",
+      "stale_after_days": 10,
+      "source": "European Central Bank",
+      "source_url": "https://data.ecb.europa.eu/data/datasets/YC/YC.B.U2.EUR.4F.G_N_A.SV_C_YM.SR_10Y",
+      "value": 3.279171221,
+      "observation_date": "2026-08-20",
+      "age_days": 1,
+      "quality": "ok"
     },
     {
       "id": "GFDEBTN",
       "title": "Deuda federal bruta de EE. UU.",
       "group": "Fiscal",
       "unit": "millones USD",
-      "frequency": "quarterly",
-      "stale_after_days": 140,
-      "source": "FRED",
+      "frequency": "daily",
+      "stale_after_days": 7,
+      "source": "U.S. Treasury Fiscal Data",
+      "source_url": "https://fiscaldata.treasury.gov/datasets/debt-to-the-penny/",
       "value": 40012700.53567944,
       "observation_date": "2026-08-19",
       "age_days": 2,
@@ -548,11 +493,12 @@
       "unit": "miles de millones USD SAAR",
       "frequency": "quarterly",
       "stale_after_days": 140,
-      "source": "FRED",
-      "value": null,
-      "observation_date": null,
-      "age_days": null,
-      "quality": "missing"
+      "source": "BEA · espejo DBnomics",
+      "source_url": "https://db.nomics.world/BEA/NIPA-T30200/A091RC-Q",
+      "value": 1247.033,
+      "observation_date": "2026-06-30",
+      "age_days": 52,
+      "quality": "ok"
     },
     {
       "id": "GDP",
@@ -561,11 +507,12 @@
       "unit": "miles de millones USD SAAR",
       "frequency": "quarterly",
       "stale_after_days": 140,
-      "source": "FRED",
-      "value": null,
-      "observation_date": null,
-      "age_days": null,
-      "quality": "missing"
+      "source": "BEA · espejo DBnomics",
+      "source_url": "https://db.nomics.world/BEA/NIPA-T10105/A191RC-Q",
+      "value": 32475.21,
+      "observation_date": "2026-06-30",
+      "age_days": 52,
+      "quality": "ok"
     },
     {
       "id": "CPIAUCSL",
@@ -574,11 +521,12 @@
       "unit": "índice",
       "frequency": "monthly",
       "stale_after_days": 45,
-      "source": "FRED",
-      "value": null,
-      "observation_date": null,
-      "age_days": null,
-      "quality": "missing"
+      "source": "U.S. Bureau of Labor Statistics",
+      "source_url": "https://www.bls.gov/cpi/data.htm",
+      "value": 332.813,
+      "observation_date": "2026-07-01",
+      "age_days": 51,
+      "quality": "warning"
     },
     {
       "id": "UNRATE",
@@ -587,11 +535,82 @@
       "unit": "%",
       "frequency": "monthly",
       "stale_after_days": 45,
-      "source": "FRED",
-      "value": null,
-      "observation_date": null,
-      "age_days": null,
-      "quality": "missing"
+      "source": "U.S. Bureau of Labor Statistics",
+      "source_url": "https://www.bls.gov/cps/data.htm",
+      "value": 4.1,
+      "observation_date": "2026-07-01",
+      "age_days": 51,
+      "quality": "warning"
+    },
+    {
+      "id": "CAPEX_MSFT",
+      "title": "Microsoft: capex último trimestre",
+      "group": "Capacidad productiva",
+      "unit": "miles de millones USD",
+      "frequency": "quarterly",
+      "stale_after_days": 140,
+      "source": "Hyperscaler Capex Tracker · CC BY 4.0",
+      "source_url": "https://www.regardsofwallstreet.com/data/capex",
+      "value": 41.0,
+      "observation_date": "2026-06-30",
+      "age_days": 52,
+      "quality": "ok"
+    },
+    {
+      "id": "CAPEX_GOOG",
+      "title": "Alphabet: capex último trimestre",
+      "group": "Capacidad productiva",
+      "unit": "miles de millones USD",
+      "frequency": "quarterly",
+      "stale_after_days": 140,
+      "source": "Hyperscaler Capex Tracker · CC BY 4.0",
+      "source_url": "https://www.regardsofwallstreet.com/data/capex",
+      "value": 44.9,
+      "observation_date": "2026-06-30",
+      "age_days": 52,
+      "quality": "ok"
+    },
+    {
+      "id": "CAPEX_AMZN",
+      "title": "Amazon: capex último trimestre",
+      "group": "Capacidad productiva",
+      "unit": "miles de millones USD",
+      "frequency": "quarterly",
+      "stale_after_days": 140,
+      "source": "Hyperscaler Capex Tracker · CC BY 4.0",
+      "source_url": "https://www.regardsofwallstreet.com/data/capex",
+      "value": 54.2,
+      "observation_date": "2026-06-30",
+      "age_days": 52,
+      "quality": "ok"
+    },
+    {
+      "id": "CAPEX_META",
+      "title": "Meta: capex último trimestre",
+      "group": "Capacidad productiva",
+      "unit": "miles de millones USD",
+      "frequency": "quarterly",
+      "stale_after_days": 140,
+      "source": "Hyperscaler Capex Tracker · CC BY 4.0",
+      "source_url": "https://www.regardsofwallstreet.com/data/capex",
+      "value": 31.08,
+      "observation_date": "2026-06-30",
+      "age_days": 52,
+      "quality": "ok"
+    },
+    {
+      "id": "CAPEX_ORCL",
+      "title": "Oracle: capex último trimestre",
+      "group": "Capacidad productiva",
+      "unit": "miles de millones USD",
+      "frequency": "quarterly",
+      "stale_after_days": 140,
+      "source": "Hyperscaler Capex Tracker · CC BY 4.0",
+      "source_url": "https://www.regardsofwallstreet.com/data/capex",
+      "value": 15.9,
+      "observation_date": "2026-05-31",
+      "age_days": 82,
+      "quality": "ok"
     }
   ]
 }
