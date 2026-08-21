@@ -1,7 +1,7 @@
 {
   "schema_version": 3,
-  "generated_at": "2026-08-21T20:56:37.232565+00:00",
-  "code_commit": null,
+  "generated_at": "2026-08-21T23:12:45.514673+00:00",
+  "code_commit": "5750a80d390d111fbdf473e961daa94e41084e70",
   "methodology": {
     "id": "MEIR-MON-OBS",
     "version": "0.2.0-dev",
@@ -9,7 +9,7 @@
     "effective_from": null,
     "calibration_cutoff": "2026-08-20",
     "hash_algorithm": "sha256-json-c14n-v1",
-    "sha256": "06f05697f0f94e3cfd20fefc78475431278a67de8a0a93b50fb2050dbc753054",
+    "sha256": "6ca78c6674656791681ec1cdbf015f20e8a795bd139d36ab9865ea5e30bff603",
     "semantic_reference": {
       "id": "MEIR-MON-002-A1",
       "title": "El precio del privilegio",
@@ -122,9 +122,9 @@
         "key": "us_specific",
         "label": "Prima estadounidense relativa",
         "active": false,
-        "value": 0.08599999999999985,
-        "threshold": "EE. UU.-pares ≥ +35 pb en 92 dias · transicion",
-        "explanation": "Regla provisional hasta sustituirla por el residuo p90/p95 calibrado sobre 2003-2024."
+        "value": 0.1906867586258673,
+        "threshold": "residuo 3m ≥ p90 (+25.5 pb)",
+        "explanation": "OLS mensual congelado sobre 2003-2024. H1 exige además p95 en dos cierres consecutivos; las ventanas alternativas no compiten por el resultado."
       }
     ],
     "diagnostics": {
@@ -138,8 +138,18 @@
       },
       "peer_median_change_pp": 0.08400000000000007,
       "us_change_pp": 0.16999999999999993,
-      "us_excess_change_pp": 0.08599999999999985,
-      "us_specific_rule_status": "transitional"
+      "us_relative_model": {
+        "available": true,
+        "month": "2026-07",
+        "score_pp": 0.1906867586258673,
+        "previous_month": "2026-06",
+        "previous_score_pp": 0.16566059596415028,
+        "h0_threshold_p90_pp": 0.255450704639,
+        "h1_threshold_p95_pp": 0.358694243008,
+        "h0_specific": false,
+        "h1_specific_persistent": false
+      },
+      "us_specific_rule_status": "calibrated_candidate"
     },
     "context_windows": {
       "183": {
@@ -162,14 +172,14 @@
       "effective_from": null,
       "calibration_cutoff": "2026-08-20",
       "hash_algorithm": "sha256-json-c14n-v1",
-      "sha256": "06f05697f0f94e3cfd20fefc78475431278a67de8a0a93b50fb2050dbc753054",
+      "sha256": "6ca78c6674656791681ec1cdbf015f20e8a795bd139d36ab9865ea5e30bff603",
       "semantic_reference": {
         "id": "MEIR-MON-002-A1",
         "title": "El precio del privilegio",
         "version": 0.5
       }
     },
-    "method_note": "La señal triple abre investigacion y nunca decide H1 por si sola. H0 requiere evidencia estadounidense positiva; H2 exige sincronismo global. Las ventanas de seis y doce meses son contexto, no rutas alternativas de activacion."
+    "method_note": "La señal triple abre investigacion y nunca decide H1 por si sola. H0 requiere un residuo estadounidense ≥p90; H1 exige ≥p95 persistente; H2 exige sincronismo global y residuo por debajo de p90. Las ventanas de seis y doce meses son contexto, no rutas alternativas de activacion."
   },
   "structural_state": {
     "engine": "structural_state",
@@ -182,7 +192,7 @@
       "effective_from": null,
       "calibration_cutoff": "2026-08-20",
       "hash_algorithm": "sha256-json-c14n-v1",
-      "sha256": "06f05697f0f94e3cfd20fefc78475431278a67de8a0a93b50fb2050dbc753054",
+      "sha256": "6ca78c6674656791681ec1cdbf015f20e8a795bd139d36ab9865ea5e30bff603",
       "semantic_reference": {
         "id": "MEIR-MON-002-A1",
         "title": "El precio del privilegio",
@@ -196,11 +206,11 @@
         "status": "available",
         "value": 2.4,
         "unit": "% real",
-        "percentile_available_sample": 96.1,
-        "sample_start": "2025-01-02",
+        "percentile_available_sample": 95.7,
+        "sample_start": "2003-01-02",
         "sample_end": "2026-08-21",
-        "coverage_status": "partial_history",
-        "note": "El percentil no se considera historico completo hasta cubrir 2003-presente."
+        "coverage_status": "full_since_2003",
+        "note": "Percentil calculado sobre la historia oficial disponible desde 2003."
       },
       {
         "key": "debt_held_by_public_to_gdp",
@@ -639,13 +649,13 @@
       "source": "LBMA",
       "source_url": "https://www.lbma.org.uk/prices-and-data/precious-metal-prices",
       "formula": null,
-      "value": 4487.6,
-      "period_date": "2026-08-20",
-      "observation_date": "2026-08-20",
+      "value": 4581.95,
+      "period_date": "2026-08-21",
+      "observation_date": "2026-08-21",
       "published_at": null,
-      "retrieved_at": "2026-08-21T20:45:52.012448+00:00",
+      "retrieved_at": "2026-08-21T23:09:46.147749+00:00",
       "revision": 0,
-      "age_days": 1,
+      "age_days": 0,
       "quality": "ok"
     },
     {
@@ -658,12 +668,12 @@
       "source": "CoinGecko",
       "source_url": "https://www.coingecko.com/en/coins/bitcoin",
       "formula": null,
-      "value": 77482.73114600967,
+      "value": 78546.45973100197,
       "period_date": "2026-08-21",
       "observation_date": "2026-08-21",
       "published_at": null,
-      "retrieved_at": "2026-08-21T20:56:37.232565+00:00",
-      "revision": 5,
+      "retrieved_at": "2026-08-21T23:12:45.514673+00:00",
+      "revision": 7,
       "age_days": 0,
       "quality": "ok"
     },
@@ -1038,12 +1048,12 @@
       "source": "Derivado por el observatorio",
       "source_url": "https://github.com/Alonides/observatorio-macro/blob/main/methodology.yml",
       "formula": "BTC_USD / oro_USD",
-      "value": 17.265962016670304,
+      "value": 17.14258333919008,
       "period_date": "2026-08-21",
       "observation_date": "2026-08-21",
       "published_at": null,
-      "retrieved_at": "2026-08-21T20:56:37.232565+00:00",
-      "revision": 4,
+      "retrieved_at": "2026-08-21T23:12:45.514673+00:00",
+      "revision": 6,
       "age_days": 0,
       "quality": "ok"
     },
@@ -1057,13 +1067,13 @@
       "source": "Derivado por el observatorio",
       "source_url": "https://github.com/Alonides/observatorio-macro/blob/main/methodology.yml",
       "formula": "oro_USD × NOK_por_USD",
-      "value": 42324.350640000004,
-      "period_date": "2026-08-20",
-      "observation_date": "2026-08-20",
+      "value": 43214.20323,
+      "period_date": "2026-08-21",
+      "observation_date": "2026-08-21",
       "published_at": null,
-      "retrieved_at": "2026-08-21T20:45:52.012448+00:00",
+      "retrieved_at": "2026-08-21T23:09:46.147749+00:00",
       "revision": 0,
-      "age_days": 1,
+      "age_days": 0,
       "quality": "ok"
     },
     {
@@ -1076,13 +1086,13 @@
       "source": "Derivado por el observatorio",
       "source_url": "https://github.com/Alonides/observatorio-macro/blob/main/methodology.yml",
       "formula": "oro_USD / USD_por_EUR",
-      "value": 3874.967619376566,
-      "period_date": "2026-08-20",
-      "observation_date": "2026-08-20",
+      "value": 3956.4372679388657,
+      "period_date": "2026-08-21",
+      "observation_date": "2026-08-21",
       "published_at": null,
-      "retrieved_at": "2026-08-21T20:45:52.012448+00:00",
+      "retrieved_at": "2026-08-21T23:09:46.147749+00:00",
       "revision": 0,
-      "age_days": 1,
+      "age_days": 0,
       "quality": "ok"
     },
     {
@@ -1095,13 +1105,13 @@
       "source": "Derivado por el observatorio",
       "source_url": "https://github.com/Alonides/observatorio-macro/blob/main/methodology.yml",
       "formula": "oro_USD × JPY_por_USD",
-      "value": 714470.7960000001,
-      "period_date": "2026-08-20",
-      "observation_date": "2026-08-20",
+      "value": 729492.2595,
+      "period_date": "2026-08-21",
+      "observation_date": "2026-08-21",
       "published_at": null,
-      "retrieved_at": "2026-08-21T20:45:52.012448+00:00",
+      "retrieved_at": "2026-08-21T23:09:46.147749+00:00",
       "revision": 0,
-      "age_days": 1,
+      "age_days": 0,
       "quality": "ok"
     },
     {
@@ -1114,13 +1124,13 @@
       "source": "Derivado por el observatorio",
       "source_url": "https://github.com/Alonides/observatorio-macro/blob/main/methodology.yml",
       "formula": "oro_USD × CNY_por_USD",
-      "value": 30251.80912,
-      "period_date": "2026-08-20",
-      "observation_date": "2026-08-20",
+      "value": 30887.84134,
+      "period_date": "2026-08-21",
+      "observation_date": "2026-08-21",
       "published_at": null,
-      "retrieved_at": "2026-08-21T20:45:52.012448+00:00",
+      "retrieved_at": "2026-08-21T23:09:46.147749+00:00",
       "revision": 0,
-      "age_days": 1,
+      "age_days": 0,
       "quality": "ok"
     },
     {
