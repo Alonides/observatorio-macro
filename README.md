@@ -4,7 +4,7 @@ Observatorio macroeconómico automatizado para vigilar el precio del privilegio 
 
 ## Qué hace
 
-- Recoge 36 series de productores primarios: tipos soberanos, inflación implícita, dólar, oro, Bitcoin, energía, liquidez, fiscalidad y capex empresarial.
+- Recoge 36 series: fuentes oficiales para macro y mercados, más un dataset especializado de capex con metodología, licencia y fuentes por fila.
 - Conserva la fecha de observación y la fecha de recogida: nunca confunde un dato antiguo con uno nuevo.
 - Calcula pendientes de la curva estadounidense y cambios a tres meses.
 - Clasifica la evidencia entre tres hipótesis no excluyentes:
@@ -42,6 +42,6 @@ El histórico se fusiona por fecha: las fuentes que solo publican el último niv
 
 El panel es un instrumento de vigilancia, no una recomendación financiera ni un modelo de predicción opaco. Los umbrales están declarados en `src/observatorio/engine.py`; cualquier cambio queda registrado por Git.
 
-El circuito operativo no depende de FRED. Consulta Treasury, Federal Reserve, New York Fed, BLS, EIA, SEC, Cboe, LBMA, Norges Bank, ECB, Bundesbank, Bank of England y Ministry of Finance Japan; CoinGecko aporta Bitcoin. Las dos tablas NIPA de BEA viajan por el espejo abierto DBnomics porque la API directa exige una clave personal; el panel lo declara en cada fila.
+El circuito operativo no depende de FRED. Consulta Treasury, Federal Reserve, New York Fed, BLS, EIA, Cboe, LBMA, Norges Bank, ECB, Bundesbank, Bank of England y Ministry of Finance Japan; CoinGecko aporta Bitcoin. Las dos tablas NIPA de BEA viajan por el espejo abierto DBnomics porque la API directa exige una clave personal. La SEC bloquea de forma persistente los rangos de GitHub Actions; por eso el bloque empresarial usa el *Hyperscaler Capex Tracker* (CC BY 4.0), que conserva base, método y fuentes de cada fila. El panel declara siempre el transporte real.
 
 Consulta [Arquitectura](docs/ARCHITECTURE.md) y [Diccionario de datos](docs/DATA_DICTIONARY.md).
