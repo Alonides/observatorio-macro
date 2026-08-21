@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import datetime, timezone, date
 from pathlib import Path
 
@@ -32,22 +33,31 @@ def _atomic_json(path: Path, payload) -> None:
     temporary.replace(path)
 
 
-def collect(fetcher=fetch_series, now: datetime | None = None, max_points: int = 900) -> dict:
+def collect(fetcher=fetch_series, now: datetime | None = None, max_points: int = 900, workers: int = 8) -> dict:
     now = now or datetime.now(timezone.utc)
     today = now.date()
     previous = _load_json(DATA_DIR / "series.json", {"series": {}}).get("series", {})
     collected: dict[str, list[dict]] = {}
     errors: list[dict] = []
 
-    for spec in SERIES:
-        try:
-            points = fetcher(spec.id)
-            collected[spec.id] = points[-max_points:]
-        except Exception as exc:  # aislamiento deliberado por fuente/serie
-            fallback = previous.get(spec.id, [])
-            if fallback:
-                collected[spec.id] = fallback
-            errors.append({"series_id": spec.id, "error": str(exc), "fallback_used": bool(fallback)})
+    # FRED sirve cada serie en una petición independiente. La concurrencia es
+    # acotada para acelerar la carga sin castigar la fuente ni ocultar fallos.
+    with ThreadPoolExecutor(max_workers=workers, thread_name_prefix="fred") as pool:
+        futures = {pool.submit(fetcher, spec.id): spec for spec in SERIES}
+        for future in as_completed(futures):
+            spec = futures[future]
+            try:
+                points = future.result()
+                collected[spec.id] = points[-max_points:]
+                print(f"OK {spec.id}: {len(collected[spec.id])} observaciones", flush=True)
+            except Exception as exc:  # aislamiento deliberado por fuente/serie
+                fallback = previous.get(spec.id, [])
+                if fallback:
+                    collected[spec.id] = fallback
+                errors.append({"series_id": spec.id, "error": str(exc), "fallback_used": bool(fallback)})
+                print(f"ERROR {spec.id}: {exc}", flush=True)
+
+    errors.sort(key=lambda item: item["series_id"])
 
     snapshots = []
     for spec in SERIES:
@@ -78,4 +88,3 @@ def collect(fetcher=fetch_series, now: datetime | None = None, max_points: int =
     _atomic_json(DATA_DIR / "series.json", {"schema_version": 1, "generated_at": now.isoformat(), "series": collected})
     _atomic_json(DATA_DIR / "latest.json", payload)
     return payload
-

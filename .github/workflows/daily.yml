@@ -15,7 +15,7 @@ concurrency:
 jobs:
   ingest:
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -36,4 +36,3 @@ jobs:
           git add -- data/latest.json data/series.json
           git commit -m "data: actualización diaria [skip ci]"
           git push
-

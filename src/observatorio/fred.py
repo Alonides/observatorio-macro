@@ -5,12 +5,14 @@ from __future__ import annotations
 import csv
 import io
 import time
-from datetime import date
+from datetime import date, timedelta
+from urllib.parse import urlencode
 from urllib.error import HTTPError, URLError
 from urllib.request import Request, urlopen
 
 
-FRED_CSV = "https://fred.stlouisfed.org/graph/fredgraph.csv?id={series_id}"
+FRED_CSV = "https://fred.stlouisfed.org/graph/fredgraph.csv"
+LOOKBACK_DAYS = 1_500
 
 
 class SourceError(RuntimeError):
@@ -45,15 +47,31 @@ def parse_fred_csv(text: str, series_id: str) -> list[dict]:
     return points
 
 
-def fetch_series(series_id: str, opener=urlopen, retries: int = 3) -> list[dict]:
+def series_url(series_id: str, today: date | None = None) -> str:
+    """Construye una consulta acotada.
+
+    Descargar el historial completo de 32 series convertía una carga diaria de
+    pocos datos nuevos en cientos de MB. Cuatro años cubren holgadamente las
+    ventanas del motor y reducen drásticamente tiempo y superficie de fallo.
+    """
+    today = today or date.today()
+    query = urlencode({
+        "id": series_id,
+        "cosd": (today - timedelta(days=LOOKBACK_DAYS)).isoformat(),
+        "coed": today.isoformat(),
+    })
+    return f"{FRED_CSV}?{query}"
+
+
+def fetch_series(series_id: str, opener=urlopen, retries: int = 2) -> list[dict]:
     last_error: Exception | None = None
     for attempt in range(retries):
         try:
             request = Request(
-                FRED_CSV.format(series_id=series_id),
+                series_url(series_id),
                 headers={"User-Agent": "observatorio-macro/0.1"},
             )
-            with opener(request, timeout=45) as response:
+            with opener(request, timeout=20) as response:
                 text = response.read().decode("utf-8-sig")
             return parse_fred_csv(text, series_id)
         except (HTTPError, URLError, TimeoutError, SourceError) as exc:
