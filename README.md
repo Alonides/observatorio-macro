@@ -42,6 +42,6 @@ El histórico se fusiona por fecha: las fuentes que solo publican el último niv
 
 El panel es un instrumento de vigilancia, no una recomendación financiera ni un modelo de predicción opaco. Los umbrales están declarados en `src/observatorio/engine.py`; cualquier cambio queda registrado por Git.
 
-El circuito operativo no depende de FRED. Consulta directamente Treasury, Federal Reserve, New York Fed, BEA, BLS, EIA, SEC, Cboe, LBMA, Norges Bank, ECB, Bundesbank, Bank of England y Ministry of Finance Japan; CoinGecko aporta Bitcoin.
+El circuito operativo no depende de FRED. Consulta Treasury, Federal Reserve, New York Fed, BLS, EIA, SEC, Cboe, LBMA, Norges Bank, ECB, Bundesbank, Bank of England y Ministry of Finance Japan; CoinGecko aporta Bitcoin. Las dos tablas NIPA de BEA viajan por el espejo abierto DBnomics porque la API directa exige una clave personal; el panel lo declara en cada fila.
 
 Consulta [Arquitectura](docs/ARCHITECTURE.md) y [Diccionario de datos](docs/DATA_DICTIONARY.md).
