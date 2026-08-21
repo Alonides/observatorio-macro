@@ -1,16 +1,597 @@
 {
   "schema_version": 1,
-  "generated_at": null,
-  "status": "pending_first_run",
-  "series_ok": 0,
-  "series_total": 0,
-  "errors": [],
-  "derived": [],
+  "generated_at": "2026-08-21T15:32:17.219090+00:00",
+  "status": "operational_partial",
+  "operational": true,
+  "missing_core": [],
+  "series_ok": 16,
+  "series_total": 32,
+  "errors": [
+    {
+      "series_id": "A091RC1Q027SBEA",
+      "error": "A091RC1Q027SBEA: fuente oficial aún no incorporada en v0.2",
+      "fallback_used": false
+    },
+    {
+      "series_id": "CPIAUCSL",
+      "error": "CPIAUCSL: fuente oficial aún no incorporada en v0.2",
+      "fallback_used": false
+    },
+    {
+      "series_id": "DCOILBRENTEU",
+      "error": "DCOILBRENTEU: fuente oficial aún no incorporada en v0.2",
+      "fallback_used": false
+    },
+    {
+      "series_id": "DHHNGSP",
+      "error": "DHHNGSP: fuente oficial aún no incorporada en v0.2",
+      "fallback_used": false
+    },
+    {
+      "series_id": "GDP",
+      "error": "GDP: fuente oficial aún no incorporada en v0.2",
+      "fallback_used": false
+    },
+    {
+      "series_id": "IORB",
+      "error": "IORB: fuente oficial aún no incorporada en v0.2",
+      "fallback_used": false
+    },
+    {
+      "series_id": "IRLTLT01DEM156N",
+      "error": "IRLTLT01DEM156N: fuente oficial aún no incorporada en v0.2",
+      "fallback_used": false
+    },
+    {
+      "series_id": "IRLTLT01EZM156N",
+      "error": "IRLTLT01EZM156N: fuente oficial aún no incorporada en v0.2",
+      "fallback_used": false
+    },
+    {
+      "series_id": "IRLTLT01GBM156N",
+      "error": "IRLTLT01GBM156N: fuente oficial aún no incorporada en v0.2",
+      "fallback_used": false
+    },
+    {
+      "series_id": "IRLTLT01JPM156N",
+      "error": "IRLTLT01JPM156N: fuente oficial aún no incorporada en v0.2",
+      "fallback_used": false
+    },
+    {
+      "series_id": "IRLTLT01NOM156N",
+      "error": "IRLTLT01NOM156N: fuente oficial aún no incorporada en v0.2",
+      "fallback_used": false
+    },
+    {
+      "series_id": "RRPONTSYD",
+      "error": "RRPONTSYD: fuente oficial aún no incorporada en v0.2",
+      "fallback_used": false
+    },
+    {
+      "series_id": "STLFSI4",
+      "error": "STLFSI4: fuente oficial aún no incorporada en v0.2",
+      "fallback_used": false
+    },
+    {
+      "series_id": "UNRATE",
+      "error": "UNRATE: fuente oficial aún no incorporada en v0.2",
+      "fallback_used": false
+    },
+    {
+      "series_id": "WALCL",
+      "error": "WALCL: fuente oficial aún no incorporada en v0.2",
+      "fallback_used": false
+    },
+    {
+      "series_id": "WTREGEN",
+      "error": "WTREGEN: fuente oficial aún no incorporada en v0.2",
+      "fallback_used": false
+    }
+  ],
+  "derived": [
+    {
+      "id": "US_2S10S",
+      "title": "Pendiente EE. UU. 2–10",
+      "value": 50.0,
+      "unit": "pb"
+    },
+    {
+      "id": "US_2S30S",
+      "title": "Pendiente EE. UU. 2–30",
+      "value": 104.0,
+      "unit": "pb"
+    }
+  ],
   "regime": {
-    "regime": "PENDIENTE",
-    "label": "Pendiente de la primera carga",
-    "signals": []
+    "regime": "INDETERMINADO",
+    "label": "Evidencia insuficiente o mixta",
+    "triple_active": 0,
+    "confirmation_active": false,
+    "signals": [
+      {
+        "key": "dollar",
+        "label": "Dólar amplio a la baja",
+        "active": false,
+        "value": 0.196511996332672,
+        "threshold": "≤ −5 % en 92 días",
+        "explanation": "Posible debilitamiento del denominador."
+      },
+      {
+        "key": "real_yield",
+        "label": "Rendimiento real a la alza",
+        "active": false,
+        "value": 0.2200000000000002,
+        "threshold": "≥ +50 pb en 92 días",
+        "explanation": "El mercado exige más rentabilidad real."
+      },
+      {
+        "key": "breakeven",
+        "label": "Inflación implícita al alza",
+        "active": false,
+        "value": -0.10000000000000009,
+        "threshold": "≥ +30 pb en 92 días",
+        "explanation": "Sube simultáneamente la compensación inflacionaria."
+      },
+      {
+        "key": "repo",
+        "label": "Tensión monetaria SOFR−IORB",
+        "active": null,
+        "value": null,
+        "threshold": "≥ +20 pb",
+        "explanation": "Confirma tensión de financiación, no solo movimiento de precios."
+      },
+      {
+        "key": "stress",
+        "label": "Tensión financiera sistémica",
+        "active": null,
+        "value": null,
+        "threshold": "STLFSI4 ≥ 1",
+        "explanation": "Confirma que el choque alcanza la intermediación financiera."
+      },
+      {
+        "key": "global_duration",
+        "label": "Reprecio global de duración",
+        "active": null,
+        "value": null,
+        "threshold": "mediana pares ≥ +30 pb en 92 días",
+        "explanation": "Japón, Alemania, Reino Unido, Noruega y eurozona sirven como cesta de pares."
+      },
+      {
+        "key": "us_specific",
+        "label": "Prima estadounidense relativa",
+        "active": null,
+        "value": null,
+        "threshold": "EE. UU.−pares ≥ +35 pb en 92 días",
+        "explanation": "Busca deterioro relativo y no solo un movimiento mundial de duración."
+      }
+    ],
+    "thresholds": {
+      "dollar_change_pct_max": -5.0,
+      "real_10y_change_pp_min": 0.5,
+      "breakeven_10y_change_pp_min": 0.3,
+      "sofr_iorb_spread_pp_min": 0.2,
+      "financial_stress_min": 1.0,
+      "global_peer_median_change_pp_min": 0.3,
+      "us_vs_peer_excess_change_pp_min": 0.35
+    },
+    "method_note": "H1 exige la señal triple y al menos una confirmación de liquidez/tensión o prima relativa. H2 exige además un choque global de duración."
   },
-  "series": []
+  "series": [
+    {
+      "id": "DGS3MO",
+      "title": "Treasury EE. UU. 3 meses",
+      "group": "Deuda EE. UU.",
+      "unit": "%",
+      "frequency": "daily",
+      "stale_after_days": 7,
+      "source": "FRED",
+      "value": 3.87,
+      "observation_date": "2026-08-20",
+      "age_days": 1,
+      "quality": "ok"
+    },
+    {
+      "id": "DGS2",
+      "title": "Treasury EE. UU. 2 años",
+      "group": "Deuda EE. UU.",
+      "unit": "%",
+      "frequency": "daily",
+      "stale_after_days": 7,
+      "source": "FRED",
+      "value": 4.19,
+      "observation_date": "2026-08-20",
+      "age_days": 1,
+      "quality": "ok"
+    },
+    {
+      "id": "DGS10",
+      "title": "Treasury EE. UU. 10 años",
+      "group": "Deuda EE. UU.",
+      "unit": "%",
+      "frequency": "daily",
+      "stale_after_days": 7,
+      "source": "FRED",
+      "value": 4.69,
+      "observation_date": "2026-08-20",
+      "age_days": 1,
+      "quality": "ok"
+    },
+    {
+      "id": "DGS30",
+      "title": "Treasury EE. UU. 30 años",
+      "group": "Deuda EE. UU.",
+      "unit": "%",
+      "frequency": "daily",
+      "stale_after_days": 7,
+      "source": "FRED",
+      "value": 5.23,
+      "observation_date": "2026-08-20",
+      "age_days": 1,
+      "quality": "ok"
+    },
+    {
+      "id": "DFII10",
+      "title": "TIPS real EE. UU. 10 años",
+      "group": "Deuda EE. UU.",
+      "unit": "% real",
+      "frequency": "daily",
+      "stale_after_days": 7,
+      "source": "FRED",
+      "value": 2.35,
+      "observation_date": "2026-08-20",
+      "age_days": 1,
+      "quality": "ok"
+    },
+    {
+      "id": "T10YIE",
+      "title": "Breakeven inflación EE. UU. 10 años",
+      "group": "Inflación",
+      "unit": "%",
+      "frequency": "daily",
+      "stale_after_days": 7,
+      "source": "FRED",
+      "value": 2.3400000000000003,
+      "observation_date": "2026-08-20",
+      "age_days": 1,
+      "quality": "ok"
+    },
+    {
+      "id": "SOFR",
+      "title": "SOFR",
+      "group": "Liquidez",
+      "unit": "%",
+      "frequency": "daily",
+      "stale_after_days": 7,
+      "source": "FRED",
+      "value": 3.63,
+      "observation_date": "2026-08-20",
+      "age_days": 1,
+      "quality": "ok"
+    },
+    {
+      "id": "IORB",
+      "title": "Interés sobre saldos de reserva",
+      "group": "Liquidez",
+      "unit": "%",
+      "frequency": "daily",
+      "stale_after_days": 7,
+      "source": "FRED",
+      "value": null,
+      "observation_date": null,
+      "age_days": null,
+      "quality": "missing"
+    },
+    {
+      "id": "RRPONTSYD",
+      "title": "Reverse repo overnight",
+      "group": "Liquidez",
+      "unit": "miles de millones USD",
+      "frequency": "daily",
+      "stale_after_days": 7,
+      "source": "FRED",
+      "value": null,
+      "observation_date": null,
+      "age_days": null,
+      "quality": "missing"
+    },
+    {
+      "id": "WALCL",
+      "title": "Balance total de la Reserva Federal",
+      "group": "Liquidez",
+      "unit": "millones USD",
+      "frequency": "weekly",
+      "stale_after_days": 14,
+      "source": "FRED",
+      "value": null,
+      "observation_date": null,
+      "age_days": null,
+      "quality": "missing"
+    },
+    {
+      "id": "WTREGEN",
+      "title": "Cuenta General del Tesoro",
+      "group": "Liquidez",
+      "unit": "millones USD",
+      "frequency": "weekly",
+      "stale_after_days": 14,
+      "source": "FRED",
+      "value": null,
+      "observation_date": null,
+      "age_days": null,
+      "quality": "missing"
+    },
+    {
+      "id": "STLFSI4",
+      "title": "Índice de tensión financiera St. Louis",
+      "group": "Liquidez",
+      "unit": "índice",
+      "frequency": "weekly",
+      "stale_after_days": 14,
+      "source": "FRED",
+      "value": null,
+      "observation_date": null,
+      "age_days": null,
+      "quality": "missing"
+    },
+    {
+      "id": "VIXCLS",
+      "title": "VIX",
+      "group": "Riesgo",
+      "unit": "índice",
+      "frequency": "daily",
+      "stale_after_days": 7,
+      "source": "FRED",
+      "value": 16.01,
+      "observation_date": "2026-08-20",
+      "age_days": 1,
+      "quality": "ok"
+    },
+    {
+      "id": "DTWEXBGS",
+      "title": "Índice amplio del dólar",
+      "group": "Divisas",
+      "unit": "índice",
+      "frequency": "daily",
+      "stale_after_days": 7,
+      "source": "FRED",
+      "value": 118.9028,
+      "observation_date": "2026-08-14",
+      "age_days": 7,
+      "quality": "ok"
+    },
+    {
+      "id": "DEXUSEU",
+      "title": "USD por EUR",
+      "group": "Divisas",
+      "unit": "USD/EUR",
+      "frequency": "daily",
+      "stale_after_days": 7,
+      "source": "FRED",
+      "value": 1.1581,
+      "observation_date": "2026-08-14",
+      "age_days": 7,
+      "quality": "ok"
+    },
+    {
+      "id": "DEXNOUS",
+      "title": "NOK por USD",
+      "group": "Noruega",
+      "unit": "NOK/USD",
+      "frequency": "daily",
+      "stale_after_days": 7,
+      "source": "FRED",
+      "value": 9.4314,
+      "observation_date": "2026-08-14",
+      "age_days": 7,
+      "quality": "ok"
+    },
+    {
+      "id": "DEXJPUS",
+      "title": "JPY por USD",
+      "group": "Japón",
+      "unit": "JPY/USD",
+      "frequency": "daily",
+      "stale_after_days": 7,
+      "source": "FRED",
+      "value": 159.21,
+      "observation_date": "2026-08-14",
+      "age_days": 7,
+      "quality": "ok"
+    },
+    {
+      "id": "DEXCHUS",
+      "title": "CNY por USD",
+      "group": "China",
+      "unit": "CNY/USD",
+      "frequency": "daily",
+      "stale_after_days": 7,
+      "source": "FRED",
+      "value": 6.7412,
+      "observation_date": "2026-08-14",
+      "age_days": 7,
+      "quality": "ok"
+    },
+    {
+      "id": "GOLDAMGBD228NLBM",
+      "title": "Oro fixing AM Londres",
+      "group": "Activos reserva",
+      "unit": "USD/onza",
+      "frequency": "daily",
+      "stale_after_days": 7,
+      "source": "FRED",
+      "value": 4487.6,
+      "observation_date": "2026-08-20",
+      "age_days": 1,
+      "quality": "ok"
+    },
+    {
+      "id": "CBBTCUSD",
+      "title": "Bitcoin",
+      "group": "Activos reserva",
+      "unit": "USD/BTC",
+      "frequency": "daily",
+      "stale_after_days": 7,
+      "source": "FRED",
+      "value": 77583.12134525142,
+      "observation_date": "2026-08-21",
+      "age_days": 0,
+      "quality": "ok"
+    },
+    {
+      "id": "DCOILBRENTEU",
+      "title": "Petróleo Brent",
+      "group": "Energía",
+      "unit": "USD/barril",
+      "frequency": "daily",
+      "stale_after_days": 7,
+      "source": "FRED",
+      "value": null,
+      "observation_date": null,
+      "age_days": null,
+      "quality": "missing"
+    },
+    {
+      "id": "DHHNGSP",
+      "title": "Gas natural Henry Hub",
+      "group": "Energía",
+      "unit": "USD/MMBtu",
+      "frequency": "daily",
+      "stale_after_days": 7,
+      "source": "FRED",
+      "value": null,
+      "observation_date": null,
+      "age_days": null,
+      "quality": "missing"
+    },
+    {
+      "id": "IRLTLT01JPM156N",
+      "title": "Japón: bono público largo",
+      "group": "Duración global",
+      "unit": "%",
+      "frequency": "monthly",
+      "stale_after_days": 62,
+      "source": "FRED",
+      "value": null,
+      "observation_date": null,
+      "age_days": null,
+      "quality": "missing"
+    },
+    {
+      "id": "IRLTLT01DEM156N",
+      "title": "Alemania: bono público largo",
+      "group": "Duración global",
+      "unit": "%",
+      "frequency": "monthly",
+      "stale_after_days": 62,
+      "source": "FRED",
+      "value": null,
+      "observation_date": null,
+      "age_days": null,
+      "quality": "missing"
+    },
+    {
+      "id": "IRLTLT01GBM156N",
+      "title": "Reino Unido: bono público largo",
+      "group": "Duración global",
+      "unit": "%",
+      "frequency": "monthly",
+      "stale_after_days": 62,
+      "source": "FRED",
+      "value": null,
+      "observation_date": null,
+      "age_days": null,
+      "quality": "missing"
+    },
+    {
+      "id": "IRLTLT01NOM156N",
+      "title": "Noruega: bono público largo",
+      "group": "Noruega",
+      "unit": "%",
+      "frequency": "monthly",
+      "stale_after_days": 62,
+      "source": "FRED",
+      "value": null,
+      "observation_date": null,
+      "age_days": null,
+      "quality": "missing"
+    },
+    {
+      "id": "IRLTLT01EZM156N",
+      "title": "Eurozona: bono público largo",
+      "group": "Duración global",
+      "unit": "%",
+      "frequency": "monthly",
+      "stale_after_days": 62,
+      "source": "FRED",
+      "value": null,
+      "observation_date": null,
+      "age_days": null,
+      "quality": "missing"
+    },
+    {
+      "id": "GFDEBTN",
+      "title": "Deuda federal bruta de EE. UU.",
+      "group": "Fiscal",
+      "unit": "millones USD",
+      "frequency": "quarterly",
+      "stale_after_days": 140,
+      "source": "FRED",
+      "value": 40012700.53567944,
+      "observation_date": "2026-08-19",
+      "age_days": 2,
+      "quality": "ok"
+    },
+    {
+      "id": "A091RC1Q027SBEA",
+      "title": "Intereses federales pagados",
+      "group": "Fiscal",
+      "unit": "miles de millones USD SAAR",
+      "frequency": "quarterly",
+      "stale_after_days": 140,
+      "source": "FRED",
+      "value": null,
+      "observation_date": null,
+      "age_days": null,
+      "quality": "missing"
+    },
+    {
+      "id": "GDP",
+      "title": "PIB nominal de EE. UU.",
+      "group": "Fiscal",
+      "unit": "miles de millones USD SAAR",
+      "frequency": "quarterly",
+      "stale_after_days": 140,
+      "source": "FRED",
+      "value": null,
+      "observation_date": null,
+      "age_days": null,
+      "quality": "missing"
+    },
+    {
+      "id": "CPIAUCSL",
+      "title": "IPC de EE. UU.",
+      "group": "Inflación",
+      "unit": "índice",
+      "frequency": "monthly",
+      "stale_after_days": 45,
+      "source": "FRED",
+      "value": null,
+      "observation_date": null,
+      "age_days": null,
+      "quality": "missing"
+    },
+    {
+      "id": "UNRATE",
+      "title": "Desempleo de EE. UU.",
+      "group": "Economía real",
+      "unit": "%",
+      "frequency": "monthly",
+      "stale_after_days": 45,
+      "source": "FRED",
+      "value": null,
+      "observation_date": null,
+      "age_days": null,
+      "quality": "missing"
+    }
+  ]
 }
-
