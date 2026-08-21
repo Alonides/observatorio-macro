@@ -33,6 +33,17 @@ def _atomic_json(path: Path, payload) -> None:
     temporary.replace(path)
 
 
+def _merge_points(previous: list[dict], incoming: list[dict], max_points: int) -> list[dict]:
+    """Une por fecha sin borrar historia cuando una API solo entrega el último dato."""
+    by_day: dict[str, dict] = {}
+    for point in [*previous, *incoming]:
+        if not isinstance(point, dict) or point.get("date") is None or point.get("value") is None:
+            continue
+        day = str(point["date"])
+        by_day[day] = {"date": day, "value": point["value"]}
+    return [by_day[day] for day in sorted(by_day)][-max_points:]
+
+
 def collect(fetcher=fetch_series, now: datetime | None = None, max_points: int = 900, workers: int = 8) -> dict:
     now = now or datetime.now(timezone.utc)
     today = now.date()
@@ -40,18 +51,22 @@ def collect(fetcher=fetch_series, now: datetime | None = None, max_points: int =
     collected: dict[str, list[dict]] = {}
     errors: list[dict] = []
 
-    # FRED sirve cada serie en una petición independiente. La concurrencia es
-    # acotada para acelerar la carga sin castigar la fuente ni ocultar fallos.
-    with ThreadPoolExecutor(max_workers=workers, thread_name_prefix="fred") as pool:
+    # La concurrencia es acotada para acelerar la carga sin castigar a los
+    # productores oficiales ni ocultar fallos individuales.
+    with ThreadPoolExecutor(max_workers=workers, thread_name_prefix="source") as pool:
         futures = {pool.submit(fetcher, spec.id): spec for spec in SERIES}
         for future in as_completed(futures):
             spec = futures[future]
             try:
                 points = future.result()
-                collected[spec.id] = points[-max_points:]
-                print(f"OK {spec.id}: {len(collected[spec.id])} observaciones", flush=True)
+                collected[spec.id] = _merge_points(previous.get(spec.id, []), points, max_points)
+                print(
+                    f"OK {spec.id}: {len(points)} nuevas/recibidas; "
+                    f"{len(collected[spec.id])} conservadas",
+                    flush=True,
+                )
             except Exception as exc:  # aislamiento deliberado por fuente/serie
-                fallback = previous.get(spec.id, [])
+                fallback = previous.get(spec.id, [])[-max_points:]
                 if fallback:
                     collected[spec.id] = fallback
                 errors.append({"series_id": spec.id, "error": str(exc), "fallback_used": bool(fallback)})
@@ -77,7 +92,7 @@ def collect(fetcher=fetch_series, now: datetime | None = None, max_points: int =
     missing_core = sorted(series_id for series_id in CORE_SERIES if not collected.get(series_id))
     operational = not missing_core
     payload = {
-        "schema_version": 1,
+        "schema_version": 2,
         "generated_at": now.isoformat(),
         "status": "ok" if not errors else "operational_partial" if operational else "failed",
         "operational": operational,
@@ -89,6 +104,6 @@ def collect(fetcher=fetch_series, now: datetime | None = None, max_points: int =
         "regime": evaluate(collected),
         "series": snapshots,
     }
-    _atomic_json(DATA_DIR / "series.json", {"schema_version": 1, "generated_at": now.isoformat(), "series": collected})
+    _atomic_json(DATA_DIR / "series.json", {"schema_version": 2, "generated_at": now.isoformat(), "series": collected})
     _atomic_json(DATA_DIR / "latest.json", payload)
     return payload
