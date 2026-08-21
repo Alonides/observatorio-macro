@@ -4,7 +4,21 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 
-from observatorio.official import parse_fed_ddp_csv, parse_sofr_json, parse_treasury_csv
+from observatorio.official import (
+    parse_bea_nipa,
+    parse_bls_json,
+    parse_boe_csv,
+    parse_eia_json,
+    parse_fed_ddp_csv,
+    parse_h41_html,
+    parse_mof_csv,
+    parse_norges_html,
+    parse_rrp_json,
+    parse_sdmx_csv,
+    parse_sec_annual_capex,
+    parse_sofr_json,
+    parse_treasury_csv,
+)
 
 
 class OfficialSourceParserTests(unittest.TestCase):
@@ -28,7 +42,68 @@ class OfficialSourceParserTests(unittest.TestCase):
         payload = {"refRates": [{"effectiveDate": "2026-08-20", "percentRate": 3.63}]}
         self.assertEqual(parse_sofr_json(payload), [{"date": "2026-08-20", "value": 3.63}])
 
+    def test_rrp_json_converts_dollars_to_billions_and_ignores_exercise(self):
+        payload = {"repo": {"operations": [
+            {"operationDate": "2026-08-20", "totalAmtAccepted": "125000000000", "note": ""},
+            {"operationDate": "2026-08-20", "totalAmtAccepted": "1000000", "note": "Small value exercise"},
+        ]}}
+        self.assertEqual(parse_rrp_json(payload), [{"date": "2026-08-20", "value": 125.0}])
+
+    def test_sdmx_csv(self):
+        text = "KEY,TIME_PERIOD,OBS_VALUE\nDE10Y,2026-08-20,2.88\n"
+        self.assertEqual(parse_sdmx_csv(text), [{"date": "2026-08-20", "value": 2.88}])
+
+    def test_mof_and_boe_csv(self):
+        self.assertEqual(
+            parse_mof_csv("Date,10-year\n2026/08/20,2.95\n"),
+            [{"date": "2026-08-20", "value": 2.95}],
+        )
+        self.assertEqual(
+            parse_boe_csv("DATE,IUDERB\n20 Aug 2026,4.71\n"),
+            [{"date": "2026-08-20", "value": 4.71}],
+        )
+
+    def test_norges_html_selects_ten_year_column(self):
+        html = "<table><tr>" + "".join(
+            f"<td>{value}</td>" for value in ("2026-08-20", "3.1", "3.2", "3.3", "3.4", "3.5", "3.6", "4.394")
+        ) + "</tr></table>"
+        self.assertEqual(parse_norges_html(html), [{"date": "2026-08-20", "value": 4.394}])
+
+    def test_h41_html_preserves_thousands_separator(self):
+        html = """
+        <p><strong>Release Date:</strong> August 20, 2026</p>
+        <p>Wednesday Aug 19, 2026</p>
+        <table>
+          <tr><td>Total assets</td><td>6,745,699</td></tr>
+          <tr><td>U.S. Treasury, General Account</td><td>936,406</td></tr>
+        </table>
+        """
+        parsed = parse_h41_html(html)
+        self.assertEqual(parsed["WALCL"][0]["date"], "2026-08-19")
+        self.assertEqual(parsed["WALCL"][0]["value"], 6745699.0)
+        self.assertEqual(parsed["WTREGEN"][0]["value"], 936406.0)
+
+    def test_bls_eia_and_bea(self):
+        bls = {"status": "REQUEST_SUCCEEDED", "Results": {"series": [{
+            "seriesID": "CUSR0000SA0",
+            "data": [{"year": "2026", "period": "M07", "value": "329.2"}],
+        }]}}
+        self.assertEqual(parse_bls_json(bls)["CUSR0000SA0"][0], {"date": "2026-07-01", "value": 329.2})
+        eia = {"response": {"data": [{"period": "2026-08-20", "value": "82.5"}]}}
+        self.assertEqual(parse_eia_json(eia), [{"date": "2026-08-20", "value": 82.5}])
+        bea = {"BEAAPI": {"Results": {"Data": [{
+            "LineNumber": "1", "LineDescription": "Gross domestic product",
+            "TimePeriod": "2026Q2", "DataValue": "31,250.4",
+        }]}}}
+        self.assertEqual(parse_bea_nipa(bea, "Gross domestic product"), [{"date": "2026-06-30", "value": 31250.4}])
+
+    def test_sec_capex_uses_latest_filing_for_each_fiscal_year(self):
+        payload = {"facts": {"us-gaap": {"PaymentsToAcquirePropertyPlantAndEquipment": {"units": {"USD": [
+            {"form": "10-K", "fp": "FY", "start": "2025-01-01", "end": "2025-12-31", "val": 50_000_000_000, "filed": "2026-02-01"},
+            {"form": "10-Q", "fp": "Q1", "start": "2026-01-01", "end": "2026-03-31", "val": 9_000_000_000, "filed": "2026-04-20"},
+        ]}}}}}
+        self.assertEqual(parse_sec_annual_capex(payload), [{"date": "2025-12-31", "value": 50.0}])
+
 
 if __name__ == "__main__":
     unittest.main()
-
