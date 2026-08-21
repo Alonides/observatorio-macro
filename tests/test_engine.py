@@ -52,7 +52,7 @@ class EngineTests(unittest.TestCase):
             "CAPEX_GOOG": points(35, 45),
             "CAPEX_AMZN": points(48, 60),
         }
-        metric = next(item for item in derived_metrics(data) if item["id"] == "AI_CAPEX_FY")
+        metric = next(item for item in derived_metrics(data) if item["id"] == "AI_CAPEX_QUARTER")
         self.assertEqual(metric["value"], 155)
 
 
