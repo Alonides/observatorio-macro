@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "generated_at": "2026-08-21T16:14:42.956103+00:00",
+  "generated_at": "2026-08-21T17:42:34.614798+00:00",
   "status": "ok",
   "operational": true,
   "missing_core": [],
@@ -229,9 +229,9 @@
       "stale_after_days": 7,
       "source": "Federal Reserve Bank of New York",
       "source_url": "https://markets.newyorkfed.org/",
-      "value": 0.225,
-      "observation_date": "2026-08-20",
-      "age_days": 1,
+      "value": 0.2,
+      "observation_date": "2026-08-21",
+      "age_days": 0,
       "quality": "ok"
     },
     {
@@ -369,7 +369,7 @@
       "stale_after_days": 7,
       "source": "CoinGecko",
       "source_url": "https://www.coingecko.com/en/coins/bitcoin",
-      "value": 76976.9781437926,
+      "value": 77480.60438284562,
       "observation_date": "2026-08-21",
       "age_days": 0,
       "quality": "ok"
