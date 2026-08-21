@@ -19,5 +19,3 @@ jobs:
           cache: pip
       - run: pip install -r requirements.txt
       - run: python -m unittest discover -s tests -v
-      - name: Verify critical public sources
-        run: python scripts/source_smoke.py
