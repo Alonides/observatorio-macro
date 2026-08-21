@@ -155,8 +155,8 @@ def derived_metrics(series: dict[str, list[dict]]) -> list[dict]:
     capex_available = [value for value in capex if value is not None]
     if len(capex_available) >= 3:
         metrics.append({
-            "id": "AI_CAPEX_FY",
-            "title": f"Capex último ejercicio · {len(capex_available)}/5 hyperscalers",
+            "id": "AI_CAPEX_QUARTER",
+            "title": f"Capex último trimestre disponible · {len(capex_available)}/5 hyperscalers",
             "value": round(sum(capex_available), 1),
             "unit": "miles de millones USD",
         })
