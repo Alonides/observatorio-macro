@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <title>Observatorio Macro</title>
+  <link rel="stylesheet" href="web/styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <div>
+      <p class="eyebrow">OBSERVATORIO MACRO · ALONIDES</p>
+      <h1>El precio del privilegio</h1>
+      <p class="subtitle">Duración global, confianza monetaria y capacidad productiva.</p>
+    </div>
+    <div id="health" class="health">Cargando…</div>
+  </header>
+
+  <main>
+    <section class="hero-grid">
+      <article id="regime" class="regime-card"></article>
+      <article class="card">
+        <h2>Indicadores derivados</h2>
+        <div id="derived" class="metric-grid"></div>
+      </article>
+    </section>
+
+    <section class="card">
+      <div class="section-head">
+        <div><p class="eyebrow">PRUEBA DISCRIMINANTE</p><h2>Señales H0 · H1 · H2</h2></div>
+        <p>Umbrales declarados y versionados; gris significa dato insuficiente.</p>
+      </div>
+      <div id="signals" class="signals"></div>
+    </section>
+
+    <section class="card">
+      <div class="section-head">
+        <div><p class="eyebrow">ÚLTIMA OBSERVACIÓN</p><h2>Mapa de variables</h2></div>
+        <input id="filter" type="search" placeholder="Filtrar por nombre o grupo">
+      </div>
+      <div id="groups"></div>
+    </section>
+  </main>
+
+  <footer>
+    Instrumento analítico, no recomendación financiera. Cada valor conserva su fecha de observación real.
+  </footer>
+  <script src="web/app.js"></script>
+</body>
+</html>
+
