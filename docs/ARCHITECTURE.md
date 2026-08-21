@@ -19,7 +19,7 @@
 - **H1:** aparece simultáneamente dólar débil, rendimiento real alto e inflación implícita alta, confirmado por tensión de liquidez, VIX extremo o deterioro relativo de EE. UU.
 - **H2:** concurren el choque mundial y el componente específico estadounidense.
 
-FRED queda fuera del circuito operativo porque su servidor CSV agotó el tiempo desde GitHub Actions. El catálogo actual consulta Norges Bank, ECB, Bundesbank, Bank of England, Ministry of Finance Japan, Treasury, Federal Reserve, New York Fed, BLS, EIA, SEC, Cboe y LBMA; CoinGecko cubre Bitcoin. Las tablas NIPA de BEA se obtienen del espejo DBnomics, declarado como transporte, para no almacenar una clave personal. Un fallo aparece como ausencia o fallback declarado, nunca como cero.
+FRED queda fuera del circuito operativo porque su servidor CSV agotó el tiempo desde GitHub Actions. El catálogo macro consulta Norges Bank, ECB, Bundesbank, Bank of England, Ministry of Finance Japan, Treasury, Federal Reserve, New York Fed, BLS, EIA, Cboe y LBMA; CoinGecko cubre Bitcoin. Las tablas NIPA de BEA se obtienen del espejo DBnomics, declarado como transporte, para no almacenar una clave personal. La SEC responde 403 de forma persistente desde los rangos de GitHub Actions; el capex se obtiene del *Hyperscaler Capex Tracker* (CC BY 4.0), que documenta base, método y fuentes por fila. Un fallo aparece como ausencia o fallback declarado, nunca como cero.
 
 ## Próximas capas
 
