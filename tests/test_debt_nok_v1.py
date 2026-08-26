@@ -40,10 +40,12 @@ class DebtNokV1Tests(unittest.TestCase):
         self.assertEqual(nrs["operational_score"], 0.0)
         self.assertIsNotNone(nrs["gate_score"])
 
-    def test_confirmed_nrs_is_critical(self):
+    def test_confirmed_nrs_is_material_alert_not_critical_loss_signal(self):
         result = evaluate_operational(norwegian_reversal_confirmed())
         self.assertEqual(result["nrs"]["state"], "confirmed")
-        self.assertEqual(result["operational"]["level"], "critical")
+        self.assertEqual(result["operational"]["level"], "alert")
+        self.assertTrue(result["operational"]["notification_required"])
+        self.assertIn("cambio de régimen", " ".join(result["operational"]["reasons"]))
 
     def test_report_is_deterministic_and_spanish(self):
         report = build_report(us_rejection(), mode="weekly", generated_at="2026-08-26T10:00:00+00:00")
