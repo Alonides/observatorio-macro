@@ -4,6 +4,10 @@ Primary sources often label the same economic move on adjacent business days
 because their fixing or publication cut-offs differ. Validation therefore tests
 a frozen set of lags (-2 to +2 business days) and reports the best alignment.
 This affects only proxy admissibility, never the model observation dates.
+
+Importing this module also installs the frozen v1.0.3 direct-FX calibration in
+the bridge module. The side effect is intentional and tested: the scheduled
+agent imports this module before constructing any provisional series.
 """
 
 from __future__ import annotations
@@ -12,6 +16,9 @@ from datetime import date, timedelta
 from math import isfinite, log, sqrt
 from statistics import mean
 from typing import Mapping, Sequence
+
+from . import fast_bridge as _bridge
+from .fast_config import configure_v103_rules
 
 
 def _point_map(points: Sequence[Mapping[str, object]]) -> dict[date, float]:
@@ -143,6 +150,12 @@ def tracking_statistics_aligned(
         for item in candidates
     ]
     return output
+
+
+# Install the validator and direct-FX thresholds once per process. No official
+# model object is touched; only the provisional bridge module is configured.
+_bridge.tracking_statistics = tracking_statistics_aligned
+_bridge.RULES = configure_v103_rules(_bridge.RULES)
 
 
 __all__ = ["tracking_statistics_aligned"]
