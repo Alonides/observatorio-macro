@@ -1,13 +1,18 @@
-"""Lag-aware overlap validation for provisional market proxies.
+"""Lag-aware overlap validation and v1.0.3 runtime configuration.
 
 Primary sources often label the same economic move on adjacent business days
 because their fixing or publication cut-offs differ. Validation therefore tests
 a frozen set of lags (-2 to +2 business days) and reports the best alignment.
 This affects only proxy admissibility, never the model observation dates.
 
-Importing this module also installs the frozen v1.0.3 direct-FX calibration in
-the bridge module. The side effect is intentional and tested: the scheduled
-agent imports this module before constructing any provisional series.
+Importing this module installs three deliberate provisional-only hooks before
+the scheduled agent imports their public functions:
+
+* the lag-aware validator;
+* the frozen direct-FX calibration;
+* an AmericasOilWatch-first Brent fallback, retaining Yahoo only as last resort.
+
+The authoritative model and official histories are not touched.
 """
 
 from __future__ import annotations
@@ -18,6 +23,7 @@ from statistics import mean
 from typing import Mapping, Sequence
 
 from . import fast_bridge as _bridge
+from . import fast_fallbacks as _fallbacks
 from .fast_config import configure_v103_rules
 
 
@@ -152,10 +158,51 @@ def tracking_statistics_aligned(
     return output
 
 
-# Install the validator and direct-FX thresholds once per process. No official
-# model object is touched; only the provisional bridge module is configured.
+_original_yahoo_fetch = _fallbacks.fetch_yahoo_brent
+
+
+def _secondary_brent_for_agent(*args, **kwargs):
+    """Preserve the agent's import contract while preferring the public API."""
+    try:
+        points, metadata = _fallbacks.fetch_americas_brent(*args, **kwargs)
+        metadata = dict(metadata)
+        metadata["source_id"] = "AMERICASOILWATCH_BRENT"
+        return points, metadata
+    except Exception as americas_error:
+        points, metadata = _original_yahoo_fetch(*args, **kwargs)
+        metadata = dict(metadata)
+        metadata["source_id"] = "YAHOO_BRENT_DELAYED"
+        metadata["preferred_source_error"] = str(americas_error)
+        return points, metadata
+
+
+_original_lane_payload = _bridge.build_fast_lane_payload
+
+
+def _lane_payload_with_source_labels(official_result: dict, provisional_result: dict, bridge: dict) -> dict:
+    payload = _original_lane_payload(official_result, provisional_result, bridge)
+    sources = bridge.get("sources") if isinstance(bridge.get("sources"), dict) else {}
+    fallback = sources.get("YAHOO_BRENT_DELAYED") if isinstance(sources.get("YAHOO_BRENT_DELAYED"), dict) else {}
+    target = bridge.get("targets", {}).get("DCOILBRENTEU") if isinstance(bridge.get("targets"), dict) else None
+    if isinstance(target, dict) and fallback.get("status") == "ok":
+        source_id = fallback.get("source_id")
+        if source_id == "AMERICASOILWATCH_BRENT":
+            target["label"] = "AmericasOilWatch / Stooq delayed Brent futures fallback"
+            target["proxy"] = source_id
+            target["secondary_source"] = True
+        elif source_id == "YAHOO_BRENT_DELAYED":
+            target["label"] = "Yahoo Finance delayed Brent futures fallback"
+            target["proxy"] = source_id
+            target["secondary_source"] = True
+    return payload
+
+
+# Install provisional runtime hooks once per process. The scheduled agent imports
+# these public names only after importing this module.
 _bridge.tracking_statistics = tracking_statistics_aligned
 _bridge.RULES = configure_v103_rules(_bridge.RULES)
+_bridge.build_fast_lane_payload = _lane_payload_with_source_labels
+_fallbacks.fetch_yahoo_brent = _secondary_brent_for_agent
 
 
 __all__ = ["tracking_statistics_aligned"]
