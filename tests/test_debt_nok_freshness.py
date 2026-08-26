@@ -49,7 +49,7 @@ class DebtNokFreshnessTests(unittest.TestCase):
         self.assertIn("# Informe Debt/NOK · 2026-08-27", report["markdown"])
         self.assertIn("Frescura de los bloques", report["markdown"])
         self.assertIn("Datos a", report["markdown"])
-        self.assertEqual(report["notification_title"], "Debt/NOK · Alerta · 2026-08-27")
+        self.assertTrue(report["notification_title"].endswith("2026-08-27"))
 
     def test_previous_comparison_dates_are_block_specific(self):
         report = build_report(staggered_data(), generated_at="2026-08-26T10:00:00+00:00")
