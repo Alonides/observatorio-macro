@@ -11,6 +11,20 @@ La versión operativa v1.0 no altera las ecuaciones validadas del núcleo v0.4.1
 - agente programado con trazabilidad en Git;
 - entrega por notificaciones de GitHub, sin credenciales de correo almacenadas.
 
+## Historial operativo del residual
+
+El almacén macro general conserva un histórico compacto destinado al panel público. Después de alinear los calendarios de Noruega, Suecia, Brent y VIX, ese histórico puede quedar por debajo de la muestra mínima exigida por el residual congelado.
+
+El agente no reduce las ventanas para fabricar cobertura. Mantiene en `data/debt_nok/history.json` una caché separada desde 2018 de cinco series oficiales:
+
+- NOK por USD;
+- USD por EUR;
+- SEK por USD;
+- Brent;
+- VIX.
+
+En cada ejecución fusiona la caché, el snapshot compacto y la historia obtenida de las fuentes oficiales. Si una fuente falla, conserva las observaciones válidas anteriores y declara el error. Esta capa permite calcular el residual causal con la calibración completa y deja la procedencia y la cobertura registradas.
+
 ## Cadencia elegida
 
 - **Lunes 07:30 UTC:** informe completo semanal. Equivale aproximadamente a 08:30 en Oslo durante el horario de invierno y 09:30 durante el horario de verano.
@@ -69,6 +83,7 @@ Se activa por cualquiera de los siguientes:
 - El agente no ejecuta operaciones ni modifica posiciones.
 - Los datos ausentes no se convierten en cero.
 - El residual NOK es causal y walk-forward.
+- El agente no reduce la muestra mínima cuando falta historia; amplía la caché oficial o mantiene cobertura parcial.
 - La entrega se basa en estados y cambios, evitando repetir diariamente la misma alerta.
 - La ausencia de señal no prueba la ausencia de riesgo estructural.
 - Las fuentes y los resultados quedan versionados en Git.
