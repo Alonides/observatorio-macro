@@ -15,6 +15,13 @@ on:
       - "scripts/debt_nok_agent.py"
       - "tests/test_debt_nok_v1.py"
       - ".github/workflows/debt_nok_agent.yml"
+  pull_request:
+    paths:
+      - "src/observatorio/debt_nok_v1/**"
+      - "src/observatorio/debt_nok_v04/**"
+      - "scripts/debt_nok_agent.py"
+      - "tests/test_debt_nok_v1.py"
+      - ".github/workflows/debt_nok_agent.yml"
   workflow_dispatch:
     inputs:
       mode:
@@ -31,7 +38,7 @@ permissions:
   issues: write
 
 concurrency:
-  group: debt-nok-monitoring-agent
+  group: debt-nok-monitoring-agent-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: false
 
 jobs:
@@ -40,8 +47,6 @@ jobs:
     timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
-        with:
-          ref: main
 
       - uses: actions/setup-python@v5
         with:
@@ -60,7 +65,7 @@ jobs:
           mode="daily"
           if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
             mode="${{ inputs.mode }}"
-          elif [[ "${{ github.event_name }}" == "push" ]]; then
+          elif [[ "${{ github.event_name }}" == "push" || "${{ github.event_name }}" == "pull_request" ]]; then
             mode="weekly"
           elif [[ "${{ github.event.schedule }}" == "30 7 * * 1" ]]; then
             mode="weekly"
@@ -71,7 +76,14 @@ jobs:
         id: agent
         run: python scripts/debt_nok_agent.py --mode "${{ steps.mode.outputs.mode }}"
 
+      - name: Validate generated payload
+        run: |
+          python -m json.tool data/debt_nok/latest.json >/dev/null
+          python -m json.tool data/debt_nok/history.json >/dev/null
+          test -s data/debt_nok/latest.md
+
       - name: Commit monitor snapshot and report
+        if: github.event_name != 'pull_request'
         shell: bash
         run: |
           git config user.name "debt-nok-agent"
@@ -86,7 +98,7 @@ jobs:
           git push origin HEAD:main
 
       - name: Deliver weekly report through GitHub notifications
-        if: steps.mode.outputs.mode == 'weekly'
+        if: github.event_name != 'pull_request' && steps.mode.outputs.mode == 'weekly'
         env:
           GH_TOKEN: ${{ github.token }}
         shell: bash
@@ -100,7 +112,7 @@ jobs:
           gh issue comment "$issue_number" --repo "$GITHUB_REPOSITORY" --body-file data/debt_nok/latest.md
 
       - name: Deliver new material alert
-        if: steps.mode.outputs.mode == 'daily' && steps.agent.outputs.notify == 'true'
+        if: github.event_name != 'pull_request' && steps.mode.outputs.mode == 'daily' && steps.agent.outputs.notify == 'true'
         env:
           GH_TOKEN: ${{ github.token }}
           ALERT_TITLE: ${{ steps.agent.outputs.title }}
