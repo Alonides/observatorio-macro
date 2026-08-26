@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "generated_at": "2026-08-26T12:06:42.872620+00:00",
+  "generated_at": "2026-08-26T12:24:58.709110+00:00",
   "status": "ok",
   "operational": true,
   "missing_core": [],
@@ -369,7 +369,7 @@
       "stale_after_days": 7,
       "source": "CoinGecko",
       "source_url": "https://www.coingecko.com/en/coins/bitcoin",
-      "value": 78484.58407812813,
+      "value": 78503.20910192325,
       "observation_date": "2026-08-26",
       "age_days": 0,
       "quality": "ok"
