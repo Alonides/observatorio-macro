@@ -55,7 +55,7 @@ def _risk_block(md: _base.MarketData, asof: date) -> dict:
         "gate": bool(spx_gate or vix_onset),
         "sp500_decline_10_pct": spx_decline,
         "vix": vix,
-        "vix_change_10_points": vix_chane_10,
+        "vix_change_10_points": vix_change_10,
         "vix_change_10_pct": vix_change_10_pct,
         "vix_onset": vix_onset,
         "method": (
@@ -86,7 +86,7 @@ def evaluate_regimes(
     result["nok_residual"] = residual_diagnostics
     result["method_note_v041"] = (
         "URP requires a fresh risk-off onset. NKS and NRS use a walk-forward "
-        "Huber residual of EUR/NOK against EUR/SE, Brent and VIX. Every score "
+        "Huber residual of EUR/NOK against EUR/SEK, Brent and VIX. Every score "
         "at t is fitted and standardised only with information available before t."
     )
     return result
