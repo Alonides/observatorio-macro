@@ -52,7 +52,7 @@ class DebtNokV1Tests(unittest.TestCase):
         self.assertEqual(report["model_version"], MODEL_VERSION)
         self.assertEqual(report["mode"], "weekly")
         self.assertIn("# Informe Debt/NOK", report["markdown"])
-        self.assertIn("Panel de bloques", report["markdown"])
+        self.assertIn("Panel oficial de bloques", report["markdown"])
         self.assertIn("score_deltas_5_sessions", report)
 
 
