@@ -110,7 +110,16 @@ class DebtNokV04Tests(unittest.TestCase):
         self.assertIn("urr", result["blocks"])
         self.assertIn("nrs", result["blocks"])
         self.assertIn("nok_residual", result)
+        self.assertIn("latest", result)
+        self.assertIn("validated_episodes_ge_50", result["blocks"]["nks"])
+        self.assertIn("persistent_validated_episodes_ge_50", result["blocks"]["nks"])
         self.assertGreaterEqual(result["blocks"]["urp"]["max_score"], 50.0)
+
+    def test_nrs_reporting_uses_recovery_windows(self):
+        result = run_continuous_backtest(norwegian_reversal_confirmed())
+        self.assertIn("recovery_windows", result["blocks"]["nrs"])
+        self.assertNotIn("event_windows", result["blocks"]["nrs"])
+        self.assertGreater(result["blocks"]["nrs"]["confirmed_sessions"], 0)
 
     def test_explainable_nok_path_keeps_residual_below_stress_threshold(self):
         result = build_nok_residual(residual_synthetic())
