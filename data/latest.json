@@ -1,23 +1,12 @@
 {
   "schema_version": 2,
-  "generated_at": "2026-08-26T05:58:16.065174+00:00",
-  "status": "operational_partial",
+  "generated_at": "2026-08-26T11:24:11.456733+00:00",
+  "status": "ok",
   "operational": true,
   "missing_core": [],
   "series_ok": 36,
   "series_total": 36,
-  "errors": [
-    {
-      "series_id": "DCOILBRENTEU",
-      "error": "https://api.eia.gov/v2/petroleum/pri/spt/data/?api_key=DEMO_KEY&frequency=daily&data[0]=value&facets[series][]=RBRTE&start=2025-04-13&sort[0][column]=period&sort[0][direction]=asc&offset=0&length=5000: The read operation timed out",
-      "fallback_used": true
-    },
-    {
-      "series_id": "DHHNGSP",
-      "error": "https://api.eia.gov/v2/natural-gas/pri/fut/data/?api_key=DEMO_KEY&frequency=daily&data[0]=value&facets[series][]=RNGWHHD&start=2025-04-13&sort[0][column]=period&sort[0][direction]=asc&offset=0&length=5000: The read operation timed out",
-      "fallback_used": true
-    }
-  ],
+  "errors": [],
   "derived": [
     {
       "id": "US_2S10S",
@@ -94,7 +83,7 @@
         "key": "global_duration",
         "label": "Reprecio global de duración",
         "active": false,
-        "value": 0.15933777305000052,
+        "value": 0.20235000000000025,
         "threshold": "mediana pares ≥ +30 pb en 92 días",
         "explanation": "Japón, Alemania, Reino Unido, Noruega y eurozona sirven como cesta de pares."
       },
@@ -102,7 +91,7 @@
         "key": "us_specific",
         "label": "Prima estadounidense relativa",
         "active": false,
-        "value": -0.07933777305000045,
+        "value": -0.12235000000000018,
         "threshold": "EE. UU.−pares ≥ +35 pb en 92 días",
         "explanation": "Busca deterioro relativo y no solo un movimiento mundial de duración."
       }
@@ -380,7 +369,7 @@
       "stale_after_days": 7,
       "source": "CoinGecko",
       "source_url": "https://www.coingecko.com/en/coins/bitcoin",
-      "value": 78981.33010241871,
+      "value": 78658.42366722933,
       "observation_date": "2026-08-26",
       "age_days": 0,
       "quality": "ok"
@@ -436,9 +425,9 @@
       "stale_after_days": 10,
       "source": "Deutsche Bundesbank",
       "source_url": "https://www.bundesbank.de/en/statistics/money-and-capital-markets/interest-rates-and-yields",
-      "value": 3.24,
-      "observation_date": "2026-08-25",
-      "age_days": 1,
+      "value": 3.2,
+      "observation_date": "2026-08-26",
+      "age_days": 0,
       "quality": "ok"
     },
     {
@@ -450,9 +439,9 @@
       "stale_after_days": 10,
       "source": "Bank of England",
       "source_url": "https://www.bankofengland.co.uk/boeapps/database/",
-      "value": 5.0506,
-      "observation_date": "2026-08-21",
-      "age_days": 5,
+      "value": 5.0513,
+      "observation_date": "2026-08-24",
+      "age_days": 2,
       "quality": "ok"
     },
     {
@@ -464,9 +453,9 @@
       "stale_after_days": 10,
       "source": "Norges Bank",
       "source_url": "https://www.norges-bank.no/en/topics/Statistics/norwegian-government-securities/generiske-statsrenter/",
-      "value": 4.392,
-      "observation_date": "2026-08-24",
-      "age_days": 2,
+      "value": 4.369,
+      "observation_date": "2026-08-25",
+      "age_days": 1,
       "quality": "ok"
     },
     {
@@ -478,9 +467,9 @@
       "stale_after_days": 10,
       "source": "European Central Bank",
       "source_url": "https://data.ecb.europa.eu/data/datasets/YC/YC.B.U2.EUR.4F.G_N_A.SV_C_YM.SR_10Y",
-      "value": 3.2803958027,
-      "observation_date": "2026-08-24",
-      "age_days": 2,
+      "value": 3.2448308736,
+      "observation_date": "2026-08-25",
+      "age_days": 1,
       "quality": "ok"
     },
     {
