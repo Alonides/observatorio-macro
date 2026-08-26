@@ -1,8 +1,8 @@
-# Debt/NOK Monitor v1.0 · operación
+# Debt/NOK Monitor v1.0.1 · operación
 
 ## Qué queda congelado
 
-La versión operativa v1.0 no altera las ecuaciones validadas del núcleo v0.4.1. Añade:
+La versión operativa v1.0.1 no altera las ecuaciones validadas del núcleo v0.4.1. Añade:
 
 - estados operativos `normal`, `watch`, `alert` y `critical`;
 - separación explícita entre `gate_score` y `operational_score` en NRS;
@@ -11,19 +11,7 @@ La versión operativa v1.0 no altera las ecuaciones validadas del núcleo v0.4.1
 - agente programado con trazabilidad en Git;
 - entrega por notificaciones de GitHub, sin credenciales de correo almacenadas.
 
-## Historial operativo del residual
-
-El almacén macro general conserva un histórico compacto destinado al panel público. Después de alinear los calendarios de Noruega, Suecia, Brent y VIX, ese histórico puede quedar por debajo de la muestra mínima exigida por el residual congelado.
-
-El agente no reduce las ventanas para fabricar cobertura. Mantiene en `data/debt_nok/history.json` una caché separada desde 2018 de cinco series oficiales:
-
-- NOK por USD;
-- USD por EUR;
-- SEK por USD;
-- Brent;
-- VIX.
-
-En cada ejecución fusiona la caché, el snapshot compacto y la historia obtenida de las fuentes oficiales. Si una fuente falla, conserva las observaciones válidas anteriores y declara el error. Esta capa permite calcular el residual causal con la calibración completa y deja la procedencia y la cobertura registradas.
+La corrección v1.0.1 distingue una **reversión NOK confirmada** de un deterioro crítico: NRS genera una alerta material de cambio de régimen, pero no convierte por sí solo el panel en rojo. También impide interpretar periodos sin historia Norway–Bund como resultados negativos de NRS.
 
 ## Cadencia elegida
 
@@ -68,22 +56,31 @@ Se activa por cualquiera de los siguientes:
 - URR detecta discriminación estadounidense;
 - URP ≥ 60;
 - DSS ≥ 70;
-- NKS ≥ 65.
+- NKS ≥ 65;
+- NRS confirma una reversión NOK posterior a un shock.
+
+La última condición es una señal material de cambio de régimen y exige revisión humana, pero no implica por sí sola un agravamiento sistémico.
 
 ### Crítico
 
 Se activa por cualquiera de los siguientes:
 
 - URR confirma régimen persistente de rechazo;
-- NKS ≥ 80;
-- NRS está confirmado.
+- NKS ≥ 80.
+
+## Cobertura histórica de NRS
+
+NRS exige explícitamente que la prima Norway–Bund se haya normalizado. La serie diaria homogénea del bono noruego a diez años disponible en el backtest comienza en 2019. Por tanto:
+
+- la reversión de 2020 puede probarse de forma completa;
+- las ventanas de 2008 y 2014–2015 se marcan como **no disponibles**, no como ausencia de reversión;
+- la falta de datos históricos nunca se convierte en cero ni en un falso negativo.
 
 ## Guardarraíles
 
 - El agente no ejecuta operaciones ni modifica posiciones.
 - Los datos ausentes no se convierten en cero.
 - El residual NOK es causal y walk-forward.
-- El agente no reduce la muestra mínima cuando falta historia; amplía la caché oficial o mantiene cobertura parcial.
 - La entrega se basa en estados y cambios, evitando repetir diariamente la misma alerta.
 - La ausencia de señal no prueba la ausencia de riesgo estructural.
 - Las fuentes y los resultados quedan versionados en Git.
