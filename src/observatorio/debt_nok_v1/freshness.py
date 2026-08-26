@@ -129,7 +129,10 @@ def _block_inputs(md: MarketData) -> tuple[dict[str, dict[str, date | None]], di
         "URR": _minimum_complete(urr, ("UST30", "BROAD_USD"), (("VIX", "SP500"),)),
         "DSS": _minimum_complete(dss, ("UST30", "BROAD_USD"), (("VIX", "SP500"),)),
         "NKS": _minimum_complete(nks, ("EUR_NOK", "NOK_SEK")),
-        "NRS": _minimum_complete(nrs, ("EUR_NOK", "NOK_SEK", "NOK_RESIDUAL", "NORWAY_BUND", "BRENT")),
+        # NRS can still be classified as inactive or as an unconfirmed candidate
+        # without the residual. A confirmed reversal continues to require it in
+        # the validated core gate.
+        "NRS": _minimum_complete(nrs, ("EUR_NOK", "NOK_SEK", "NORWAY_BUND", "BRENT")),
     }
     return inputs, dates
 
