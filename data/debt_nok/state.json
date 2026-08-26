@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-26T12:25:02.304264+00:00",
+  "updated_at": "2026-08-26T14:52:46.315502+00:00",
   "report_date": "2026-08-26",
   "asof": "2026-08-21",
   "block_asof": {
@@ -85,5 +85,18 @@
     "lag_definition": "Días hábiles aproximados entre la fecha del bloque y el dato de mercado más reciente."
   },
   "level": "normal",
-  "fingerprint": "normal|inactive|inactive|inactive|normal|inactive"
+  "fast_lane": {
+    "status": "aligned",
+    "level": "normal",
+    "raw_level": "normal",
+    "review_required": false,
+    "active_targets": [
+      "DCOILBRENTEU",
+      "DEXNOUS",
+      "DEXSDUS",
+      "DEXUSEU",
+      "DTWEXBGS"
+    ]
+  },
+  "fingerprint": "normal|inactive|inactive|inactive|normal|inactive|normal|normal|inactive,inactive,inactive,normal,inactive|DCOILBRENTEU:2026-08-26,DEXNOUS:2026-08-26,DEXSDUS:2026-08-26,DEXUSEU:2026-08-26,DTWEXBGS:2026-08-26"
 }
