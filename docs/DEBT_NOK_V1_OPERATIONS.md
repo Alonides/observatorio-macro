@@ -1,8 +1,8 @@
-# Debt/NOK Monitor v1.0.1 · operación
+# Debt/NOK Monitor v1.0.2 · operación
 
 ## Qué queda congelado
 
-La versión operativa v1.0.1 no altera las ecuaciones validadas del núcleo v0.4.1. Añade:
+La versión operativa v1.0.2 no altera las ecuaciones validadas del núcleo v0.4.1. Mantiene:
 
 - estados operativos `normal`, `watch`, `alert` y `critical`;
 - separación explícita entre `gate_score` y `operational_score` en NRS;
@@ -11,7 +11,44 @@ La versión operativa v1.0.1 no altera las ecuaciones validadas del núcleo v0.4
 - agente programado con trazabilidad en Git;
 - entrega por notificaciones de GitHub, sin credenciales de correo almacenadas.
 
-La corrección v1.0.1 distingue una **reversión NOK confirmada** de un deterioro crítico: NRS genera una alerta material de cambio de régimen, pero no convierte por sí solo el panel en rojo. También impide interpretar periodos sin historia Norway–Bund como resultados negativos de NRS.
+La corrección v1.0.1 distinguió una **reversión NOK confirmada** de un deterioro crítico: NRS genera una alerta material de cambio de régimen, pero no convierte por sí solo el panel en rojo. También impide interpretar periodos sin historia Norway–Bund como resultados negativos de NRS.
+
+La mejora v1.0.2 separa la **fecha del informe** de la **fecha de los datos** y evita que la fuente más lenta retrase silenciosamente todos los bloques.
+
+## Fechas y frescura por bloque
+
+Cada bloque se evalúa en su última fecha completa propia:
+
+- **URP:** Treasury 30 años, dólar amplio, riesgo y prima relativa USA–Bund.
+- **URR:** fecha URP más oro y rendimiento real cuando están disponibles.
+- **DSS:** Treasury 30 años, dólar amplio y riesgo.
+- **NKS:** EUR/NOK, NOK/SEK, residual NOK y funding disponible.
+- **NRS:** EUR/NOK, NOK/SEK, residual NOK, Norway–Bund y Brent.
+
+El informe muestra para cada bloque:
+
+- `asof`: fecha exacta de la lectura;
+- `business_day_lag`: días hábiles aproximados frente al dato de mercado más reciente;
+- estado de frescura: `fresh`, `delayed`, `stale` o `unavailable`;
+- fechas de sus inputs.
+
+Los estados de frescura se interpretan así:
+
+- **Actualizado:** retraso de cero o un día hábil;
+- **Retrasado:** dos o tres días hábiles;
+- **Obsoleto:** más de tres días hábiles;
+- **No disponible:** falta una entrada obligatoria.
+
+La fecha que encabeza el informe es la fecha de generación en `Europe/Oslo`. La fecha de mercado más reciente y las fechas de cada bloque se presentan por separado.
+
+## Comparación a cinco sesiones
+
+El cambio frente a hace cinco sesiones se calcula también por bloque:
+
+- URP, URR y DSS retroceden cinco observaciones de Treasury 30 años desde su propia fecha;
+- NKS y NRS retroceden cinco observaciones de EUR/NOK desde su propia fecha.
+
+Así se evita comparar un bloque reciente con otro que todavía depende de una fuente anterior.
 
 ## Cadencia elegida
 
@@ -29,6 +66,8 @@ El informe se publica siempre en:
 - `data/debt_nok/latest.json`;
 - `data/debt_nok/latest.md`;
 - `data/debt_nok/reports/YYYY-MM-DD.md` para informes semanales y alertas.
+
+Desde v1.0.2, el nombre del informe histórico usa la fecha de generación en Oslo, no la fecha del bloque más lento.
 
 El informe semanal se añade como comentario a un único issue titulado **Debt/NOK · informes periódicos**, asignado a `Alonides`. GitHub normalmente envía una notificación por correo al usuario asignado, de acuerdo con sus preferencias de notificación. Las alertas materiales se abren como issues independientes.
 
@@ -81,6 +120,7 @@ NRS exige explícitamente que la prima Norway–Bund se haya normalizado. La ser
 - El agente no ejecuta operaciones ni modifica posiciones.
 - Los datos ausentes no se convierten en cero.
 - El residual NOK es causal y walk-forward.
+- La frescura modifica exclusivamente la fecha de evaluación y su presentación; no cambia fórmulas, pesos ni umbrales.
 - La entrega se basa en estados y cambios, evitando repetir diariamente la misma alerta.
 - La ausencia de señal no prueba la ausencia de riesgo estructural.
-- Las fuentes y los resultados quedan versionados en Git.
+- Las fuentes, fechas y resultados quedan versionados en Git.
