@@ -9,7 +9,6 @@ relationship:
 * parallel date and value arrays of equal length.
 
 It deliberately does not infer dates from array position or scrape display text.
-Importing the module installs the parser into the provisional fallback loader.
 """
 
 from __future__ import annotations
@@ -19,7 +18,6 @@ from math import isfinite
 from typing import Mapping, Sequence
 
 from ..official import SourceError
-from . import fast_fallbacks as _fallbacks
 
 
 DATE_KEYS = (
@@ -220,9 +218,6 @@ def parse_dated_price_payload(payload: Mapping[str, object] | Sequence[object]) 
         {"date": day.isoformat(), "value": output[day]}
         for day in sorted(output)
     ]
-
-
-_fallbacks.parse_americas_brent = parse_dated_price_payload
 
 
 __all__ = ["parse_dated_price_payload"]
