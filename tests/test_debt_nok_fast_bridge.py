@@ -27,6 +27,18 @@ def points(days, values):
     return [{"date": day, "value": value} for day, value in zip(days, values)]
 
 
+def compound_values(base: float, count: int, direction: float = 1.0) -> list[float]:
+    values = [base]
+    for index in range(1, count):
+        daily_return = direction * (
+            0.0010
+            + 0.0005 * math.sin(index / 3.0)
+            + 0.0002 * math.cos(index / 7.0)
+        )
+        values.append(values[-1] * math.exp(daily_return))
+    return values
+
+
 def operational(level: str, nks_score: float = 0.0) -> dict:
     blocks = {
         "URP": {"score": 0.0, "state": "inactive", "asof": "2026-08-25"},
@@ -69,8 +81,8 @@ class FastBridgeTests(unittest.TestCase):
 
     def test_bridge_appends_future_proxy_returns_without_overwriting_official(self):
         days = business_days(45)
-        official_values = [100.0 * math.exp(0.001 * index) for index in range(40)]
-        proxy_values = [10.0 * math.exp(0.001 * index) for index in range(45)]
+        proxy_values = compound_values(10.0, 45)
+        official_values = [value * 10.0 for value in proxy_values[:40]]
         official = points(days[:40], official_values)
         proxies = {"ECB_DEXUSEU": points(days, proxy_values)}
 
@@ -85,8 +97,8 @@ class FastBridgeTests(unittest.TestCase):
 
     def test_bad_tracking_proxy_is_rejected(self):
         days = business_days(45)
-        official_values = [100.0 * math.exp(0.002 * index) for index in range(40)]
-        proxy_values = [10.0 * math.exp(-0.002 * index) for index in range(45)]
+        official_values = compound_values(100.0, 40)
+        proxy_values = compound_values(10.0, 45, direction=-1.0)
         extended, metadata = build_fast_series(
             {"DEXUSEU": points(days[:40], official_values)},
             proxies={"ECB_DEXUSEU": points(days, proxy_values)},
