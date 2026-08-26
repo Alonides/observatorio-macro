@@ -40,10 +40,6 @@ def _parse_date(raw) -> date | None:
     if isinstance(raw, (int, float)):
         try:
             value = float(raw)
-            # Unix timestamps below 100 million seconds predate 1973 and are
-            # implausible for this monitor. Rejecting them prevents a plain
-            # numeric price array such as [84.2, 85.1] from becoming a fake
-            # 1970 date/value row.
             if value < 100_000_000:
                 return None
             if value > 1e12:
@@ -83,7 +79,6 @@ def _parse_value(raw) -> float | None:
 
 
 def _is_explicit_date_token(raw) -> bool:
-    """Return true only when a sequence's first item is plausibly a date token."""
     if isinstance(raw, date):
         return True
     if isinstance(raw, bool) or raw is None:
@@ -101,9 +96,6 @@ def _is_explicit_date_token(raw) -> bool:
             return float(text) >= 100_000_000
         except ValueError:
             return False
-    # A date-like textual token must contain a separator or a month name. The
-    # final parse remains authoritative; this only prevents numeric arrays from
-    # entering the pair-row path.
     lowered = text.lower()
     month_tokens = (
         "jan", "feb", "mar", "apr", "may", "jun",
@@ -149,7 +141,6 @@ def _extract(node, output: dict[date, float]) -> None:
 
         _parallel_arrays(node, output)
 
-        # Explicit date-keyed mapping: {"2026-08-25": 85.1, ...}
         for raw_key, raw_value in node.items():
             keyed_day = _parse_date(raw_key)
             keyed_value = _parse_value(raw_value)
@@ -172,14 +163,54 @@ def _extract(node, output: dict[date, float]) -> None:
                 _extract(child, output)
 
 
+def _shape_summary(node, depth: int = 0):
+    """Return field names and container types only; never emit payload values."""
+    if depth >= 2:
+        return type(node).__name__
+    if isinstance(node, Mapping):
+        summary = {}
+        for key, value in list(node.items())[:12]:
+            if isinstance(value, Mapping):
+                summary[str(key)] = {
+                    "type": "object",
+                    "keys": [str(item) for item in list(value.keys())[:12]],
+                }
+            elif isinstance(value, (list, tuple)):
+                first = value[0] if value else None
+                if isinstance(first, Mapping):
+                    first_shape = {
+                        "type": "object",
+                        "keys": [str(item) for item in list(first.keys())[:12]],
+                    }
+                elif isinstance(first, (list, tuple)):
+                    first_shape = {"type": type(first).__name__, "length": len(first)}
+                else:
+                    first_shape = type(first).__name__ if first is not None else "empty"
+                summary[str(key)] = {
+                    "type": type(value).__name__,
+                    "length": len(value),
+                    "first": first_shape,
+                }
+            else:
+                summary[str(key)] = type(value).__name__
+        return summary
+    if isinstance(node, (list, tuple)):
+        first = node[0] if node else None
+        return {
+            "type": type(node).__name__,
+            "length": len(node),
+            "first": _shape_summary(first, depth + 1) if first is not None else "empty",
+        }
+    return type(node).__name__
+
+
 def parse_dated_price_payload(payload: Mapping[str, object] | Sequence[object]) -> list[dict]:
     output: dict[date, float] = {}
     _extract(payload, output)
     if not output:
-        top = list(payload.keys())[:12] if isinstance(payload, Mapping) else [type(payload).__name__]
         raise SourceError(
             "public price payload contained no explicit dated values; "
-            f"top-level shape={top}"
+            f"shape={_shape_summary(payload)}"
         )
     return [
         {"date": day.isoformat(), "value": output[day]}
@@ -187,7 +218,6 @@ def parse_dated_price_payload(payload: Mapping[str, object] | Sequence[object]) 
     ]
 
 
-# fetch_americas_brent resolves this global at call time.
 _fallbacks.parse_americas_brent = parse_dated_price_payload
 
 
