@@ -23,7 +23,7 @@ Cada bloque se evalúa en su última fecha completa propia:
 - **URR:** fecha URP más oro y rendimiento real cuando están disponibles.
 - **DSS:** Treasury 30 años, dólar amplio y riesgo.
 - **NKS:** EUR/NOK, NOK/SEK, residual NOK y funding disponible.
-- **NRS:** EUR/NOK, NOK/SEK, residual NOK, Norway–Bund y Brent.
+- **NRS:** EUR/NOK, NOK/SEK, Norway–Bund y Brent; el residual se incorpora cuando existe y sigue siendo obligatorio para confirmar una reversión.
 
 El informe muestra para cada bloque:
 
