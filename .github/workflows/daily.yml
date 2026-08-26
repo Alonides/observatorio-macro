@@ -14,6 +14,7 @@ on:
       - ".github/workflows/daily.yml"
 
 permissions:
+  actions: write
   contents: write
 
 concurrency:
@@ -26,21 +27,52 @@ jobs:
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
           cache: pip
+
       - run: pip install -r requirements.txt
       - run: python -m unittest discover -s tests -v
       - run: python scripts/collect.py
+
       - name: Commit daily snapshot
+        id: snapshot
+        shell: bash
         run: |
-          if git diff --quiet -- data/; then
+          if git diff --quiet -- data/latest.json data/series.json; then
             echo "No data changes"
+            echo "changed=false" >> "$GITHUB_OUTPUT"
             exit 0
           fi
+
           git config user.name "observatorio-bot"
           git config user.email "observatorio-bot@users.noreply.github.com"
           git add -- data/latest.json data/series.json
           git commit -m "data: actualización diaria"
-          git push
+
+          # Another trusted workflow may have committed Debt/NOK reports while
+          # this relatively slow ingestion was collecting external sources.
+          # Rebase the independent snapshot commit before pushing. Retry only
+          # the narrow fetch/rebase/push race; genuine conflicts still fail.
+          for attempt in 1 2 3; do
+            git pull --rebase origin main
+            if git push origin HEAD:main; then
+              echo "changed=true" >> "$GITHUB_OUTPUT"
+              exit 0
+            fi
+            if [[ "$attempt" -eq 3 ]]; then
+              echo "Unable to publish the daily snapshot after three attempts" >&2
+              exit 1
+            fi
+            sleep $((attempt * 3))
+          done
+
+      - name: Refresh public dashboard
+        if: steps.snapshot.outputs.changed == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh workflow run pages.yml --repo "$GITHUB_REPOSITORY" --ref main
