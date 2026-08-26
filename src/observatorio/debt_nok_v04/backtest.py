@@ -84,13 +84,35 @@ def _validated_nks_rows(rows: list[dict]) -> list[dict]:
 
 
 def _nrs_rows(md: _v4.MarketData) -> list[dict]:
+    """Build NRS history without turning missing funding data into a negative.
+
+    NRS explicitly requires the Norway-Bund gate. Norges Bank's homogeneous
+    daily 10-year series begins in 2019, so earlier recovery windows are not
+    valid negative controls. They are reported as unavailable instead.
+    """
     rows: list[dict] = []
     mapping = {
         "inactive": 0.0,
         "candidate_unconfirmed_residual_missing": 50.0,
         "confirmed": 100.0,
     }
+    no_bund = md.no_bund()
+    brent = md.view("DCOILBRENTEU")
     for day in md.eurnok().dates:
+        if no_bund.value(day) is None:
+            rows.append({
+                "date": day.isoformat(),
+                "score": None,
+                "state": "insufficient_funding_data",
+            })
+            continue
+        if brent.value(day) is None:
+            rows.append({
+                "date": day.isoformat(),
+                "score": None,
+                "state": "insufficient_market_data",
+            })
+            continue
         result = _v4._base._nrs_at(md, day)
         state = result.get("state")
         rows.append({
@@ -226,7 +248,8 @@ def run_continuous_backtest(
     nrs_block["recovery_windows"] = nrs_block.pop("event_windows")
     nrs_block["interpretation_note"] = (
         "NRS is evaluated in post-shock recovery windows, not only inside the "
-        "stress window that generated the preceding NKS episode."
+        "stress window that generated the preceding NKS episode. Windows without "
+        "the required Norway-Bund history are unavailable, not negative results."
     )
     if include_history:
         nrs_block["history"] = nrs_rows
