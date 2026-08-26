@@ -121,6 +121,16 @@ class DebtNokV04Tests(unittest.TestCase):
         self.assertNotIn("event_windows", result["blocks"]["nrs"])
         self.assertGreater(result["blocks"]["nrs"]["confirmed_sessions"], 0)
 
+    def test_nrs_history_without_norway_bund_is_unavailable_not_negative(self):
+        data = norwegian_reversal_confirmed()
+        data.pop("IRLTLT01NOM156N", None)
+        result = run_continuous_backtest(data, include_history=True)
+        history = result["blocks"]["nrs"]["history"]
+        self.assertTrue(history)
+        self.assertTrue(all(row["score"] is None for row in history))
+        self.assertTrue(all(row["state"] == "insufficient_funding_data" for row in history))
+        self.assertEqual(result["blocks"]["nrs"]["confirmed_sessions"], 0)
+
     def test_explainable_nok_path_keeps_residual_below_stress_threshold(self):
         result = build_nok_residual(residual_synthetic())
         self.assertGreater(len(result["points"]), 200)

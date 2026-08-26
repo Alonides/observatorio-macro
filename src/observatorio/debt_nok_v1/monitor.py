@@ -1,7 +1,7 @@
-"""Operational Debt/NOK monitor v1.0.
+"""Operational Debt/NOK monitor v1.0.1.
 
 This module turns the validated research classifier into an explicit operational
-state without changing the underlying v0.4.1 scores.  It is deliberately
+state without changing the underlying v0.4.1 scores. It is deliberately
 rule-based and auditable: no language model or opaque probability is used.
 """
 
@@ -12,7 +12,7 @@ from typing import Mapping, Sequence
 
 from ..debt_nok_v04.regime import evaluate_regimes as evaluate_core
 
-MODEL_VERSION = "1.0.0"
+MODEL_VERSION = "1.0.1"
 CORE_MODEL_VERSION = "0.4.1"
 
 LEVELS = {
@@ -88,9 +88,6 @@ def classify_level(result: dict) -> tuple[str, list[str]]:
     if nks["score"] >= 80.0:
         critical = True
         reasons.append(f"NKS alcanza {nks['score']:.1f}")
-    if nrs["state"] == "confirmed":
-        critical = True
-        reasons.append("NRS confirma una reversión noruega posterior al shock")
 
     if urr["state"] == "us_discrimination":
         alert = True
@@ -104,6 +101,12 @@ def classify_level(result: dict) -> tuple[str, list[str]]:
     if nks["score"] >= 65.0:
         alert = True
         reasons.append(f"NKS entra en estrés severo ({nks['score']:.1f})")
+    if nrs["state"] == "confirmed":
+        alert = True
+        reasons.append(
+            "NRS confirma una reversión noruega posterior al shock; es un cambio "
+            "de régimen relevante, pero no implica por sí solo deterioro sistémico"
+        )
 
     if urr["state"] == "rejection_pulse":
         watch = True
@@ -167,7 +170,8 @@ def evaluate_operational(
     }
     result["method_note_v1"] = (
         "The operational layer does not alter the validated v0.4.1 scores. It "
-        "maps them to normal/watch/alert/critical states using declared rules."
+        "maps them to normal/watch/alert/critical states using declared rules. "
+        "A confirmed NRS is a material regime-change alert, not a critical loss signal."
     )
     return result
 
