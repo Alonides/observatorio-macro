@@ -27,11 +27,15 @@ DATE_KEYS = (
     "asof", "as_of", "asOf", "updated", "updated_at",
 )
 VALUE_KEYS = (
-    "close", "price", "value", "settle", "settlement", "brent", "c",
-    "last", "last_price", "current", "usd_per_barrel",
+    "close", "price", "priceUsd", "priceUSD", "price_usd", "value",
+    "settle", "settlement", "brent", "c", "last", "last_price",
+    "current", "usd_per_barrel",
 )
 DATE_ARRAY_KEYS = ("dates", "periods", "days", "timestamps", "times", "labels")
-VALUE_ARRAY_KEYS = ("values", "prices", "closes", "close", "settles", "data")
+VALUE_ARRAY_KEYS = (
+    "values", "prices", "pricesUsd", "pricesUSD", "prices_usd",
+    "closes", "close", "settles", "data",
+)
 
 
 def _parse_date(raw) -> date | None:
