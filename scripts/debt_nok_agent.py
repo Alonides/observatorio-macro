@@ -2,8 +2,8 @@
 """Scheduled operational agent for the Debt/NOK monitor.
 
 The daily macro store intentionally retains a compact history for the public
-panel.  The NOK residual needs a longer common sample after aligning Norwegian,
-Swedish, oil and volatility calendars.  This agent therefore maintains a
+panel. The NOK residual needs a longer common sample after aligning Norwegian,
+Swedish, oil and volatility calendars. This agent therefore maintains a
 separate, official factor cache from 2018 onward and never lowers the frozen
 walk-forward calibration merely to fit the compact store.
 """
@@ -199,12 +199,15 @@ def main() -> int:
     _atomic_json(MONITOR_DIR / "history.json", history_payload)
     _atomic_json(MONITOR_DIR / "state.json", {
         "updated_at": report["generated_at"],
+        "report_date": report.get("report_date"),
         "asof": report.get("asof"),
+        "block_asof": report.get("block_asof", {}),
+        "freshness": report.get("freshness", {}),
         "level": report.get("alert", {}).get("level"),
         "fingerprint": fingerprint,
     })
     if args.mode == "weekly" or notify:
-        stamp = report.get("asof") or datetime.now(timezone.utc).date().isoformat()
+        stamp = report.get("report_date") or datetime.now(timezone.utc).date().isoformat()
         _atomic_text(MONITOR_DIR / "reports" / f"{stamp}.md", report["markdown"])
 
     _github_output("notify", "true" if notify else "false")
@@ -212,10 +215,13 @@ def main() -> int:
     _github_output("level", str(report.get("alert", {}).get("level", "unknown")))
     _github_output("title", str(report.get("notification_title", "Debt/NOK report")).replace("\n", " "))
     _github_output("asof", str(report.get("asof") or "unknown"))
+    _github_output("report_date", str(report.get("report_date") or "unknown"))
 
     print(
-        f"Debt/NOK {report['model_version']} · {report.get('asof')} · "
-        f"{report['alert']['level']} · residual={len(residual_points)} · notify={notify}"
+        f"Debt/NOK {report['model_version']} · informe={report.get('report_date')} · "
+        f"datos={report.get('asof')} · {report['alert']['level']} · "
+        f"frescura={report.get('freshness', {}).get('quality')} · "
+        f"residual={len(residual_points)} · notify={notify}"
     )
     for series_id, error in sorted(factor_errors.items()):
         print(f"{series_id} warning: {error}", file=sys.stderr)
