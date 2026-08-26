@@ -1,0 +1,41 @@
+name: Debt and NOK backtest v0.4
+
+on:
+  workflow_dispatch:
+    inputs:
+      start:
+        description: Historical start date
+        required: false
+        default: "2006-01-01"
+  pull_request:
+    paths:
+      - ".github/workflows/backtest_v04.yml"
+      - "scripts/backtest_regimes_v04.py"
+      - "src/observatorio/debt_nok_v04/**"
+      - "tests/test_debt_nok_v04.py"
+      - "docs/DEBT_NOK_MODEL_V04_OVERLAY.md"
+
+permissions:
+  contents: read
+
+jobs:
+  backtest-v04:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Run unit and falsification tests
+        run: python -m unittest discover -s tests -v
+      - name: Run 2006-present historical backtest
+        run: python scripts/backtest_regimes_v04.py --fetch --start "${{ github.event.inputs.start || '2006-01-01' }}"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: debt-nok-backtest-v04
+          path: |
+            data/backtest_series_v04.json
+            data/regime_backtest_v04.json
+          if-no-files-found: warn
