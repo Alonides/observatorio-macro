@@ -1,20 +1,33 @@
 """Secondary market-data fallbacks for the provisional Debt/NOK lane.
 
-These sources are used only when a preferred primary-source bridge is not
-available. They are explicitly labelled secondary and provisional and remain
-subject to the same overlap, age and movement guardrails as every other proxy.
+These sources are used only when the preferred EIA+CME primary-source bridge is
+not available. They are explicitly labelled secondary and provisional and
+remain subject to the same overlap, age and movement guardrails as every other
+proxy.
+
+Fallback order:
+
+1. AmericasOilWatch public Brent API (underlying Stooq cb.f);
+2. Yahoo Finance delayed Brent futures chart.
 """
 
 from __future__ import annotations
 
 import json
-from datetime import datetime, timezone
+from datetime import date, datetime, timezone
 from math import isfinite
-from typing import Callable, Mapping
+from typing import Callable, Mapping, Sequence
 from urllib.parse import urlencode
 
 from ..official import SourceError, _read
 
+
+AMERICAS_BRENT_HISTORY_URL = "https://americasoilwatch.com/api/v1/brent-history"
+AMERICAS_BRENT_CURRENT_URL = "https://americasoilwatch.com/api/v1/brent"
+AMERICAS_HEADERS = {
+    "User-Agent": "observatorio-macro/1.0.3 (+https://github.com/Alonides/observatorio-macro)",
+    "Accept": "application/json",
+}
 
 YAHOO_BRENT_SYMBOL = "BZ=F"
 YAHOO_CHART_BASE = "https://query1.finance.yahoo.com/v8/finance/chart"
@@ -25,6 +38,148 @@ YAHOO_BROWSER_HEADERS = {
     ),
     "Accept": "application/json,text/plain,*/*",
 }
+
+DATE_KEYS = (
+    "date", "period", "day", "time", "timestamp", "datetime",
+    "asof", "as_of", "asOf", "updated", "updated_at",
+)
+VALUE_KEYS = (
+    "close", "price", "value", "settle", "settlement", "brent",
+    "last", "last_price", "current",
+)
+
+
+def _parse_date(raw) -> date | None:
+    if raw is None:
+        return None
+    if isinstance(raw, (int, float)):
+        try:
+            value = float(raw)
+            if value > 1e12:
+                value /= 1000.0
+            return datetime.fromtimestamp(value, tz=timezone.utc).date()
+        except (OSError, OverflowError, ValueError):
+            return None
+    text = str(raw).strip()
+    if not text:
+        return None
+    if text.isdigit():
+        return _parse_date(float(text))
+    normalized = text.replace("Z", "+00:00")
+    try:
+        return datetime.fromisoformat(normalized).date()
+    except ValueError:
+        pass
+    for fmt in (
+        "%Y-%m-%d", "%Y/%m/%d", "%m/%d/%Y", "%d/%m/%Y",
+        "%d %b %Y", "%b %d, %Y", "%B %d, %Y",
+    ):
+        try:
+            return datetime.strptime(text, fmt).date()
+        except ValueError:
+            continue
+    return None
+
+
+def _parse_value(raw) -> float | None:
+    if raw is None or isinstance(raw, bool):
+        return None
+    try:
+        value = float(str(raw).replace(",", "").strip())
+    except (TypeError, ValueError):
+        return None
+    return value if isfinite(value) and value > 0.0 else None
+
+
+def _extract_recursive(node, output: dict[date, float]) -> None:
+    if isinstance(node, Mapping):
+        day = next(
+            (_parse_date(node.get(key)) for key in DATE_KEYS if node.get(key) is not None),
+            None,
+        )
+        value = next(
+            (_parse_value(node.get(key)) for key in VALUE_KEYS if node.get(key) is not None),
+            None,
+        )
+        if day is not None and value is not None:
+            output[day] = value
+        for child in node.values():
+            if isinstance(child, (Mapping, list, tuple)):
+                _extract_recursive(child, output)
+    elif isinstance(node, (list, tuple)):
+        for child in node:
+            _extract_recursive(child, output)
+
+
+def parse_americas_brent(payload: Mapping[str, object] | Sequence[object]) -> list[dict]:
+    """Parse common nested JSON shapes without depending on UI internals."""
+    by_day: dict[date, float] = {}
+    _extract_recursive(payload, by_day)
+    if not by_day:
+        raise SourceError("AmericasOilWatch returned no dated Brent prices")
+    return [
+        {"date": day.isoformat(), "value": by_day[day]}
+        for day in sorted(by_day)
+    ]
+
+
+def _json_request(
+    url: str,
+    read_bytes: Callable[..., bytes],
+    headers: Mapping[str, str],
+) -> Mapping[str, object] | Sequence[object]:
+    try:
+        return json.loads(
+            read_bytes(
+                url,
+                timeout=10,
+                retries=2,
+                headers=dict(headers),
+            ).decode("utf-8-sig", errors="replace")
+        )
+    except json.JSONDecodeError as exc:
+        raise SourceError(f"{url}: JSON inválido: {exc}") from exc
+
+
+def fetch_americas_brent(
+    read_bytes: Callable[..., bytes] = _read,
+) -> tuple[list[dict], dict]:
+    history_payload = _json_request(
+        AMERICAS_BRENT_HISTORY_URL,
+        read_bytes,
+        AMERICAS_HEADERS,
+    )
+    points = parse_americas_brent(history_payload)
+
+    current_error = None
+    try:
+        current_payload = _json_request(
+            AMERICAS_BRENT_CURRENT_URL,
+            read_bytes,
+            AMERICAS_HEADERS,
+        )
+        current = parse_americas_brent(current_payload)
+        by_day = {point["date"]: point for point in points}
+        for point in current:
+            by_day[point["date"]] = point
+        points = [by_day[day] for day in sorted(by_day)]
+    except Exception as exc:
+        current_error = str(exc)
+
+    return points, {
+        "provider": "AmericasOilWatch",
+        "underlying": "Stooq cb.f front-month Brent futures",
+        "url": AMERICAS_BRENT_HISTORY_URL,
+        "current_url": AMERICAS_BRENT_CURRENT_URL,
+        "status": "ok",
+        "latest": points[-1]["date"],
+        "observations": len(points),
+        "role": "secondary public Brent futures fallback",
+        "secondary": True,
+        "provisional_only": True,
+        "attribution": "AmericasOilWatch / Stooq",
+        "current_endpoint_error": current_error,
+    }
 
 
 def parse_yahoo_chart(payload: Mapping[str, object]) -> list[dict]:
@@ -76,17 +231,9 @@ def fetch_yahoo_brent(
         "includeAdjustedClose": "true",
     })
     url = f"{YAHOO_CHART_BASE}/{YAHOO_BRENT_SYMBOL}?{query}"
-    try:
-        payload = json.loads(
-            read_bytes(
-                url,
-                timeout=10,
-                retries=1,
-                headers=YAHOO_BROWSER_HEADERS,
-            ).decode("utf-8-sig", errors="replace")
-        )
-    except json.JSONDecodeError as exc:
-        raise SourceError(f"Yahoo Brent JSON invalid: {exc}") from exc
+    payload = _json_request(url, read_bytes, YAHOO_BROWSER_HEADERS)
+    if not isinstance(payload, Mapping):
+        raise SourceError("Yahoo Brent chart payload is not an object")
     points = parse_yahoo_chart(payload)
     return points, {
         "provider": "Yahoo Finance",
@@ -101,8 +248,34 @@ def fetch_yahoo_brent(
     }
 
 
+def fetch_secondary_brent(
+    read_bytes: Callable[..., bytes] = _read,
+) -> tuple[list[dict], dict, str, dict[str, str]]:
+    """Return the first available secondary Brent source plus audit failures."""
+    errors: dict[str, str] = {}
+    try:
+        points, metadata = fetch_americas_brent(read_bytes=read_bytes)
+        return points, metadata, "AMERICASOILWATCH_BRENT", errors
+    except Exception as exc:
+        errors["AMERICASOILWATCH_BRENT"] = str(exc)
+
+    try:
+        points, metadata = fetch_yahoo_brent(read_bytes=read_bytes)
+        return points, metadata, "YAHOO_BRENT_DELAYED", errors
+    except Exception as exc:
+        errors["YAHOO_BRENT_DELAYED"] = str(exc)
+
+    raise SourceError("No secondary Brent fallback was available: " + "; ".join(
+        f"{key}: {value}" for key, value in sorted(errors.items())
+    ))
+
+
 __all__ = [
+    "AMERICAS_BRENT_HISTORY_URL",
     "YAHOO_BRENT_SYMBOL",
+    "fetch_americas_brent",
+    "fetch_secondary_brent",
     "fetch_yahoo_brent",
+    "parse_americas_brent",
     "parse_yahoo_chart",
 ]
