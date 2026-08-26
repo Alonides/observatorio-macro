@@ -1,4 +1,4 @@
-"""Continuous v0.4 backtest, including the persistent URR state."""
+"""Continuous v0.4.1 backtest with causal NOK residual and NRS history."""
 
 from __future__ import annotations
 
@@ -8,9 +8,19 @@ from typing import Mapping, Sequence
 
 # Importing the overlay first patches the falsified v0.3 risk gate.
 from . import regime as _v4
+from .residual import attach_nok_residual
 from .. import backtest as _base
 
 MODEL_VERSION = _v4.MODEL_VERSION
+
+NOK_EVENT_WINDOWS = {
+    "lehman_2008": ("2008-09-12", "2009-01-31"),
+    "oil_2014_15": ("2014-06-01", "2015-03-31"),
+    "covid_2020": ("2020-02-19", "2020-04-30"),
+    "inflation_2022": ("2022-04-01", "2022-10-31"),
+    "banking_2023": ("2023-03-08", "2023-04-05"),
+    "tariff_pulse_2025": ("2025-04-02", "2025-04-30"),
+}
 
 
 def _urr_rows(md: _v4.MarketData) -> list[dict]:
@@ -27,6 +37,24 @@ def _urr_rows(md: _v4.MarketData) -> list[dict]:
         rows.append({
             "date": day.isoformat(),
             "score": mapping.get(state),
+            "state": state,
+        })
+    return rows
+
+
+def _nrs_rows(md: _v4.MarketData) -> list[dict]:
+    rows: list[dict] = []
+    mapping = {
+        "inactive": 0.0,
+        "candidate_unconfirmed_residual_missing": 50.0,
+        "confirmed": 100.0,
+    }
+    for day in md.eurnok().dates:
+        result = _v4._base._nrs_at(md, day)
+        state = result.get("state")
+        rows.append({
+            "date": day.isoformat(),
+            "score": result.get("score") if state == "confirmed" else mapping.get(state),
             "state": state,
         })
     return rows
@@ -67,8 +95,11 @@ def _annual(rows: list[dict], threshold: float = 50.0) -> dict[str, int]:
     return dict(sorted(counts.items()))
 
 
-def _event_summary(rows: list[dict]) -> dict:
-    windows = getattr(_base, "EVENT_WINDOWS", {})
+def _event_summary(
+    rows: list[dict],
+    windows: Mapping[str, tuple[str, str]] | None = None,
+) -> dict:
+    windows = windows or getattr(_base, "EVENT_WINDOWS", {})
     result: dict = {}
     for name, (start_raw, end_raw) in windows.items():
         start = date.fromisoformat(start_raw)
@@ -91,35 +122,56 @@ def _event_summary(rows: list[dict]) -> dict:
             "peak_date": peak["date"],
             "peak_state": peak.get("state"),
             "days_ge_50": sum(row["score"] >= 50.0 for row in selected),
+            "confirmed_sessions": sum(row.get("state") == "confirmed" for row in selected),
         }
     return result
+
+
+def _block(rows: list[dict], windows=None) -> dict:
+    scored = [row for row in rows if row.get("score") is not None]
+    return {
+        "scored_sessions": len(scored),
+        "episodes_ge_50": _episodes(rows),
+        "annual_alert_sessions_ge_50": _annual(rows),
+        "event_windows": _event_summary(rows, windows),
+        "max_score": round(max((row["score"] for row in scored), default=0.0), 2),
+    }
 
 
 def run_continuous_backtest(
     series: Mapping[str, Sequence[Mapping[str, object]]],
     include_history: bool = False,
 ) -> dict:
-    output = _base.run_continuous_backtest(series, include_history=include_history)
+    enriched, residual_diagnostics = attach_nok_residual(series)
+    output = _base.run_continuous_backtest(enriched, include_history=include_history)
     output["model_version"] = MODEL_VERSION
 
-    md = _v4.MarketData(series)
-    rows = _urr_rows(md)
-    scored = [row for row in rows if row["score"] is not None]
-    block = {
-        "scored_sessions": len(scored),
-        "episodes_ge_50": _episodes(rows),
-        "annual_alert_sessions_ge_50": _annual(rows),
-        "event_windows": _event_summary(rows),
-        "max_score": round(max((row["score"] for row in scored), default=0.0), 2),
-    }
+    md = _v4.MarketData(enriched)
+    urr_rows = _urr_rows(md)
+    urr_block = _block(urr_rows)
     if include_history:
-        block["history"] = rows
-    output.setdefault("blocks", {})["urr"] = block
-    output["method_note_v04"] = (
-        "The v0.4 continuous test uses a fresh risk-off onset and reports URR "
-        "separately from the short-lived URP pulse."
+        urr_block["history"] = urr_rows
+    output.setdefault("blocks", {})["urr"] = urr_block
+
+    # Re-state NKS event performance using windows designed for NOK rather than
+    # only the US sovereign controls in the base backtest.
+    nks_rows = _base._block_history(md, "nks")
+    output["blocks"]["nks"]["nok_event_windows"] = _event_summary(nks_rows, NOK_EVENT_WINDOWS)
+
+    nrs_rows = _nrs_rows(md)
+    nrs_block = _block(nrs_rows, NOK_EVENT_WINDOWS)
+    nrs_block["confirmed_sessions"] = sum(row.get("state") == "confirmed" for row in nrs_rows)
+    if include_history:
+        nrs_block["history"] = nrs_rows
+    output["blocks"]["nrs"] = nrs_block
+
+    output["nok_residual"] = residual_diagnostics
+    output["method_note_v041"] = (
+        "The v0.4.1 continuous test attaches one walk-forward NOK residual "
+        "before scoring all sessions. The residual, NKS and NRS therefore use "
+        "the same causal history and are not recomputed with future data."
     )
     return output
 
 
-__all__ = ["MODEL_VERSION", "run_continuous_backtest"]
+__all__ = ["MODEL_VERSION", "NOK_EVENT_WINDOWS", "run_continuous_backtest"]

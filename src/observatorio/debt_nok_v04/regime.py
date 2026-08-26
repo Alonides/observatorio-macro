@@ -1,10 +1,9 @@
-"""Empirically corrected debt/NOK regime classifier v0.4.
+"""Empirically corrected debt/NOK regime classifier v0.4.1.
 
-This module is an isolated overlay on the frozen v0.3 implementation.  The
-continuous 2006-present test showed that a high but *falling* VIX generated
-false US-rejection pulses during recovery phases.  v0.4 therefore requires a
-fresh risk-off onset: either the S&P 500 is down at least 3% over ten sessions,
-or VIX is at least 25 and has risen at least five points or 20%.
+v0.4 corrected a false-positive mechanism in URP: an elevated but falling VIX
+was being mistaken for a fresh risk-off event. v0.4.1 adds the causal,
+walk-forward NOK residual used by NKS and NRS while preserving the audited v0.3
+score equations.
 """
 
 from __future__ import annotations
@@ -13,13 +12,15 @@ from datetime import date
 from typing import Mapping, Sequence
 
 from .. import regime as _base
+from .residual import RESIDUAL_PARAMETERS, attach_nok_residual
 
-MODEL_VERSION = "0.4.0"
+MODEL_VERSION = "0.4.1"
 
-# Make the correction explicit and visible in serialized parameters.
+# Make the corrections explicit and visible in serialized parameters.
 _base.MODEL_VERSION = MODEL_VERSION
 _base.PARAMETERS["urp"]["vix_onset_points"] = 5.0
 _base.PARAMETERS["urp"]["vix_onset_pct"] = 20.0
+_base.PARAMETERS["nok_residual"] = RESIDUAL_PARAMETERS
 
 
 def _risk_block(md: _base.MarketData, asof: date) -> dict:
@@ -54,7 +55,7 @@ def _risk_block(md: _base.MarketData, asof: date) -> dict:
         "gate": bool(spx_gate or vix_onset),
         "sp500_decline_10_pct": spx_decline,
         "vix": vix,
-        "vix_change_10_points": vix_change_10,
+        "vix_change_10_points": vix_chane_10,
         "vix_change_10_pct": vix_change_10_pct,
         "vix_onset": vix_onset,
         "method": (
@@ -66,8 +67,7 @@ def _risk_block(md: _base.MarketData, asof: date) -> dict:
 
 
 # _urp_at resolves _risk_block from the base module at call time, so replacing
-# this single global preserves the audited v0.3 equations and changes only the
-# empirically falsified risk-onset condition.
+# this global changes only the empirically falsified risk-onset condition.
 _base._risk_block = _risk_block
 
 MarketData = _base.MarketData
@@ -79,12 +79,15 @@ def evaluate_regimes(
     series: Mapping[str, Sequence[Mapping[str, object]]],
     asof: str | date | None = None,
 ) -> dict:
-    result = _base.evaluate_regimes(series, asof=asof)
+    enriched, residual_diagnostics = attach_nok_residual(series)
+    result = _base.evaluate_regimes(enriched, asof=asof)
     result["model_version"] = MODEL_VERSION
     result["parameters"] = PARAMETERS
-    result["method_note_v04"] = (
-        "URP requires a fresh risk-off onset. Elevated but declining VIX is "
-        "treated as aftermath/recovery, not a new rejection pulse."
+    result["nok_residual"] = residual_diagnostics
+    result["method_note_v041"] = (
+        "URP requires a fresh risk-off onset. NKS and NRS use a walk-forward "
+        "Huber residual of EUR/NOK against EUR/SE, Brent and VIX. Every score "
+        "at t is fitted and standardised only with information available before t."
     )
     return result
 

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Fetch or load history and run the continuous debt/NOK v0.4 backtest."""
+"""Fetch or load history and run the continuous debt/NOK v0.4.1 backtest."""
 
 from __future__ import annotations
 
@@ -41,7 +41,9 @@ def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--input", default="data/backtest_series_v04.json")
     parser.add_argument("--output", default="data/regime_backtest_v04.json")
-    parser.add_argument("--start", default="2006-01-01")
+    # Three years of pre-history allow the first residual z-scores to become
+    # available around 2006 without fitting on future observations.
+    parser.add_argument("--start", default="2003-01-01")
     parser.add_argument("--end", default=None)
     parser.add_argument("--fetch", action="store_true")
     parser.add_argument("--synthetic-only", action="store_true")
@@ -52,7 +54,7 @@ def main() -> int:
     output_path = ROOT / args.output
 
     if args.synthetic_only:
-        _write(output_path, {"model_version": "0.4.0", "synthetic": synthetic_results()})
+        _write(output_path, {"model_version": "0.4.1", "synthetic": synthetic_results()})
         print(output_path)
         return 0
 

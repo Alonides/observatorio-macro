@@ -6,7 +6,7 @@ on:
       start:
         description: Historical start date
         required: false
-        default: "2006-01-01"
+        default: "2003-01-01"
   pull_request:
     paths:
       - ".github/workflows/backtest_v04.yml"
@@ -21,7 +21,7 @@ permissions:
 jobs:
   backtest-v04:
     runs-on: ubuntu-latest
-    timeout-minutes: 25
+    timeout-minutes: 30
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -29,8 +29,8 @@ jobs:
           python-version: "3.12"
       - name: Run unit and falsification tests
         run: python -m unittest discover -s tests -v
-      - name: Run 2006-present historical backtest
-        run: python scripts/backtest_regimes_v04.py --fetch --start "${{ github.event.inputs.start || '2006-01-01' }}"
+      - name: Run 2003-present historical backtest
+        run: python scripts/backtest_regimes_v04.py --fetch --start "${{ github.event.inputs.start || '2003-01-01' }}"
       - uses: actions/upload-artifact@v4
         if: always()
         with:

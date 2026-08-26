@@ -1,9 +1,12 @@
-"""Historical loaders used by the v0.4 continuous backtest.
+"""Historical loaders used by the v0.4.1 continuous backtest.
 
-The operational daily collector is not changed.  This overlay fixes two issues
-revealed by the first historical run: Federal Reserve H.10 requests with 20,000
-observations returned an error page, and EIA Brent stopped at its 5,000-row API
-limit.  H.10 now requests 6,000 observations and Brent is paginated.
+The operational daily collector is not changed. This overlay fixes the long
+history needed by the research model:
+
+* Federal Reserve H.10 requests use 6,000 observations;
+* EIA Brent is paginated beyond the 5,000-row response limit;
+* Norway 10-year yields come from Norges Bank's official SDMX data warehouse
+  instead of the short HTML table shown on the public page.
 """
 
 from __future__ import annotations
@@ -11,6 +14,7 @@ from __future__ import annotations
 import json
 from functools import lru_cache
 from pathlib import Path
+from urllib.parse import urlencode
 
 from .. import history as _base
 
@@ -71,9 +75,28 @@ def _brent_history(start: str, end: str) -> list[dict]:
     return _base._dedupe(points, start, end)
 
 
+def _norway_history(start: str, end: str) -> list[dict]:
+    query = urlencode({
+        "format": "csv",
+        "locale": "en",
+        "startPeriod": start,
+        "endPeriod": end,
+    })
+    url = (
+        "https://data.norges-bank.no/api/data/GOVT_GENERIC_RATES/"
+        "B.10Y.GBON.?" + query
+    )
+    points = _base._parse_sdmx_csv(_base._text(url))
+    points = _base._dedupe(points, start, end)
+    if not points:
+        raise HistorySourceError("Norges Bank SDMX returned no 10-year government yield observations")
+    return points
+
+
 # The base dispatcher looks up these globals when each series is requested.
 _base._fed_history = _fed_history
 _base._brent_history = _brent_history
+_base._norway_history = _norway_history
 
 fetch_historical_series = _base.fetch_historical_series
 fetch_history_dataset = _base.fetch_history_dataset
