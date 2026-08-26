@@ -18,14 +18,28 @@ function nested(object, path) {
   return path.reduce((value, key) => value && typeof value === 'object' ? value[key] : undefined, object);
 }
 
+function displayDate(raw) {
+  return raw ? dateFmt.format(new Date(`${raw}T00:00:00Z`)) : '—';
+}
+
+function lagText(raw) {
+  const lag = Number(raw);
+  if (!Number.isFinite(lag)) return 'sin fecha';
+  if (lag <= 0) return 'al día';
+  if (lag === 1) return '1 día hábil';
+  return `${lag} días hábiles`;
+}
+
 function renderHealth(data) {
   const health = document.querySelector('#monitor-health');
   const generated = data.generated_at ? new Date(data.generated_at).toLocaleString('es-ES', {
     timeZone: 'Europe/Oslo', dateStyle: 'medium', timeStyle: 'short',
   }) : 'pendiente';
-  const quality = nested(data, ['current', 'operational', 'data_quality']) || 'pending';
-  health.className = `health status-${quality === 'complete' ? 'ok' : 'operational_partial'}`;
-  health.innerHTML = `<strong>Modelo ${escapeHtml(data.model_version || '—')}</strong><span>${escapeHtml(data.asof || 'sin fecha')} · ${escapeHtml(generated)}</span>`;
+  const coverage = nested(data, ['current', 'operational', 'data_quality']) || 'pending';
+  const freshness = nested(data, ['freshness', 'quality']) || 'unavailable';
+  const healthy = coverage === 'complete' && ['fresh', 'delayed'].includes(freshness);
+  health.className = `health status-${healthy ? 'ok' : 'operational_partial'}`;
+  health.innerHTML = `<strong>Modelo ${escapeHtml(data.model_version || '—')}</strong><span>Informe ${escapeHtml(data.report_date || 'sin fecha')} · último dato ${escapeHtml(nested(data, ['freshness', 'latest_input_date']) || data.asof || '—')} · ${escapeHtml(generated)}</span>`;
 }
 
 function renderAlert(data) {
@@ -53,10 +67,10 @@ function renderSchedule(data) {
     <div><dt>${escapeHtml(label)}</dt><dd>${escapeHtml(value || '—')}</dd></div>`).join('');
 }
 
-function severity(block) {
+function severity(block, key) {
   const score = Number(block.score || 0);
-  if (block.state === 'confirmed' || block.state === 'rejection_regime' || score >= 80) return 'critical';
-  if (block.state === 'us_discrimination' || score >= 65) return 'alert';
+  if (block.state === 'rejection_regime' || (key === 'NKS' && score >= 80)) return 'critical';
+  if (block.state === 'confirmed' || block.state === 'us_discrimination' || score >= 65) return 'alert';
   if (block.state === 'rejection_pulse' || score >= 35) return 'watch';
   return 'normal';
 }
@@ -65,11 +79,13 @@ function renderBlocks(data) {
   const blocks = nested(data, ['current', 'operational', 'blocks']) || {};
   document.querySelector('#block-grid').innerHTML = ['URP', 'URR', 'DSS', 'NKS', 'NRS'].map(key => {
     const block = blocks[key] || { label: key, score: 0, state: 'sin_datos', coverage: 0 };
-    return `<article class="monitor-block ${severity(block)}">
+    const lag = lagText(block.business_day_lag);
+    return `<article class="monitor-block ${severity(block, key)}">
       <div class="block-code">${escapeHtml(key)}</div>
       <div class="block-score">${number(block.score, 0)}</div>
       <h3>${escapeHtml(block.label || key)}</h3>
       <p>${escapeHtml(block.state || 'sin_datos')} · cobertura ${number((Number(block.coverage) || 0) * 100, 0)} %</p>
+      <p>Datos ${escapeHtml(block.asof || '—')} · ${escapeHtml(lag)} · ${escapeHtml(block.freshness_label || 'No disponible')}</p>
     </article>`;
   }).join('');
 }
@@ -99,21 +115,33 @@ function renderDeltas(data) {
   }).join('');
 }
 
+function freshnessTable(data) {
+  const blocks = nested(data, ['freshness', 'blocks']) || {};
+  const rows = ['URP', 'URR', 'DSS', 'NKS', 'NRS'].map(key => {
+    const item = blocks[key] || {};
+    return `<tr><td>${escapeHtml(key)}</td><td>${escapeHtml(item.asof || '—')}</td><td>${escapeHtml(lagText(item.business_day_lag))}</td><td>${escapeHtml(item.label || 'No disponible')}</td></tr>`;
+  }).join('');
+  return `<table><thead><tr><th>Bloque</th><th>Datos a</th><th>Retraso</th><th>Frescura</th></tr></thead><tbody>${rows}</tbody></table>`;
+}
+
 function renderReport(data) {
-  document.querySelector('#report-date').textContent = `Informe a ${data.asof ? dateFmt.format(new Date(`${data.asof}T00:00:00Z`)) : 'fecha pendiente'}`;
+  document.querySelector('#report-date').textContent = `Informe de ${data.report_date ? displayDate(data.report_date) : 'fecha pendiente'}`;
   document.querySelector('#report-mode').textContent = data.mode === 'weekly' ? 'Semanal' : 'Monitor diario';
   const reasons = (data.reasons || []).map(reason => `<li>${escapeHtml(reason)}</li>`).join('');
+  const freshness = data.freshness || {};
   document.querySelector('#report-summary').innerHTML = `
     <p><strong>${escapeHtml(data.headline || '')}</strong></p>
     <p>${escapeHtml(data.summary || '')}</p>
+    <p>Último dato de mercado: <strong>${escapeHtml(freshness.latest_input_date || data.asof || '—')}</strong>. Bloque más retrasado: <strong>${escapeHtml(freshness.oldest_block || '—')}</strong> (${escapeHtml(lagText(freshness.maximum_business_day_lag))}).</p>
     ${reasons ? `<ul>${reasons}</ul>` : ''}`;
   const coverage = nested(data, ['current', 'operational', 'missing_confirmations']) || [];
   const residual = data.source_status || {};
   document.querySelector('#method-content').innerHTML = `
-    <p>Modelo operativo v1.0 sobre núcleo v0.4.1. Las reglas son deterministas, versionadas y no alteran los scores validados.</p>
+    <p>Modelo operativo ${escapeHtml(data.model_version || '—')} sobre núcleo v0.4.1. Las reglas son deterministas, versionadas y no alteran los scores validados.</p>
+    ${freshnessTable(data)}
     <p>Residual disponible: ${escapeHtml(String(residual.residual_points ?? '—'))} observaciones, ${escapeHtml(residual.residual_start || '—')} → ${escapeHtml(residual.residual_end || '—')}.</p>
     <p>Confirmaciones ausentes: ${coverage.length ? coverage.map(escapeHtml).join(', ') : 'ninguna en la lectura actual'}.</p>
-    <p>La ausencia de señal no demuestra que no exista riesgo estructural; sólo indica que la configuración definida no está activa.</p>`;
+    <p>Cada bloque conserva su última lectura completa y declara su fecha. La ausencia de señal no demuestra que no exista riesgo estructural.</p>`;
 }
 
 function cleanSeries(id) {
