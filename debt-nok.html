@@ -26,11 +26,11 @@
     <section class="monitor-hero">
       <article id="alert-card" class="card alert-card pending">
         <div class="alert-head">
-          <div><p class="eyebrow">ESTADO OPERATIVO</p><h2 id="alert-label">Pendiente</h2></div>
+          <div><p class="eyebrow">ESTADO OFICIAL</p><h2 id="alert-label">Pendiente</h2></div>
           <div id="alert-score" class="alert-score">—</div>
         </div>
         <h3 id="headline">Esperando el primer informe operativo.</h3>
-        <p id="summary" class="method">El agente publicará aquí su lectura actual.</p>
+        <p id="summary" class="method">El agente publicará aquí su lectura oficial.</p>
         <div id="reasons" class="reason-list"></div>
       </article>
 
@@ -38,26 +38,43 @@
         <p class="eyebrow">CADENCIA Y ENTREGA</p>
         <h2>Agente programado</h2>
         <dl id="schedule" class="schedule-list"></dl>
-        <p class="delivery-note">Los informes completos quedan en este panel. Las entregas periódicas y las alertas materiales se publican en un hilo de GitHub asignado a Alonides, normalmente acompañado de notificación por correo.</p>
+        <p class="delivery-note">Los informes completos quedan en este panel. Las entregas periódicas, alertas oficiales y divergencias provisionales materiales se publican en un hilo de GitHub asignado a Alonides.</p>
       </article>
     </section>
 
     <section class="card">
       <div class="section-head">
         <div>
-          <p class="eyebrow">MATRIZ DE RÉGIMEN</p>
+          <p class="eyebrow">MATRIZ OFICIAL DE RÉGIMEN</p>
           <h2>Cinco bloques independientes</h2>
-          <p>Los números son scores operativos de 0 a 100. Cada bloque declara su propia fecha completa de datos; NRS sólo puntúa operativamente cuando la reversión está confirmada.</p>
+          <p>Los números son scores oficiales de 0 a 100. Cada bloque declara su propia fecha completa de datos; NRS sólo puntúa operativamente cuando la reversión está confirmada.</p>
         </div>
         <a class="report-link" href="data/debt_nok/latest.md" target="_blank" rel="noreferrer">Abrir informe Markdown ↗</a>
       </div>
       <div id="block-grid" class="block-grid"></div>
     </section>
 
+    <section id="fast-lane-section" class="card fast-lane-card unavailable">
+      <div class="section-head">
+        <div>
+          <p class="eyebrow">VÍA RÁPIDA PROVISIONAL</p>
+          <h2 id="fast-lane-title">Esperando proxies oficiales</h2>
+          <p id="fast-lane-message">La lectura oficial conserva siempre prioridad.</p>
+        </div>
+        <span id="fast-lane-label" class="mode-pill provisional-pill">Provisional</span>
+      </div>
+      <p id="fast-lane-disclaimer" class="fast-disclaimer"></p>
+      <div id="fast-lane-comparison" class="fast-comparison-grid"></div>
+      <details class="method-details fast-details">
+        <summary>Puentes activos, validación y fuentes</summary>
+        <div id="fast-bridge-content"></div>
+      </details>
+    </section>
+
     <section class="card charts-section">
       <div class="section-head">
         <div>
-          <p class="eyebrow">FOCO NORUEGA</p>
+          <p class="eyebrow">FOCO NORUEGA · HISTORIA OFICIAL</p>
           <h2>EUR/NOK, NOK/SEK y residual walk-forward</h2>
           <p>El residual positivo indica que NOK se debilita más de lo esperado frente a SEK, Brent y VIX; no prueba por sí mismo una causa.</p>
         </div>
@@ -81,12 +98,12 @@
 
     <section class="monitor-detail-grid">
       <article class="card">
-        <p class="eyebrow">VARIABLES ACTUALES</p>
+        <p class="eyebrow">VARIABLES OFICIALES ACTUALES</p>
         <h2>Qué está moviendo la lectura</h2>
         <div id="key-values" class="key-values"></div>
       </article>
       <article class="card">
-        <p class="eyebrow">CAMBIO RECIENTE</p>
+        <p class="eyebrow">CAMBIO OFICIAL RECIENTE</p>
         <h2>Variación frente a hace cinco sesiones</h2>
         <div id="deltas" class="delta-grid"></div>
       </article>
@@ -107,7 +124,7 @@
 
   <footer class="shell">
     <p>Instrumento de vigilancia y falsificación. No ejecuta operaciones ni constituye recomendación financiera.</p>
-    <p>Modelo operativo v1.0.2 · núcleo validado v0.4.1 · código, fechas y umbrales auditables en Git.</p>
+    <p>Modelo operativo v1.0.3 · núcleo validado v0.4.1 · vía rápida provisional separada y auditable.</p>
   </footer>
   <script src="web/debt-nok.js"></script>
 </body>
