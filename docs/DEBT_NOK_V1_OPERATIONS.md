@@ -1,8 +1,8 @@
-# Debt/NOK Monitor v1.0 · operación
+# Debt/NOK Monitor v1.0.1 · operación
 
 ## Qué queda congelado
 
-La versión operativa v1.0 no altera las ecuaciones validadas del núcleo v0.4.1. Añade:
+La versión operativa v1.0.1 no altera las ecuaciones validadas del núcleo v0.4.1. Añade:
 
 - estados operativos `normal`, `watch`, `alert` y `critical`;
 - separación explícita entre `gate_score` y `operational_score` en NRS;
@@ -10,6 +10,8 @@ La versión operativa v1.0 no altera las ecuaciones validadas del núcleo v0.4.1
 - panel web específico;
 - agente programado con trazabilidad en Git;
 - entrega por notificaciones de GitHub, sin credenciales de correo almacenadas.
+
+La corrección v1.0.1 distingue una **reversión NOK confirmada** de un deterioro crítico: NRS genera una alerta material de cambio de régimen, pero no convierte por sí solo el panel en rojo. También impide interpretar periodos sin historia Norway–Bund como resultados negativos de NRS.
 
 ## Cadencia elegida
 
@@ -54,15 +56,25 @@ Se activa por cualquiera de los siguientes:
 - URR detecta discriminación estadounidense;
 - URP ≥ 60;
 - DSS ≥ 70;
-- NKS ≥ 65.
+- NKS ≥ 65;
+- NRS confirma una reversión NOK posterior a un shock.
+
+La última condición es una señal material de cambio de régimen y exige revisión humana, pero no implica por sí sola un agravamiento sistémico.
 
 ### Crítico
 
 Se activa por cualquiera de los siguientes:
 
 - URR confirma régimen persistente de rechazo;
-- NKS ≥ 80;
-- NRS está confirmado.
+- NKS ≥ 80.
+
+## Cobertura histórica de NRS
+
+NRS exige explícitamente que la prima Norway–Bund se haya normalizado. La serie diaria homogénea del bono noruego a diez años disponible en el backtest comienza en 2019. Por tanto:
+
+- la reversión de 2020 puede probarse de forma completa;
+- las ventanas de 2008 y 2014–2015 se marcan como **no disponibles**, no como ausencia de reversión;
+- la falta de datos históricos nunca se convierte en cero ni en un falso negativo.
 
 ## Guardarraíles
 
