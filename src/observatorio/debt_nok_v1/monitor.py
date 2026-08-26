@@ -1,9 +1,9 @@
-"""Operational Debt/NOK monitor v1.0.2.
+"""Operational Debt/NOK monitor v1.0.3.
 
 This module maps the validated v0.4.1 core to explicit operational states. The
-v1.0.2 change is temporal rather than mathematical: URP, URR, DSS, NKS and NRS
-are evaluated at their own latest complete input dates and carry visible
-freshness metadata.
+block-specific dating introduced in v1.0.2 remains unchanged. v1.0.3 adds an
+external provisional fast lane in the reporting agent; the authoritative
+classification implemented here continues to use the validated official lane.
 """
 
 from __future__ import annotations
@@ -13,7 +13,7 @@ from typing import Mapping, Sequence
 
 from .freshness import evaluate_fresh_regimes, previous_block_dates
 
-MODEL_VERSION = "1.0.2"
+MODEL_VERSION = "1.0.3"
 CORE_MODEL_VERSION = "0.4.1"
 
 LEVELS = {
@@ -181,10 +181,10 @@ def evaluate_operational(
         "notification_required": LEVELS[level]["rank"] >= LEVELS["alert"]["rank"],
     }
     result["method_note_v1"] = (
-        "The operational layer does not alter the validated v0.4.1 scores. It "
-        "maps them to normal/watch/alert/critical states and evaluates each block "
-        "at its own latest complete input date. A confirmed NRS is a material "
-        "regime-change alert, not a critical loss signal."
+        "The authoritative operational layer does not alter the validated v0.4.1 "
+        "scores. It maps them to normal/watch/alert/critical states and evaluates "
+        "each block at its own latest complete official-input date. Any provisional "
+        "fast-lane result is produced and labelled separately by the reporting agent."
     )
     return result
 
