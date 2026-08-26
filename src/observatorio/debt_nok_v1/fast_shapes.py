@@ -40,6 +40,12 @@ def _parse_date(raw) -> date | None:
     if isinstance(raw, (int, float)):
         try:
             value = float(raw)
+            # Unix timestamps below 100 million seconds predate 1973 and are
+            # implausible for this monitor. Rejecting them prevents a plain
+            # numeric price array such as [84.2, 85.1] from becoming a fake
+            # 1970 date/value row.
+            if value < 100_000_000:
+                return None
             if value > 1e12:
                 value /= 1000.0
             return datetime.fromtimestamp(value, tz=timezone.utc).date()
@@ -74,6 +80,38 @@ def _parse_value(raw) -> float | None:
     except (TypeError, ValueError):
         return None
     return value if isfinite(value) and value > 0.0 else None
+
+
+def _is_explicit_date_token(raw) -> bool:
+    """Return true only when a sequence's first item is plausibly a date token."""
+    if isinstance(raw, date):
+        return True
+    if isinstance(raw, bool) or raw is None:
+        return False
+    if isinstance(raw, (int, float)):
+        try:
+            return float(raw) >= 100_000_000
+        except (TypeError, ValueError):
+            return False
+    text = str(raw).strip()
+    if not text:
+        return False
+    if text.isdigit():
+        try:
+            return float(text) >= 100_000_000
+        except ValueError:
+            return False
+    # A date-like textual token must contain a separator or a month name. The
+    # final parse remains authoritative; this only prevents numeric arrays from
+    # entering the pair-row path.
+    lowered = text.lower()
+    month_tokens = (
+        "jan", "feb", "mar", "apr", "may", "jun",
+        "jul", "aug", "sep", "oct", "nov", "dec",
+    )
+    return any(token in text for token in ("-", "/", "T", ":")) or any(
+        month in lowered for month in month_tokens
+    )
 
 
 def _first_parsed(mapping: Mapping[str, object], keys: Sequence[str], parser):
@@ -124,7 +162,7 @@ def _extract(node, output: dict[date, float]) -> None:
         return
 
     if isinstance(node, (list, tuple)):
-        if len(node) >= 2:
+        if len(node) >= 2 and _is_explicit_date_token(node[0]):
             day = _parse_date(node[0])
             value = _parse_value(node[1])
             if day is not None and value is not None:
