@@ -1,8 +1,9 @@
-"""Operational Debt/NOK monitor v1.0.1.
+"""Operational Debt/NOK monitor v1.0.2.
 
-This module turns the validated research classifier into an explicit operational
-state without changing the underlying v0.4.1 scores. It is deliberately
-rule-based and auditable: no language model or opaque probability is used.
+This module maps the validated v0.4.1 core to explicit operational states. The
+v1.0.2 change is temporal rather than mathematical: URP, URR, DSS, NKS and NRS
+are evaluated at their own latest complete input dates and carry visible
+freshness metadata.
 """
 
 from __future__ import annotations
@@ -10,9 +11,9 @@ from __future__ import annotations
 from datetime import date
 from typing import Mapping, Sequence
 
-from ..debt_nok_v04.regime import evaluate_regimes as evaluate_core
+from .freshness import evaluate_fresh_regimes, previous_block_dates
 
-MODEL_VERSION = "1.0.1"
+MODEL_VERSION = "1.0.2"
 CORE_MODEL_VERSION = "0.4.1"
 
 LEVELS = {
@@ -48,16 +49,19 @@ def _number(value, default: float = 0.0) -> float:
 def _block(result: dict, key: str) -> dict:
     raw = result.get(key) if isinstance(result, dict) else None
     raw = raw if isinstance(raw, dict) else {}
+    state = str(raw.get("state") or "insufficient_data")
+    freshness = (
+        result.get("freshness", {}).get("blocks", {}).get(key.upper(), {})
+        if isinstance(result, dict)
+        else {}
+    )
     if key == "urr":
-        state = str(raw.get("state") or "inactive")
         score = URR_SCORES.get(state, 0.0)
-        coverage = 1.0 if raw else 0.0
+        coverage = 0.0 if state == "insufficient_data" else 1.0
     elif key == "nrs":
-        state = str(raw.get("state") or "inactive")
         score = _number(raw.get("operational_score"), 0.0)
-        coverage = 1.0 if raw else 0.0
+        coverage = 0.0 if state == "insufficient_data" else 1.0
     else:
-        state = str(raw.get("state") or "insufficient_data")
         score = _number(raw.get("score"), 0.0)
         coverage = _number(raw.get("coverage"), 0.0)
     return {
@@ -66,6 +70,10 @@ def _block(result: dict, key: str) -> dict:
         "score": round(max(0.0, min(100.0, score)), 2),
         "state": state,
         "coverage": round(max(0.0, min(1.0, coverage)), 3),
+        "asof": raw.get("asof") or freshness.get("asof"),
+        "freshness_status": freshness.get("status", "unavailable"),
+        "freshness_label": freshness.get("label", "No disponible"),
+        "business_day_lag": freshness.get("business_day_lag"),
     }
 
 
@@ -143,8 +151,9 @@ def _summary(level: str, reasons: Sequence[str]) -> str:
 def evaluate_operational(
     series: Mapping[str, Sequence[Mapping[str, object]]],
     asof: str | date | None = None,
+    block_asof: Mapping[str, str | date | None] | None = None,
 ) -> dict:
-    result = evaluate_core(series, asof=asof)
+    result = evaluate_fresh_regimes(series, asof=asof, block_asof=block_asof)
     core_version = result.get("model_version")
     level, reasons = classify_level(result)
     blocks = {key.upper(): _block(result, key) for key in ("urp", "urr", "dss", "nks", "nrs")}
@@ -155,6 +164,7 @@ def evaluate_operational(
         key for key, available in data_coverage.items()
         if key not in required_keys and available is False
     )
+    freshness = result.get("freshness") if isinstance(result.get("freshness"), dict) else {}
     result["core_model_version"] = core_version or CORE_MODEL_VERSION
     result["model_version"] = MODEL_VERSION
     result["operational"] = {
@@ -164,14 +174,17 @@ def evaluate_operational(
         "summary": _summary(level, reasons),
         "blocks": blocks,
         "data_quality": "complete" if not missing else "partial",
+        "data_freshness": freshness.get("quality", "unavailable"),
+        "data_freshness_label": freshness.get("label", "No disponible"),
         "missing_confirmations": missing,
         "optional_confirmations_missing": optional_missing,
         "notification_required": LEVELS[level]["rank"] >= LEVELS["alert"]["rank"],
     }
     result["method_note_v1"] = (
         "The operational layer does not alter the validated v0.4.1 scores. It "
-        "maps them to normal/watch/alert/critical states using declared rules. "
-        "A confirmed NRS is a material regime-change alert, not a critical loss signal."
+        "maps them to normal/watch/alert/critical states and evaluates each block "
+        "at its own latest complete input date. A confirmed NRS is a material "
+        "regime-change alert, not a critical loss signal."
     )
     return result
 
@@ -183,4 +196,5 @@ __all__ = [
     "MODEL_VERSION",
     "classify_level",
     "evaluate_operational",
+    "previous_block_dates",
 ]
