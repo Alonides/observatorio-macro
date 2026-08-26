@@ -3,8 +3,9 @@
 
 The authoritative lane uses only the validated official histories. A separate
 v1.0.3 fast lane may extend slow series for a few sessions with overlap-tested
-official proxies. Provisional data never overwrite official observations and
-can only request human review; they never silently replace the official state.
+primary-source proxies. Provisional data never overwrite official observations
+and can only request human review; they never silently replace the official
+state.
 """
 
 from __future__ import annotations
@@ -24,8 +25,8 @@ from observatorio.debt_nok_v04.residual import build_nok_residual  # noqa: E402
 from observatorio.debt_nok_v1.fast_bridge import (  # noqa: E402
     build_fast_lane_payload,
     build_fast_series,
-    fetch_fast_proxies,
 )
+from observatorio.debt_nok_v1.fast_sources import fetch_primary_fast_proxies  # noqa: E402
 from observatorio.debt_nok_v1.monitor import evaluate_operational  # noqa: E402
 from observatorio.debt_nok_v1.report import build_report, render_markdown  # noqa: E402
 
@@ -154,7 +155,7 @@ def _build_fast_lane(
         sources: dict = {}
         errors = {"NETWORK": "network disabled by command-line option"}
     else:
-        proxies, sources, errors = fetch_fast_proxies()
+        proxies, sources, errors = fetch_primary_fast_proxies()
 
     provisional_series, bridge = build_fast_series(
         official_series,
@@ -162,6 +163,11 @@ def _build_fast_lane(
         sources=sources,
         errors=errors,
     )
+    oil_target = bridge.get("targets", {}).get("DCOILBRENTEU")
+    if isinstance(oil_target, dict):
+        oil_target["label"] = "EIA WTI spot + CME WTI delayed settlements"
+        oil_target["proxy"] = "EIA_CME_WTI_PROXY"
+
     provisional_residual = build_nok_residual(provisional_series)
     provisional_residual_points = provisional_residual.get("points", [])
     if provisional_residual_points:
@@ -290,6 +296,16 @@ def main() -> int:
         f"bridge={fast_lane.get('bridge', {}).get('status')} · "
         f"review={provisional_review} · notify={notify}"
     )
+    for target, item in sorted(fast_lane.get("bridge", {}).get("targets", {}).items()):
+        if not isinstance(item, dict):
+            continue
+        validation = item.get("validation") if isinstance(item.get("validation"), dict) else {}
+        print(
+            f"fast bridge {target}: status={item.get('status')} reason={item.get('reason')} "
+            f"official={item.get('official_last')} proxy={item.get('proxy_last')} "
+            f"bridge_end={item.get('bridge_end')} corr={validation.get('correlation')} "
+            f"mae={validation.get('mae_pct_points')}"
+        )
     for series_id, error in sorted(factor_errors.items()):
         print(f"{series_id} warning: {error}", file=sys.stderr)
     for source_id, error in sorted(fast_lane.get("bridge", {}).get("errors", {}).items()):
