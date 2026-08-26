@@ -30,7 +30,7 @@
 .alert-card.watch { border-color: rgba(225, 170, 85, .5); }
 .alert-card.watch .alert-score, .alert-card.watch h2 { color: var(--amber); }
 .alert-card.alert { border-color: rgba(230, 154, 98, .62); }
-.alert-card.alert .alert-score, .alert-card.alert h2 { color: var(--orange); }
+.alert-card.alert .alert-score, .alert-card.alert h2 { color: #e69a62; }
 .alert-card.critical { border-color: rgba(237, 119, 110, .7); background: linear-gradient(145deg, rgba(70, 20, 20, .92), rgba(15, 16, 15, .98)); }
 .alert-card.critical .alert-score, .alert-card.critical h2 { color: var(--red); }
 .reason-list { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 19px; }
