@@ -74,9 +74,11 @@ Antes de activar una extensión se comprueban:
 
 Los umbrales están versionados en `src/observatorio/debt_nok_v1/fast_bridge.py` y `fast_config.py`. Si una comprobación falla, el puente queda `rejected`; si el dato oficial es demasiado antiguo, queda `expired`.
 
-### Primera ejecución real fuera de muestra — 26 de agosto de 2026
+### Calibración operativa inicial — 26 de agosto de 2026
 
-Los cinco puentes terminaron activos y prolongaron sus series hasta el 26 de agosto, sin cambiar el estado oficial ni generar revisión humana:
+Esta ejecución se utilizó para fijar los umbrales iniciales de admisibilidad de los cruces BCE/H.10. **No constituye una validación fuera de muestra.** Las ejecuciones programadas posteriores son la prueba prospectiva de estabilidad, tasa de rechazo y utilidad de la vía rápida.
+
+En la calibración inicial, los cinco puentes terminaron activos y prolongaron sus series hasta el 26 de agosto, sin cambiar el estado oficial ni generar revisión humana:
 
 | Serie objetivo | Proxy | Correlación | Error medio de retornos |
 |---|---|---:|---:|
