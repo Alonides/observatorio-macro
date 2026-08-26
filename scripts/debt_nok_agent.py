@@ -3,9 +3,9 @@
 
 The authoritative lane uses only the validated official histories. A separate
 v1.0.3 fast lane may extend slow series for a few sessions with overlap-tested
-primary-source proxies. Provisional data never overwrite official observations
-and can only request human review; they never silently replace the official
-state.
+primary-source or explicitly secondary market proxies. Provisional data never
+overwrite official observations and can only request human review; they never
+silently replace the official state.
 """
 
 from __future__ import annotations
@@ -20,15 +20,22 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
 
+import observatorio.debt_nok_v1.fast_bridge as fast_bridge_module  # noqa: E402
 from observatorio.debt_nok_v04.history import fetch_historical_series  # noqa: E402
 from observatorio.debt_nok_v04.residual import build_nok_residual  # noqa: E402
+from observatorio.debt_nok_v1.fast_alignment import tracking_statistics_aligned  # noqa: E402
 from observatorio.debt_nok_v1.fast_bridge import (  # noqa: E402
     build_fast_lane_payload,
     build_fast_series,
 )
+from observatorio.debt_nok_v1.fast_fallbacks import fetch_yahoo_brent  # noqa: E402
 from observatorio.debt_nok_v1.fast_sources import fetch_primary_fast_proxies  # noqa: E402
 from observatorio.debt_nok_v1.monitor import evaluate_operational  # noqa: E402
 from observatorio.debt_nok_v1.report import build_report, render_markdown  # noqa: E402
+
+# Publication cut-offs differ across providers. The frozen lag-aware validator
+# affects only proxy admissibility; it does not shift a model observation date.
+fast_bridge_module.tracking_statistics = tracking_statistics_aligned
 
 DATA_DIR = ROOT / "data"
 MONITOR_DIR = DATA_DIR / "debt_nok"
@@ -156,6 +163,19 @@ def _build_fast_lane(
         errors = {"NETWORK": "network disabled by command-line option"}
     else:
         proxies, sources, errors = fetch_primary_fast_proxies()
+        if "EIA_WTI_FUT1" not in proxies:
+            try:
+                yahoo_points, yahoo_meta = fetch_yahoo_brent()
+                proxies["EIA_WTI_FUT1"] = yahoo_points  # legacy internal proxy id
+                sources["YAHOO_BRENT_DELAYED"] = yahoo_meta
+            except Exception as exc:
+                errors["YAHOO_BRENT_DELAYED"] = str(exc)
+                sources["YAHOO_BRENT_DELAYED"] = {
+                    "provider": "Yahoo Finance",
+                    "status": "error",
+                    "secondary": True,
+                    "provisional_only": True,
+                }
 
     provisional_series, bridge = build_fast_series(
         official_series,
@@ -165,8 +185,14 @@ def _build_fast_lane(
     )
     oil_target = bridge.get("targets", {}).get("DCOILBRENTEU")
     if isinstance(oil_target, dict):
-        oil_target["label"] = "EIA WTI spot + CME WTI delayed settlements"
-        oil_target["proxy"] = "EIA_CME_WTI_PROXY"
+        source_map = bridge.get("sources", {})
+        if isinstance(source_map.get("EIA_CME_WTI_PROXY"), dict) and source_map["EIA_CME_WTI_PROXY"].get("status") == "ok":
+            oil_target["label"] = "EIA WTI spot + CME WTI delayed settlements"
+            oil_target["proxy"] = "EIA_CME_WTI_PROXY"
+        elif isinstance(source_map.get("YAHOO_BRENT_DELAYED"), dict) and source_map["YAHOO_BRENT_DELAYED"].get("status") == "ok":
+            oil_target["label"] = "Yahoo Finance delayed Brent futures fallback"
+            oil_target["proxy"] = "YAHOO_BRENT_DELAYED"
+            oil_target["secondary_source"] = True
 
     provisional_residual = build_nok_residual(provisional_series)
     provisional_residual_points = provisional_residual.get("points", [])
@@ -304,7 +330,7 @@ def main() -> int:
             f"fast bridge {target}: status={item.get('status')} reason={item.get('reason')} "
             f"official={item.get('official_last')} proxy={item.get('proxy_last')} "
             f"bridge_end={item.get('bridge_end')} corr={validation.get('correlation')} "
-            f"mae={validation.get('mae_pct_points')}"
+            f"mae={validation.get('mae_pct_points')} lag={validation.get('proxy_lag_business_days')}"
         )
     for series_id, error in sorted(factor_errors.items()):
         print(f"{series_id} warning: {error}", file=sys.stderr)
