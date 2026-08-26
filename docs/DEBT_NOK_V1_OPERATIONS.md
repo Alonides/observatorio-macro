@@ -26,7 +26,7 @@ Usa las series oficiales congeladas del modelo. Sus scores, estados y alertas so
 
 ### Carril provisional
 
-Usa rendimientos de proxies oficiales para prolongar, durante pocos días, una serie lenta. Cada rendimiento se aplica al último nivel oficial disponible. El carril provisional:
+Usa rendimientos de proxies para prolongar, durante pocos días, una serie lenta. Cada rendimiento se aplica al último nivel oficial disponible. El carril provisional:
 
 - se identifica siempre como provisional;
 - nunca sobrescribe observaciones oficiales;
@@ -37,7 +37,7 @@ Usa rendimientos de proxies oficiales para prolongar, durante pocos días, una s
 
 Un resultado provisional `critical` se presenta como **alerta provisional máxima**, nunca como estado crítico oficial.
 
-## Proxies oficiales
+## Fuentes y jerarquía de proxies
 
 ### Divisas y dólar
 
@@ -49,9 +49,17 @@ Los tipos de referencia del Banco Central Europeo se utilizan para prolongar pro
 
 Con las mismas referencias del BCE se construye una cesta relativa de seis divisas —EUR, JPY, GBP, CAD, SEK y CHF— para prolongar provisionalmente `DTWEXBGS`. La cesta no pretende reproducir el nivel del índice amplio de la Reserva Federal: sólo aporta rendimientos recientes, que se reanclan al último nivel oficial.
 
+Las diferencias de hora de fijación entre BCE y H.10 se tratan únicamente en la validación del proxy. Se prueba una rejilla fija de desfases de −2 a +2 días hábiles; la fecha de la observación nunca se desplaza dentro del modelo.
+
 ### Petróleo
 
-El futuro WTI contrato 1 de la U.S. Energy Information Administration se utiliza para prolongar provisionalmente Brent spot. Se emplea sólo cuando su relación reciente con Brent supera los umbrales declarados.
+La jerarquía es:
+
+1. **EIA WTI spot + CME WTI settlements:** historia larga oficial de la EIA para calibración y liquidaciones recientes de CME para el tramo provisional.
+2. **AmericasOilWatch / Stooq `cb.f`:** fallback secundario de Brent front-month cuando CME no admite el acceso automatizado.
+3. **Yahoo Finance `BZ=F`:** último recurso secundario y retrasado.
+
+Todas las fuentes secundarias se identifican expresamente como tales. Se usan sólo en la vía provisional y quedan sometidas a los mismos límites de correlación, error, antigüedad y movimiento que las fuentes primarias.
 
 ## Validación de cada puente
 
@@ -64,7 +72,21 @@ Antes de activar una extensión se comprueban:
 - antigüedad máxima del último nivel oficial;
 - movimiento acumulado máximo de la extensión.
 
-Los umbrales están versionados en `src/observatorio/debt_nok_v1/fast_bridge.py`. Si una comprobación falla, el puente queda `rejected`; si el dato oficial es demasiado antiguo, queda `expired`.
+Los umbrales están versionados en `src/observatorio/debt_nok_v1/fast_bridge.py` y `fast_config.py`. Si una comprobación falla, el puente queda `rejected`; si el dato oficial es demasiado antiguo, queda `expired`.
+
+### Primera ejecución real fuera de muestra — 26 de agosto de 2026
+
+Los cinco puentes terminaron activos y prolongaron sus series hasta el 26 de agosto, sin cambiar el estado oficial ni generar revisión humana:
+
+| Serie objetivo | Proxy | Correlación | Error medio de retornos |
+|---|---|---:|---:|
+| DEXUSEU | BCE EUR/USD | 0,6020 | 0,2291 pp |
+| DEXNOUS | BCE USD/NOK derivado | 0,7084 | 0,2984 pp |
+| DEXSDUS | BCE USD/SEK derivado | 0,6453 | 0,3999 pp |
+| DTWEXBGS | cesta dólar BCE | 0,6047 | 0,1922 pp |
+| DCOILBRENTEU | AmericasOilWatch / Stooq Brent | 0,8646 | 1,6236 pp |
+
+El bloque provisional más reciente quedó fechado el 25 de agosto porque otros inputs del modelo —no los proxies— aún terminaban ese día. La lectura oficial y la provisional permanecieron **Normal**.
 
 ## Fechas y frescura por bloque
 
@@ -180,7 +202,8 @@ NRS exige que la prima Norway–Bund se haya normalizado. La serie diaria homog�
 - El residual NOK es causal y walk-forward.
 - La vía provisional nunca altera fórmulas, pesos ni umbrales.
 - Los puntos proxy no forman parte del histórico oficial.
-- Un fallo de BCE o EIA degrada la vía rápida sin interrumpir el carril oficial.
+- Un fallo de BCE, EIA, CME o una fuente secundaria degrada la vía rápida sin interrumpir el carril oficial.
+- Las fuentes secundarias no pueden confirmar por sí solas una señal oficial.
 - La entrega se basa en estados y cambios, evitando repetir diariamente la misma alerta.
 - La ausencia de señal no prueba la ausencia de riesgo estructural.
 - Fuentes, fechas, validaciones y resultados quedan versionados en Git.
