@@ -20,22 +20,17 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
 
-import observatorio.debt_nok_v1.fast_bridge as fast_bridge_module  # noqa: E402
 from observatorio.debt_nok_v04.history import fetch_historical_series  # noqa: E402
 from observatorio.debt_nok_v04.residual import build_nok_residual  # noqa: E402
-from observatorio.debt_nok_v1.fast_alignment import tracking_statistics_aligned  # noqa: E402
+from observatorio.debt_nok_v1.fast_alignment import tracking_statistics_aligned  # noqa: E402,F401
 from observatorio.debt_nok_v1.fast_bridge import (  # noqa: E402
     build_fast_lane_payload,
     build_fast_series,
 )
-from observatorio.debt_nok_v1.fast_fallbacks import fetch_yahoo_brent  # noqa: E402
+from observatorio.debt_nok_v1.fast_fallbacks import fetch_secondary_brent  # noqa: E402
 from observatorio.debt_nok_v1.fast_sources import fetch_primary_fast_proxies  # noqa: E402
 from observatorio.debt_nok_v1.monitor import evaluate_operational  # noqa: E402
 from observatorio.debt_nok_v1.report import build_report, render_markdown  # noqa: E402
-
-# Publication cut-offs differ across providers. The frozen lag-aware validator
-# affects only proxy admissibility; it does not shift a model observation date.
-fast_bridge_module.tracking_statistics = tracking_statistics_aligned
 
 DATA_DIR = ROOT / "data"
 MONITOR_DIR = DATA_DIR / "debt_nok"
@@ -152,26 +147,39 @@ def _fingerprint(report: dict) -> str:
     return "|".join([str(report.get("alert", {}).get("level", "unknown")), *states, fast_fingerprint])
 
 
+def _oil_source_label(source_id: str) -> str:
+    return {
+        "EIA_CME_WTI_PROXY": "EIA WTI spot + CME WTI delayed settlements",
+        "AMERICASOILWATCH_BRENT": "AmericasOilWatch / Stooq delayed Brent futures fallback",
+        "YAHOO_BRENT_DELAYED": "Yahoo Finance delayed Brent futures fallback",
+    }.get(source_id, source_id)
+
+
 def _build_fast_lane(
     official_series: dict[str, list[dict]],
     official_result: dict,
     no_network: bool,
 ) -> tuple[dict, dict]:
+    oil_source_id: str | None = None
     if no_network:
         proxies: dict[str, list[dict]] = {}
         sources: dict = {}
         errors = {"NETWORK": "network disabled by command-line option"}
     else:
         proxies, sources, errors = fetch_primary_fast_proxies()
-        if "EIA_WTI_FUT1" not in proxies:
+        if "EIA_WTI_FUT1" in proxies:
+            oil_source_id = "EIA_CME_WTI_PROXY"
+        else:
             try:
-                yahoo_points, yahoo_meta = fetch_yahoo_brent()
-                proxies["EIA_WTI_FUT1"] = yahoo_points  # legacy internal proxy id
-                sources["YAHOO_BRENT_DELAYED"] = yahoo_meta
+                secondary_points, secondary_meta, source_id, secondary_errors = fetch_secondary_brent()
+                proxies["EIA_WTI_FUT1"] = secondary_points  # stable internal proxy slot
+                sources[source_id] = secondary_meta
+                errors.update(secondary_errors)
+                oil_source_id = source_id
             except Exception as exc:
-                errors["YAHOO_BRENT_DELAYED"] = str(exc)
-                sources["YAHOO_BRENT_DELAYED"] = {
-                    "provider": "Yahoo Finance",
+                errors["SECONDARY_BRENT"] = str(exc)
+                sources["SECONDARY_BRENT"] = {
+                    "provider": "secondary Brent fallback chain",
                     "status": "error",
                     "secondary": True,
                     "provisional_only": True,
@@ -184,15 +192,13 @@ def _build_fast_lane(
         errors=errors,
     )
     oil_target = bridge.get("targets", {}).get("DCOILBRENTEU")
-    if isinstance(oil_target, dict):
-        source_map = bridge.get("sources", {})
-        if isinstance(source_map.get("EIA_CME_WTI_PROXY"), dict) and source_map["EIA_CME_WTI_PROXY"].get("status") == "ok":
-            oil_target["label"] = "EIA WTI spot + CME WTI delayed settlements"
-            oil_target["proxy"] = "EIA_CME_WTI_PROXY"
-        elif isinstance(source_map.get("YAHOO_BRENT_DELAYED"), dict) and source_map["YAHOO_BRENT_DELAYED"].get("status") == "ok":
-            oil_target["label"] = "Yahoo Finance delayed Brent futures fallback"
-            oil_target["proxy"] = "YAHOO_BRENT_DELAYED"
-            oil_target["secondary_source"] = True
+    if isinstance(oil_target, dict) and oil_source_id:
+        oil_target["label"] = _oil_source_label(oil_source_id)
+        oil_target["proxy"] = oil_source_id
+        oil_target["secondary_source"] = oil_source_id in {
+            "AMERICASOILWATCH_BRENT",
+            "YAHOO_BRENT_DELAYED",
+        }
 
     provisional_residual = build_nok_residual(provisional_series)
     provisional_residual_points = provisional_residual.get("points", [])
@@ -328,9 +334,10 @@ def main() -> int:
         validation = item.get("validation") if isinstance(item.get("validation"), dict) else {}
         print(
             f"fast bridge {target}: status={item.get('status')} reason={item.get('reason')} "
-            f"official={item.get('official_last')} proxy={item.get('proxy_last')} "
-            f"bridge_end={item.get('bridge_end')} corr={validation.get('correlation')} "
-            f"mae={validation.get('mae_pct_points')} lag={validation.get('proxy_lag_business_days')}"
+            f"source={item.get('proxy')} official={item.get('official_last')} "
+            f"proxy={item.get('proxy_last')} bridge_end={item.get('bridge_end')} "
+            f"corr={validation.get('correlation')} mae={validation.get('mae_pct_points')} "
+            f"lag={validation.get('proxy_lag_business_days')}"
         )
     for series_id, error in sorted(factor_errors.items()):
         print(f"{series_id} warning: {error}", file=sys.stderr)
