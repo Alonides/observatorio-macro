@@ -75,6 +75,28 @@ SeriesView = _base.SeriesView
 PARAMETERS = _base.PARAMETERS
 
 
+def _clarify_nrs_semantics(result: dict) -> None:
+    """Separate descriptive gate completion from an operational alert score.
+
+    The v0.3/v0.4 NRS `score` is the percentage of observable gates currently
+    satisfied. That is useful diagnostically, but it is not an alert severity:
+    an inactive reversal can still satisfy several benign recovery gates.
+    Preserve the diagnostic value as `gate_score` and expose an explicit
+    `operational_score` that is non-zero only when NRS is confirmed.
+    """
+    nrs = result.get("nrs")
+    if not isinstance(nrs, dict):
+        return
+    gate_score = nrs.get("score")
+    nrs["gate_score"] = gate_score
+    nrs["operational_active"] = nrs.get("state") == "confirmed"
+    nrs["operational_score"] = gate_score if nrs["operational_active"] else 0.0
+    nrs["score_semantics"] = (
+        "gate_score is descriptive gate completion; operational_score is zero "
+        "unless the full NRS confirmation state is reached."
+    )
+
+
 def evaluate_regimes(
     series: Mapping[str, Sequence[Mapping[str, object]]],
     asof: str | date | None = None,
@@ -84,10 +106,12 @@ def evaluate_regimes(
     result["model_version"] = MODEL_VERSION
     result["parameters"] = PARAMETERS
     result["nok_residual"] = residual_diagnostics
+    _clarify_nrs_semantics(result)
     result["method_note_v041"] = (
         "URP requires a fresh risk-off onset. NKS and NRS use a walk-forward "
         "Huber residual of EUR/NOK against EUR/SEK, Brent and VIX. Every score "
-        "at t is fitted and standardised only with information available before t."
+        "at t is fitted and standardised only with information available before t. "
+        "NRS gate completion is reported separately from its operational alert."
     )
     return result
 
