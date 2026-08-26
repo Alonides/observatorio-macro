@@ -1,8 +1,8 @@
 {
   "schema_version": 3,
   "model_version": "1.0.3",
-  "generated_at": "2026-08-26T14:52:46.315502+00:00",
-  "generated_at_oslo": "2026-08-26T16:52:46.315502+02:00",
+  "generated_at": "2026-08-26T15:01:12.996454+00:00",
+  "generated_at_oslo": "2026-08-26T17:01:12.996454+02:00",
   "report_date": "2026-08-26",
   "mode": "weekly",
   "asof": "2026-08-21",
@@ -1228,7 +1228,7 @@
     },
     "bridge": {
       "version": "1.0.3",
-      "generated_at": "2026-08-26T14:52:49.487011+00:00",
+      "generated_at": "2026-08-26T15:01:21.518091+00:00",
       "available": true,
       "status": "active",
       "active_targets": [
@@ -1610,10 +1610,11 @@
       "errors": {
         "CME_WTI_SETTLEMENT": "CME WTI settlements unavailable: 2026-08-10: https://www.cmegroup.com/CmeWS/mvc/Settlements/Futures/Settlements/425/FUT?tradeDate=08%2F10%2F2026: HTTP Error 403: Forbidden"
       },
-      "method": "Returns from faster official proxy series are spliced to the last official level. Official observations are never overwritten; every splice is short-lived, overlap-validated and provisional."
+      "method": "Returns from faster primary or explicitly labelled secondary proxy series are spliced to the last official level. Official observations are never overwritten; every splice is short-lived, overlap-validated and provisional."
     },
     "fingerprint": "normal|normal|inactive,inactive,inactive,normal,inactive|DCOILBRENTEU:2026-08-26,DEXNOUS:2026-08-26,DEXSDUS:2026-08-26,DEXUSEU:2026-08-26,DTWEXBGS:2026-08-26",
-    "disclaimer": "La vía rápida usa proxies oficiales correlacionados y no confirma por sí sola un cambio de régimen. La lectura oficial conserva prioridad.",
+    "disclaimer": "La vía rápida usa proxies primarios o secundarios expresamente identificados y validados. No confirma por sí sola un cambio de régimen; la lectura oficial conserva prioridad.",
+    "terminology_note": "Primary and secondary provisional sources are distinguished from the authoritative official lane.",
     "residual": {
       "points": 1339,
       "start": "2021-02-26",
@@ -1650,9 +1651,9 @@
   },
   "notification": {
     "notify": true,
-    "changed": true,
+    "changed": false,
     "fingerprint": "normal|inactive|inactive|inactive|normal|inactive|normal|normal|inactive,inactive,inactive,normal,inactive|DCOILBRENTEU:2026-08-26,DEXNOUS:2026-08-26,DEXSDUS:2026-08-26,DEXUSEU:2026-08-26,DTWEXBGS:2026-08-26",
-    "previous_fingerprint": "normal|inactive|inactive|inactive|normal|inactive",
+    "previous_fingerprint": "normal|inactive|inactive|inactive|normal|inactive|normal|normal|inactive,inactive,inactive,normal,inactive|DCOILBRENTEU:2026-08-26,DEXNOUS:2026-08-26,DEXSDUS:2026-08-26,DEXUSEU:2026-08-26,DTWEXBGS:2026-08-26",
     "official_material": false,
     "provisional_review": false,
     "channel": "github_issue_notification"

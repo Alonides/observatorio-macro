@@ -4,7 +4,7 @@
 
 El detector no identifica actualmente una configuración de crisis de deuda/dólar ni estrés material de NOK.
 
-**Actualizado en Oslo:** 2026-08-26 16:52. **Último dato oficial disponible:** 2026-08-25. **Bloque oficial más retrasado:** NKS (5 días hábiles).
+**Actualizado en Oslo:** 2026-08-26 17:01. **Último dato oficial disponible:** 2026-08-25. **Bloque oficial más retrasado:** NKS (5 días hábiles).
 
 ## Frescura oficial de los bloques
 
@@ -44,7 +44,7 @@ El detector no identifica actualmente una configuración de crisis de deuda/dól
 
 **Normal.** La vía rápida provisional no eleva el nivel de la lectura oficial.
 
-La vía rápida usa proxies oficiales correlacionados y no confirma por sí sola un cambio de régimen. La lectura oficial conserva prioridad.
+La vía rápida usa proxies primarios o secundarios expresamente identificados y validados. No confirma por sí sola un cambio de régimen; la lectura oficial conserva prioridad.
 
 | Bloque | Oficial | Provisional | Δ | Estado provisional | Datos provisionales a |
 |---|---:|---:|---:|---|---|
@@ -71,7 +71,7 @@ La vía rápida usa proxies oficiales correlacionados y no confirma por sí sola
 
 El agente es determinista y auditable. No ejecuta operaciones ni ofrece recomendaciones de inversión. Separa rechazo del dólar, escasez de dólares, estrés NOK y reversión NOK. Cada bloque oficial usa su propia fecha completa de datos; los datos ausentes no se imputan como cero.
 
-La vía rápida provisional utiliza únicamente rendimientos de proxies oficiales correlacionados, reanclados al último nivel oficial. No sobrescribe historia, caduca automáticamente y nunca sustituye la lectura oficial.
+La vía rápida provisional utiliza únicamente rendimientos de proxies primarios o secundarios expresamente identificados y validados, reanclados al último nivel oficial. No sobrescribe historia, caduca automáticamente y nunca sustituye la lectura oficial.
 
 La frescura no altera scores, pesos ni umbrales. Una señal provisional divergente solicita revisión humana; sólo la publicación oficial puede confirmarla dentro del modelo operativo.
 
