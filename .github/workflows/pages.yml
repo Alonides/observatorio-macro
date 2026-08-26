@@ -6,6 +6,7 @@ on:
       - main
     paths:
       - "index.html"
+      - "debt-nok.html"
       - "web/**"
       - "data/**"
       - ".github/workflows/pages.yml"
@@ -33,9 +34,10 @@ jobs:
       - name: Assemble public site
         run: |
           mkdir -p _site/web _site/data
-          cp index.html _site/index.html
-          cp web/app.js web/styles.css _site/web/
+          cp index.html debt-nok.html _site/
+          cp web/app.js web/styles.css web/debt-nok.js web/debt-nok.css _site/web/
           cp data/latest.json data/series.json _site/data/
+          cp -R data/debt_nok _site/data/debt_nok
           touch _site/.nojekyll
 
       - name: Configure Pages

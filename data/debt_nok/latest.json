@@ -1,0 +1,42 @@
+{
+  "schema_version": 1,
+  "model_version": "1.0.0",
+  "generated_at": null,
+  "mode": "pending",
+  "asof": null,
+  "previous_asof": null,
+  "alert": {
+    "level": "pending",
+    "rank": 0,
+    "label": "Pendiente",
+    "tone": "green",
+    "material": false
+  },
+  "headline": "El agente se activará tras la integración en main",
+  "summary": "La primera ejecución programada generará la lectura operativa, el histórico gráfico y el informe periódico.",
+  "reasons": [],
+  "current": {
+    "operational": {
+      "level": "normal",
+      "data_quality": "partial",
+      "missing_confirmations": [],
+      "blocks": {}
+    }
+  },
+  "previous": {
+    "operational": {
+      "blocks": {}
+    }
+  },
+  "score_deltas_5_sessions": {},
+  "schedule": {
+    "daily_monitor": "Martes a viernes, 07:00 UTC",
+    "weekly_report": "Lunes, 07:30 UTC",
+    "oslo_note": "08:00/08:30 en invierno y 09:00/09:30 en verano (Europa/Oslo)",
+    "delivery": "Panel web y notificación de GitHub asignada a Alonides"
+  },
+  "source_status": {
+    "sek_usd": "pending",
+    "residual_points": 0
+  }
+}
