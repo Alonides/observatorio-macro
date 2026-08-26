@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "model_version": "1.0.0",
-  "generated_at": "2026-08-26T11:17:40.549254+00:00",
+  "model_version": "1.0.1",
+  "generated_at": "2026-08-26T12:06:46.713030+00:00",
   "mode": "weekly",
   "asof": "2026-08-21",
   "previous_asof": "2026-08-18",
@@ -18,7 +18,7 @@
     "Ningún bloque operativo supera sus umbrales de vigilancia"
   ],
   "current": {
-    "model_version": "1.0.0",
+    "model_version": "1.0.1",
     "asof": "2026-08-21",
     "status": "ok",
     "urp": {
@@ -352,10 +352,10 @@
       ],
       "notification_required": false
     },
-    "method_note_v1": "The operational layer does not alter the validated v0.4.1 scores. It maps them to normal/watch/alert/critical states using declared rules."
+    "method_note_v1": "The operational layer does not alter the validated v0.4.1 scores. It maps them to normal/watch/alert/critical states using declared rules. A confirmed NRS is a material regime-change alert, not a critical loss signal."
   },
   "previous": {
-    "model_version": "1.0.0",
+    "model_version": "1.0.1",
     "asof": "2026-08-18",
     "status": "ok",
     "urp": {
@@ -689,7 +689,7 @@
       ],
       "notification_required": false
     },
-    "method_note_v1": "The operational layer does not alter the validated v0.4.1 scores. It maps them to normal/watch/alert/critical states using declared rules."
+    "method_note_v1": "The operational layer does not alter the validated v0.4.1 scores. It maps them to normal/watch/alert/critical states using declared rules. A confirmed NRS is a material regime-change alert, not a critical loss signal."
   },
   "score_deltas_5_sessions": {
     "URP": 0.0,
