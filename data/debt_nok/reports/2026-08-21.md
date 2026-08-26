@@ -21,7 +21,7 @@ El detector no identifica actualmente una configuración de crisis de deuda/dól
 - VIX: **15.13**.
 - EUR/NOK, cambio 20 sesiones: **-0.39 %**.
 - Debilidad NOK frente a SEK, 20 sesiones: **-0.51 %**.
-- Residual NOK: **—**.
+- Residual NOK: **-0.33σ**.
 - Norway–Bund, cambio 20 sesiones: **-13.2 pb**.
 
 ## Lectura operativa

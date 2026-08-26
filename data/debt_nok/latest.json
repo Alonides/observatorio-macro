@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "model_version": "1.0.0",
-  "generated_at": "2026-08-26T11:12:27.438827+00:00",
+  "generated_at": "2026-08-26T11:17:40.549254+00:00",
   "mode": "weekly",
   "asof": "2026-08-21",
   "previous_asof": "2026-08-18",
@@ -86,17 +86,17 @@
       "asof": "2026-08-21",
       "score": 0.0,
       "state": "normal",
-      "coverage": 0.75,
+      "coverage": 1.0,
       "values": {
         "eurnok_change_20_pct": -0.3862604652350221,
         "noksek_change_20_pct": -0.5086115981559391,
-        "nok_residual_z20": null,
+        "nok_residual_z20": -0.33021538969232866,
         "norway_bund_change_20_bp": -13.200000000000012,
         "nibor_ois_change_20_bp": null
       },
       "component_scores": {
         "eurnok": 0.0,
-        "residual": null,
+        "residual": 0.0,
         "noksek": 0.0,
         "funding": 0.0
       },
@@ -104,17 +104,17 @@
     },
     "nrs": {
       "asof": "2026-08-21",
-      "score": 80.0,
+      "score": 66.67,
       "state": "inactive",
-      "prior_nks_max_60": 41.01,
-      "prior_nks_peak_date": "2026-07-02",
+      "prior_nks_max_60": 33.48,
+      "prior_nks_peak_date": "2026-06-30",
       "gates": {
         "prior_nks_stress": false,
         "eurnok_recovery": true,
         "noksek_recovery": true,
         "norway_bund_normalised": true,
         "brent_not_falling_further": true,
-        "negative_nok_residual": null
+        "negative_nok_residual": false
       },
       "values": {
         "eurnok_recovery_from_60d_peak_pct": -4.2653014303275505,
@@ -124,10 +124,10 @@
         "norway_bund_baseline_pct_points": 1.3385,
         "norway_bund_current_pct_points": 1.1339999999999995,
         "brent_change_since_eurnok_peak_pct": 33.105182288029056,
-        "nok_residual_z20": null
+        "nok_residual_z20": -0.33021538969232866
       },
       "note": "USD/NOK is deliberately excluded from the reversal gate.",
-      "gate_score": 80.0,
+      "gate_score": 66.67,
       "operational_active": false,
       "operational_score": 0.0,
       "score_semantics": "gate_score is descriptive gate completion; operational_score is zero unless the full NRS confirmation state is reached."
@@ -137,7 +137,7 @@
       "relative_us": true,
       "nok_core": true,
       "norway_funding": true,
-      "nok_residual": false,
+      "nok_residual": true,
       "nibor_ois": false
     },
     "parameters": {
@@ -272,12 +272,11 @@
     "nok_residual": {
       "model_version": "0.4.1",
       "series_id": "NOK_RESIDUAL_Z20",
+      "source": "supplied",
       "coverage": {
-        "common_return_sessions": 333,
-        "daily_residual_sessions": 0,
-        "z_scored_sessions": 0,
-        "start": null,
-        "end": null
+        "z_scored_sessions": 1334,
+        "start": "2021-02-26",
+        "end": "2026-08-18"
       },
       "parameters": {
         "dependent": "daily log return EUR/NOK",
@@ -296,9 +295,7 @@
         "z_history_max_sessions": 756,
         "z_clip": 20.0
       },
-      "no_lookahead": true,
-      "method_note": "Positive z means NOK weakened more than the walk-forward model expected; negative z means it strengthened more than expected. The signal does not establish or disprove a causal macro hypothesis.",
-      "source": "calculated"
+      "no_lookahead": null
     },
     "method_note_v041": "URP requires a fresh risk-off onset. NKS and NRS use a walk-forward Huber residual of EUR/NOK against EUR/SEK, Brent and VIX. Every score at t is fitted and standardised only with information available before t. NRS gate completion is reported separately from its operational alert.",
     "core_model_version": "0.4.1",
@@ -338,7 +335,7 @@
           "label": "Estrés NOK",
           "score": 0.0,
           "state": "normal",
-          "coverage": 0.75
+          "coverage": 1.0
         },
         "NRS": {
           "key": "NRS",
@@ -348,10 +345,8 @@
           "coverage": 1.0
         }
       },
-      "data_quality": "partial",
-      "missing_confirmations": [
-        "nok_residual"
-      ],
+      "data_quality": "complete",
+      "missing_confirmations": [],
       "optional_confirmations_missing": [
         "nibor_ois"
       ],
@@ -428,17 +423,17 @@
       "asof": "2026-08-18",
       "score": 0.0,
       "state": "normal",
-      "coverage": 0.75,
+      "coverage": 1.0,
       "values": {
         "eurnok_change_20_pct": -0.824415272077661,
         "noksek_change_20_pct": -0.6398816036591093,
-        "nok_residual_z20": null,
+        "nok_residual_z20": -0.33021538969232866,
         "norway_bund_change_20_bp": -8.19999999999994,
         "nibor_ois_change_20_bp": null
       },
       "component_scores": {
         "eurnok": 0.0,
-        "residual": null,
+        "residual": 0.0,
         "noksek": 0.0,
         "funding": 0.0
       },
@@ -446,17 +441,17 @@
     },
     "nrs": {
       "asof": "2026-08-18",
-      "score": 80.0,
+      "score": 66.67,
       "state": "inactive",
-      "prior_nks_max_60": 41.01,
-      "prior_nks_peak_date": "2026-07-02",
+      "prior_nks_max_60": 33.48,
+      "prior_nks_peak_date": "2026-06-30",
       "gates": {
         "prior_nks_stress": false,
         "eurnok_recovery": true,
         "noksek_recovery": true,
         "norway_bund_normalised": true,
         "brent_not_falling_further": true,
-        "negative_nok_residual": null
+        "negative_nok_residual": false
       },
       "values": {
         "eurnok_recovery_from_60d_peak_pct": -3.943114848797047,
@@ -466,10 +461,10 @@
         "norway_bund_baseline_pct_points": 1.3394999999999997,
         "norway_bund_current_pct_points": 1.1870000000000003,
         "brent_change_since_eurnok_peak_pct": 33.105182288029056,
-        "nok_residual_z20": null
+        "nok_residual_z20": -0.33021538969232866
       },
       "note": "USD/NOK is deliberately excluded from the reversal gate.",
-      "gate_score": 80.0,
+      "gate_score": 66.67,
       "operational_active": false,
       "operational_score": 0.0,
       "score_semantics": "gate_score is descriptive gate completion; operational_score is zero unless the full NRS confirmation state is reached."
@@ -479,7 +474,7 @@
       "relative_us": true,
       "nok_core": true,
       "norway_funding": true,
-      "nok_residual": false,
+      "nok_residual": true,
       "nibor_ois": false
     },
     "parameters": {
@@ -614,12 +609,11 @@
     "nok_residual": {
       "model_version": "0.4.1",
       "series_id": "NOK_RESIDUAL_Z20",
+      "source": "supplied",
       "coverage": {
-        "common_return_sessions": 333,
-        "daily_residual_sessions": 0,
-        "z_scored_sessions": 0,
-        "start": null,
-        "end": null
+        "z_scored_sessions": 1334,
+        "start": "2021-02-26",
+        "end": "2026-08-18"
       },
       "parameters": {
         "dependent": "daily log return EUR/NOK",
@@ -638,9 +632,7 @@
         "z_history_max_sessions": 756,
         "z_clip": 20.0
       },
-      "no_lookahead": true,
-      "method_note": "Positive z means NOK weakened more than the walk-forward model expected; negative z means it strengthened more than expected. The signal does not establish or disprove a causal macro hypothesis.",
-      "source": "calculated"
+      "no_lookahead": null
     },
     "method_note_v041": "URP requires a fresh risk-off onset. NKS and NRS use a walk-forward Huber residual of EUR/NOK against EUR/SEK, Brent and VIX. Every score at t is fitted and standardised only with information available before t. NRS gate completion is reported separately from its operational alert.",
     "core_model_version": "0.4.1",
@@ -680,7 +672,7 @@
           "label": "Estrés NOK",
           "score": 0.0,
           "state": "normal",
-          "coverage": 0.75
+          "coverage": 1.0
         },
         "NRS": {
           "key": "NRS",
@@ -690,10 +682,8 @@
           "coverage": 1.0
         }
       },
-      "data_quality": "partial",
-      "missing_confirmations": [
-        "nok_residual"
-      ],
+      "data_quality": "complete",
+      "missing_confirmations": [],
       "optional_confirmations_missing": [
         "nibor_ois"
       ],
@@ -717,17 +707,24 @@
   "delivery_note": "El informe periódico se publica en el panel. GitHub crea o comenta un hilo asignado a Alonides, que normalmente genera un aviso por correo.",
   "notification_title": "Debt/NOK · Normal · 2026-08-21",
   "source_status": {
-    "sek_usd": "ok",
-    "sek_error": null,
-    "residual_points": 0,
-    "residual_start": null,
-    "residual_end": null
+    "factor_start": "2018-01-01",
+    "factor_observations": {
+      "DEXNOUS": 2158,
+      "DEXUSEU": 2158,
+      "DEXSDUS": 2158,
+      "DCOILBRENTEU": 2186,
+      "VIXCLS": 2205
+    },
+    "factor_errors": {},
+    "residual_points": 1334,
+    "residual_start": "2021-02-26",
+    "residual_end": "2026-08-18"
   },
   "notification": {
     "notify": true,
-    "changed": true,
+    "changed": false,
     "fingerprint": "normal|inactive|inactive|inactive|normal|inactive",
-    "previous_fingerprint": null,
+    "previous_fingerprint": "normal|inactive|inactive|inactive|normal|inactive",
     "channel": "github_issue_notification"
   }
 }
