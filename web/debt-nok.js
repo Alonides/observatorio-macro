@@ -39,7 +39,7 @@ function renderHealth(data) {
   const freshness = nested(data, ['freshness', 'quality']) || 'unavailable';
   const healthy = coverage === 'complete' && ['fresh', 'delayed'].includes(freshness);
   health.className = `health status-${healthy ? 'ok' : 'operational_partial'}`;
-  health.innerHTML = `<strong>Modelo ${escapeHtml(data.model_version || '—')}</strong><span>Informe ${escapeHtml(data.report_date || 'sin fecha')} · último dato ${escapeHtml(nested(data, ['freshness', 'latest_input_date']) || data.asof || '—')} · ${escapeHtml(generated)}</span>`;
+  health.innerHTML = `<strong>Modelo ${escapeHtml(data.model_version || '—')}</strong><span>Informe ${escapeHtml(data.report_date || 'sin fecha')} · último oficial ${escapeHtml(nested(data, ['freshness', 'latest_input_date']) || data.asof || '—')} · ${escapeHtml(generated)}</span>`;
 }
 
 function renderAlert(data) {
@@ -51,7 +51,7 @@ function renderAlert(data) {
   const scores = Object.values(blocks).map(block => Number(block.score)).filter(Number.isFinite);
   document.querySelector('#alert-score').textContent = scores.length ? number(Math.max(...scores), 0) : '—';
   document.querySelector('#headline').textContent = data.headline || 'Sin informe disponible';
-  document.querySelector('#summary').textContent = data.summary || 'El agente todavía no ha generado una lectura.';
+  document.querySelector('#summary').textContent = data.summary || 'El agente todavía no ha generado una lectura oficial.';
   document.querySelector('#reasons').innerHTML = (data.reasons || []).map(reason => `<span>${escapeHtml(reason)}</span>`).join('');
 }
 
@@ -88,6 +88,45 @@ function renderBlocks(data) {
       <p>Datos ${escapeHtml(block.asof || '—')} · ${escapeHtml(lag)} · ${escapeHtml(block.freshness_label || 'No disponible')}</p>
     </article>`;
   }).join('');
+}
+
+function renderFastLane(data) {
+  const section = document.querySelector('#fast-lane-section');
+  const fast = data.fast_lane || {};
+  const status = fast.status || 'unavailable';
+  section.className = `card fast-lane-card ${escapeHtml(status)}${fast.review_required ? ' review-required' : ''}`;
+  document.querySelector('#fast-lane-title').textContent = fast.label || 'Vía rápida no disponible';
+  document.querySelector('#fast-lane-label').textContent = fast.review_required ? 'Revisión humana' : 'Provisional';
+  document.querySelector('#fast-lane-message').textContent = fast.message || 'No hay una extensión provisional validada más reciente que la lectura oficial.';
+  document.querySelector('#fast-lane-disclaimer').textContent = fast.disclaimer || 'La lectura oficial conserva prioridad.';
+
+  const comparisons = fast.comparisons || {};
+  document.querySelector('#fast-lane-comparison').innerHTML = ['URP', 'URR', 'DSS', 'NKS', 'NRS'].map(key => {
+    const item = comparisons[key] || {};
+    const delta = Number(item.delta);
+    const deltaClass = Number.isFinite(delta) && delta > 0.01 ? 'up' : Number.isFinite(delta) && delta < -0.01 ? 'down' : '';
+    return `<article class="fast-comparison ${deltaClass}">
+      <div class="block-code">${escapeHtml(key)}</div>
+      <div class="fast-score-pair"><span>${number(item.official_score, 0)}</span><b>→</b><strong>${number(item.provisional_score, 0)}</strong></div>
+      <p>${escapeHtml(item.provisional_state || 'sin extensión')} · Δ ${Number.isFinite(delta) && delta >= 0 ? '+' : ''}${number(delta)}</p>
+      <p>Datos provisionales ${escapeHtml(item.provisional_asof || '—')}</p>
+    </article>`;
+  }).join('');
+
+  const bridge = fast.bridge || {};
+  const targets = bridge.targets || {};
+  const visible = Object.entries(targets).filter(([, item]) => item && !['not_needed', 'unavailable'].includes(item.status));
+  const rows = visible.map(([key, item]) => {
+    const validation = item.validation || {};
+    return `<tr><td>${escapeHtml(key)}</td><td>${escapeHtml(item.status || '—')}</td><td>${escapeHtml(item.official_last || '—')}</td><td>${escapeHtml(item.proxy_last || '—')}</td><td>${escapeHtml(item.bridge_end || '—')}</td><td>${number(validation.correlation, 3)}</td><td>${number(validation.mae_pct_points, 3)} pp</td></tr>`;
+  }).join('');
+  const errors = Object.entries(bridge.errors || {}).map(([key, value]) => `<li><strong>${escapeHtml(key)}:</strong> ${escapeHtml(value)}</li>`).join('');
+  const active = (bridge.active_targets || []).map(escapeHtml).join(', ') || 'ninguno';
+  document.querySelector('#fast-bridge-content').innerHTML = `
+    <p>Estado del puente: <strong>${escapeHtml(bridge.status || 'no disponible')}</strong>. Objetivos activos: ${active}.</p>
+    ${rows ? `<table><thead><tr><th>Serie</th><th>Estado</th><th>Oficial</th><th>Proxy</th><th>Extensión</th><th>Corr.</th><th>Error</th></tr></thead><tbody>${rows}</tbody></table>` : '<p>No hay puentes activos o rechazados que mostrar.</p>'}
+    ${errors ? `<p>Fuentes rápidas no disponibles:</p><ul>${errors}</ul>` : ''}
+    <p>${escapeHtml(bridge.method || 'Los proxies nunca sustituyen la historia oficial.')}</p>`;
 }
 
 function renderKeyValues(data) {
@@ -130,18 +169,21 @@ function renderReport(data) {
   const reasons = (data.reasons || []).map(reason => `<li>${escapeHtml(reason)}</li>`).join('');
   const freshness = data.freshness || {};
   document.querySelector('#report-summary').innerHTML = `
-    <p><strong>${escapeHtml(data.headline || '')}</strong></p>
+    <p><strong>Lectura oficial: ${escapeHtml(data.headline || '')}</strong></p>
     <p>${escapeHtml(data.summary || '')}</p>
-    <p>Último dato de mercado: <strong>${escapeHtml(freshness.latest_input_date || data.asof || '—')}</strong>. Bloque más retrasado: <strong>${escapeHtml(freshness.oldest_block || '—')}</strong> (${escapeHtml(lagText(freshness.maximum_business_day_lag))}).</p>
+    <p>Último dato oficial: <strong>${escapeHtml(freshness.latest_input_date || data.asof || '—')}</strong>. Bloque oficial más retrasado: <strong>${escapeHtml(freshness.oldest_block || '—')}</strong> (${escapeHtml(lagText(freshness.maximum_business_day_lag))}).</p>
     ${reasons ? `<ul>${reasons}</ul>` : ''}`;
   const coverage = nested(data, ['current', 'operational', 'missing_confirmations']) || [];
-  const residual = data.source_status || {};
+  const sources = data.source_status || {};
+  const fast = data.fast_lane || {};
   document.querySelector('#method-content').innerHTML = `
-    <p>Modelo operativo ${escapeHtml(data.model_version || '—')} sobre núcleo v0.4.1. Las reglas son deterministas, versionadas y no alteran los scores validados.</p>
+    <p>Modelo operativo ${escapeHtml(data.model_version || '—')} sobre núcleo v0.4.1. La lectura oficial es determinista, versionada y autoritativa.</p>
     ${freshnessTable(data)}
-    <p>Residual disponible: ${escapeHtml(String(residual.residual_points ?? '—'))} observaciones, ${escapeHtml(residual.residual_start || '—')} → ${escapeHtml(residual.residual_end || '—')}.</p>
-    <p>Confirmaciones ausentes: ${coverage.length ? coverage.map(escapeHtml).join(', ') : 'ninguna en la lectura actual'}.</p>
-    <p>Cada bloque conserva su última lectura completa y declara su fecha. La ausencia de señal no demuestra que no exista riesgo estructural.</p>`;
+    <p>Residual oficial: ${escapeHtml(String(sources.official_residual_points ?? '—'))} observaciones, ${escapeHtml(sources.official_residual_start || '—')} → ${escapeHtml(sources.official_residual_end || '—')}.</p>
+    <p>Residual provisional: ${escapeHtml(String(sources.fast_residual_points ?? '—'))} observaciones, ${escapeHtml(sources.fast_residual_start || '—')} → ${escapeHtml(sources.fast_residual_end || '—')}.</p>
+    <p>Confirmaciones oficiales ausentes: ${coverage.length ? coverage.map(escapeHtml).join(', ') : 'ninguna en la lectura actual'}.</p>
+    <p>La vía rápida está marcada como <strong>${escapeHtml(fast.status || 'no disponible')}</strong>; utiliza proxies oficiales de vida corta, no sobrescribe observaciones y no confirma por sí sola un cambio de régimen.</p>
+    <p>Cada bloque oficial conserva su última lectura completa y declara su fecha. La ausencia de señal no demuestra que no exista riesgo estructural.</p>`;
 }
 
 function cleanSeries(id) {
@@ -210,6 +252,7 @@ function renderAll() {
   renderAlert(data);
   renderSchedule(data);
   renderBlocks(data);
+  renderFastLane(data);
   renderKeyValues(data);
   renderDeltas(data);
   renderReport(data);

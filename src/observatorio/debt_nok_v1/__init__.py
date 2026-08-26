@@ -1,4 +1,4 @@
-"""Operational Debt/NOK monitor v1.0.2."""
+"""Operational Debt/NOK monitor v1.0.3."""
 
 from .monitor import MODEL_VERSION, evaluate_operational
 

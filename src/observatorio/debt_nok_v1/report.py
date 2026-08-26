@@ -95,7 +95,7 @@ def build_report(
         "material": current["operational"]["notification_required"],
     }
     report = {
-        "schema_version": 2,
+        "schema_version": 3,
         "model_version": MODEL_VERSION,
         "generated_at": generated_at,
         "generated_at_oslo": local.isoformat(),
@@ -124,6 +124,71 @@ def build_report(
     return report
 
 
+def _fast_lane_markdown(report: dict) -> list[str]:
+    fast = report.get("fast_lane")
+    if not isinstance(fast, dict):
+        return []
+
+    lines = [
+        "",
+        "## Lectura rápida provisional",
+        "",
+        f"**{fast.get('label') or 'Provisional'}.** {fast.get('message') or 'Sin extensión disponible.'}",
+        "",
+        fast.get("disclaimer") or "La lectura oficial conserva prioridad.",
+    ]
+    if fast.get("review_required"):
+        lines.extend([
+            "",
+            "**Acción:** revisión humana requerida antes de interpretar esta divergencia como cambio de régimen.",
+        ])
+
+    comparisons = fast.get("comparisons") if isinstance(fast.get("comparisons"), dict) else {}
+    if comparisons:
+        lines.extend([
+            "",
+            "| Bloque | Oficial | Provisional | Δ | Estado provisional | Datos provisionales a |",
+            "|---|---:|---:|---:|---|---|",
+        ])
+        for key in ("URP", "URR", "DSS", "NKS", "NRS"):
+            item = comparisons.get(key, {})
+            lines.append(
+                f"| {key} | {_fmt(item.get('official_score'))} | "
+                f"{_fmt(item.get('provisional_score'))} | {_fmt(item.get('delta'))} | "
+                f"{item.get('provisional_state') or '—'} | {item.get('provisional_asof') or '—'} |"
+            )
+
+    bridge = fast.get("bridge") if isinstance(fast.get("bridge"), dict) else {}
+    targets = bridge.get("targets") if isinstance(bridge.get("targets"), dict) else {}
+    visible = [
+        (key, value) for key, value in targets.items()
+        if isinstance(value, dict) and value.get("status") not in {"not_needed", "unavailable"}
+    ]
+    if visible:
+        lines.extend([
+            "",
+            "### Puentes de datos",
+            "",
+            "| Serie | Estado | Oficial hasta | Proxy hasta | Extensión hasta | Correlación | Error medio |",
+            "|---|---|---|---|---|---:|---:|",
+        ])
+        for key, item in visible:
+            validation = item.get("validation") if isinstance(item.get("validation"), dict) else {}
+            lines.append(
+                f"| {key} | {item.get('status') or '—'} | {item.get('official_last') or '—'} | "
+                f"{item.get('proxy_last') or '—'} | {item.get('bridge_end') or '—'} | "
+                f"{_fmt(validation.get('correlation'), 3)} | "
+                f"{_fmt(validation.get('mae_pct_points'), 3, ' pp')} |"
+            )
+
+    errors = bridge.get("errors") if isinstance(bridge.get("errors"), dict) else {}
+    if errors:
+        lines.extend(["", "**Fuentes rápidas no disponibles:**"])
+        for key, error in sorted(errors.items()):
+            lines.append(f"- {key}: {error}")
+    return lines
+
+
 def render_markdown(report: dict) -> str:
     current = report["current"]
     previous = report["previous"]
@@ -139,14 +204,14 @@ def render_markdown(report: dict) -> str:
     lines = [
         f"# Informe Debt/NOK · {report['report_date']}",
         "",
-        f"**Estado operativo: {level}.** {report['headline']}",
+        f"**Estado oficial: {level}.** {report['headline']}",
         "",
         report["summary"],
         "",
-        f"**Actualizado en Oslo:** {generated_display}. **Último dato de mercado:** {latest_input}. "
-        f"**Bloque más retrasado:** {oldest} ({_lag_text(max_lag)}).",
+        f"**Actualizado en Oslo:** {generated_display}. **Último dato oficial disponible:** {latest_input}. "
+        f"**Bloque oficial más retrasado:** {oldest} ({_lag_text(max_lag)}).",
         "",
-        "## Frescura de los bloques",
+        "## Frescura oficial de los bloques",
         "",
         "| Bloque | Datos a | Retraso aproximado | Estado |",
         "|---|---|---:|---|",
@@ -160,7 +225,7 @@ def render_markdown(report: dict) -> str:
 
     lines.extend([
         "",
-        "## Panel de bloques",
+        "## Panel oficial de bloques",
         "",
         "| Bloque | Actual | Estado | Datos a | Hace 5 sesiones | Δ |",
         "|---|---:|---|---|---:|---:|",
@@ -176,7 +241,7 @@ def render_markdown(report: dict) -> str:
 
     lines.extend([
         "",
-        "## Variables discriminantes",
+        "## Variables discriminantes oficiales",
         "",
         f"- Treasury 30 años, cambio 10 sesiones: **{_fmt(_value(current, ('urp', 'values', 'ust30_change_10_bp')), 1, ' pb')}**.",
         f"- Dólar amplio, caída 10 sesiones: **{_fmt(_value(current, ('urp', 'values', 'broad_usd_drop_10_pct')), 2, ' %')}**.",
@@ -186,21 +251,26 @@ def render_markdown(report: dict) -> str:
         f"- Residual NOK: **{_fmt(_value(current, ('nks', 'values', 'nok_residual_z20')), 2, 'σ')}**.",
         f"- Norway–Bund, cambio 20 sesiones: **{_fmt(_value(current, ('nks', 'values', 'norway_bund_change_20_bp')), 1, ' pb')}**.",
         "",
-        "## Lectura operativa",
+        "## Lectura operativa oficial",
         "",
     ])
     for reason in report["reasons"]:
         lines.append(f"- {reason}.")
+
+    lines.extend(_fast_lane_markdown(report))
     lines.extend([
         "",
         "## Método y límites",
         "",
         "El agente es determinista y auditable. No ejecuta operaciones ni ofrece recomendaciones de inversión. "
-        "Separa rechazo del dólar, escasez de dólares, estrés NOK y reversión NOK. Cada bloque usa su propia "
-        "fecha completa de datos; los datos ausentes no se imputan como cero.",
+        "Separa rechazo del dólar, escasez de dólares, estrés NOK y reversión NOK. Cada bloque oficial usa su "
+        "propia fecha completa de datos; los datos ausentes no se imputan como cero.",
         "",
-        "La frescura no altera scores, pesos ni umbrales. Un bloque retrasado conserva su última lectura válida y "
-        "muestra expresamente la fecha y el desfase, en vez de retrasar silenciosamente todo el informe.",
+        "La vía rápida provisional utiliza únicamente rendimientos de proxies oficiales correlacionados, reanclados "
+        "al último nivel oficial. No sobrescribe historia, caduca automáticamente y nunca sustituye la lectura oficial.",
+        "",
+        "La frescura no altera scores, pesos ni umbrales. Una señal provisional divergente solicita revisión humana; "
+        "sólo la publicación oficial puede confirmarla dentro del modelo operativo.",
         "",
         f"Cadencia: {SCHEDULE['weekly_report']} para el informe completo; {SCHEDULE['daily_monitor']} para comprobaciones intermedias y alertas materiales.",
     ])

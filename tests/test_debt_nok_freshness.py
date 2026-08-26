@@ -47,7 +47,7 @@ class DebtNokFreshnessTests(unittest.TestCase):
         self.assertEqual(report["report_date"], "2026-08-27")
         self.assertEqual(report["asof"], "2026-04-09")
         self.assertIn("# Informe Debt/NOK · 2026-08-27", report["markdown"])
-        self.assertIn("Frescura de los bloques", report["markdown"])
+        self.assertIn("Frescura oficial de los bloques", report["markdown"])
         self.assertIn("Datos a", report["markdown"])
         self.assertTrue(report["notification_title"].endswith("2026-08-27"))
 
