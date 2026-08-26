@@ -1,10 +1,101 @@
 {
-  "schema_version": 1,
-  "model_version": "1.0.1",
-  "generated_at": "2026-08-26T12:06:46.713030+00:00",
+  "schema_version": 2,
+  "model_version": "1.0.2",
+  "generated_at": "2026-08-26T12:25:02.304264+00:00",
+  "generated_at_oslo": "2026-08-26T14:25:02.304264+02:00",
+  "report_date": "2026-08-26",
   "mode": "weekly",
   "asof": "2026-08-21",
-  "previous_asof": "2026-08-18",
+  "block_asof": {
+    "URP": "2026-08-21",
+    "URR": "2026-08-21",
+    "DSS": "2026-08-21",
+    "NKS": "2026-08-18",
+    "NRS": "2026-08-18"
+  },
+  "previous_asof": "2026-08-14",
+  "previous_block_asof": {
+    "URP": "2026-08-14",
+    "URR": "2026-08-14",
+    "DSS": "2026-08-14",
+    "NKS": "2026-08-11",
+    "NRS": "2026-08-11"
+  },
+  "freshness": {
+    "quality": "stale",
+    "label": "Obsoleto",
+    "latest_input_date": "2026-08-25",
+    "latest_block_date": "2026-08-21",
+    "oldest_block": "NKS",
+    "oldest_block_date": "2026-08-18",
+    "maximum_business_day_lag": 5,
+    "unavailable_blocks": [],
+    "blocks": {
+      "URP": {
+        "asof": "2026-08-21",
+        "business_day_lag": 2,
+        "status": "delayed",
+        "label": "Retrasado",
+        "inputs": {
+          "UST30": "2026-08-25",
+          "BROAD_USD": "2026-08-21",
+          "VIX": "2026-08-25",
+          "US_BUND": "2026-08-25"
+        }
+      },
+      "URR": {
+        "asof": "2026-08-21",
+        "business_day_lag": 2,
+        "status": "delayed",
+        "label": "Retrasado",
+        "inputs": {
+          "UST30": "2026-08-25",
+          "BROAD_USD": "2026-08-21",
+          "VIX": "2026-08-25",
+          "US_BUND": "2026-08-25",
+          "GOLD": "2026-08-25",
+          "REAL_10Y": "2026-08-25"
+        }
+      },
+      "DSS": {
+        "asof": "2026-08-21",
+        "business_day_lag": 2,
+        "status": "delayed",
+        "label": "Retrasado",
+        "inputs": {
+          "UST30": "2026-08-25",
+          "BROAD_USD": "2026-08-21",
+          "VIX": "2026-08-25"
+        }
+      },
+      "NKS": {
+        "asof": "2026-08-18",
+        "business_day_lag": 5,
+        "status": "stale",
+        "label": "Obsoleto",
+        "inputs": {
+          "EUR_NOK": "2026-08-21",
+          "NOK_SEK": "2026-08-21",
+          "NOK_RESIDUAL": "2026-08-18",
+          "NORWAY_BUND": "2026-08-25"
+        }
+      },
+      "NRS": {
+        "asof": "2026-08-18",
+        "business_day_lag": 5,
+        "status": "stale",
+        "label": "Obsoleto",
+        "inputs": {
+          "EUR_NOK": "2026-08-21",
+          "NOK_SEK": "2026-08-21",
+          "NOK_RESIDUAL": "2026-08-18",
+          "NORWAY_BUND": "2026-08-25",
+          "BRENT": "2026-08-18"
+        }
+      }
+    },
+    "lag_definition": "Días hábiles aproximados entre la fecha del bloque y el dato de mercado más reciente."
+  },
   "alert": {
     "level": "normal",
     "rank": 0,
@@ -18,7 +109,7 @@
     "Ningún bloque operativo supera sus umbrales de vigilancia"
   ],
   "current": {
-    "model_version": "1.0.1",
+    "model_version": "1.0.2",
     "asof": "2026-08-21",
     "status": "ok",
     "urp": {
@@ -67,7 +158,8 @@
         "broad_usd_drop_60_pct": 0.939816030655416,
         "gold_change_20_pct": 13.08291274356157,
         "real_yield_change_20_bp": -3.000000000000025
-      }
+      },
+      "asof": "2026-08-21"
     },
     "dss": {
       "asof": "2026-08-21",
@@ -80,343 +172,6 @@
         "broad_usd_rise_20_pct": -2.1934297347786624,
         "vix": 15.13,
         "ust30_change_10_bp": 7.999999999999918
-      }
-    },
-    "nks": {
-      "asof": "2026-08-21",
-      "score": 0.0,
-      "state": "normal",
-      "coverage": 1.0,
-      "values": {
-        "eurnok_change_20_pct": -0.3862604652350221,
-        "noksek_change_20_pct": -0.5086115981559391,
-        "nok_residual_z20": -0.33021538969232866,
-        "norway_bund_change_20_bp": -13.200000000000012,
-        "nibor_ois_change_20_bp": null
-      },
-      "component_scores": {
-        "eurnok": 0.0,
-        "residual": 0.0,
-        "noksek": 0.0,
-        "funding": 0.0
-      },
-      "note": "Brent and VIX are not added again when a residual series is supplied; doing so would double count them."
-    },
-    "nrs": {
-      "asof": "2026-08-21",
-      "score": 66.67,
-      "state": "inactive",
-      "prior_nks_max_60": 33.48,
-      "prior_nks_peak_date": "2026-06-30",
-      "gates": {
-        "prior_nks_stress": false,
-        "eurnok_recovery": true,
-        "noksek_recovery": true,
-        "norway_bund_normalised": true,
-        "brent_not_falling_further": true,
-        "negative_nok_residual": false
-      },
-      "values": {
-        "eurnok_recovery_from_60d_peak_pct": -4.2653014303275505,
-        "eurnok_peak_date": "2026-06-29",
-        "noksek_recovery_from_60d_peak_pct": -3.849102019313,
-        "noksek_peak_date": "2026-06-29",
-        "norway_bund_baseline_pct_points": 1.3385,
-        "norway_bund_current_pct_points": 1.1339999999999995,
-        "brent_change_since_eurnok_peak_pct": 33.105182288029056,
-        "nok_residual_z20": -0.33021538969232866
-      },
-      "note": "USD/NOK is deliberately excluded from the reversal gate.",
-      "gate_score": 66.67,
-      "operational_active": false,
-      "operational_score": 0.0,
-      "score_semantics": "gate_score is descriptive gate completion; operational_score is zero unless the full NRS confirmation state is reached."
-    },
-    "data_coverage": {
-      "urp_core": true,
-      "relative_us": true,
-      "nok_core": true,
-      "norway_funding": true,
-      "nok_residual": true,
-      "nibor_ois": false
-    },
-    "parameters": {
-      "windows": {
-        "pulse": 10,
-        "confirm": 20,
-        "structural": 60
-      },
-      "urp": {
-        "yield_bp": [
-          20.0,
-          35.0,
-          50.0
-        ],
-        "usd_drop_pct": [
-          1.0,
-          2.0,
-          4.0
-        ],
-        "spx_drop_pct": [
-          3.0,
-          7.0,
-          12.0
-        ],
-        "vix_level": [
-          25.0,
-          40.0,
-          60.0
-        ],
-        "us_bund_widening_bp": [
-          10.0,
-          25.0,
-          50.0
-        ],
-        "weights": {
-          "yield": 0.35,
-          "usd": 0.3,
-          "risk": 0.2,
-          "relative": 0.15
-        },
-        "unconfirmed_cap": 59.0,
-        "vix_onset_points": 5.0,
-        "vix_onset_pct": 20.0
-      },
-      "urr": {
-        "pulse_min": 50.0,
-        "pulse_days_last_3": 2,
-        "discrimination_days_last_10": 5,
-        "regime_days_last_20": 10,
-        "usd_drop_20_pct": 4.0,
-        "usd_drop_60_pct": 7.0,
-        "gold_rise_20_pct": 5.0,
-        "real_yield_rise_20_bp": 10.0
-      },
-      "dss": {
-        "usd_rise_10_pct": [
-          2.0,
-          4.0,
-          8.0
-        ],
-        "usd_rise_20_pct": [
-          4.0,
-          6.0,
-          10.0
-        ],
-        "vix_level": [
-          25.0,
-          40.0,
-          60.0
-        ]
-      },
-      "nks": {
-        "eurnok_rise_20_pct": [
-          3.0,
-          6.0,
-          10.0
-        ],
-        "noksek_rise_20_pct": [
-          1.5,
-          3.0,
-          6.0
-        ],
-        "residual_z20": [
-          1.5,
-          2.5,
-          3.5
-        ],
-        "no_bund_widening_20_bp": [
-          15.0,
-          30.0,
-          60.0
-        ],
-        "nibor_ois_widening_20_bp": [
-          15.0,
-          30.0,
-          60.0
-        ],
-        "weights": {
-          "eurnok": 0.35,
-          "residual": 0.25,
-          "noksek": 0.2,
-          "funding": 0.2
-        }
-      },
-      "nrs": {
-        "prior_nks_min": 65.0,
-        "eurnok_recovery_pct": -3.0,
-        "noksek_recovery_pct": -2.0,
-        "residual_z_max": -1.0,
-        "no_bund_baseline_buffer_bp": 10.0,
-        "brent_floor_from_peak_pct": -10.0
-      },
-      "nok_residual": {
-        "dependent": "daily log return EUR/NOK",
-        "factors": [
-          "daily log return EUR/SEK",
-          "daily log return Brent",
-          "daily log return VIX"
-        ],
-        "training_min_sessions": 504,
-        "training_max_sessions": 756,
-        "refit_every_sessions": 5,
-        "huber_delta": 1.345,
-        "huber_max_iterations": 8,
-        "residual_sum_sessions": 20,
-        "z_history_min_sessions": 252,
-        "z_history_max_sessions": 756,
-        "z_clip": 20.0
-      }
-    },
-    "method_note": "URP and DSS are mutually diagnostic, not mutually exclusive scores. NRS is only confirmed when the NOK residual is available and negative.",
-    "nok_residual": {
-      "model_version": "0.4.1",
-      "series_id": "NOK_RESIDUAL_Z20",
-      "source": "supplied",
-      "coverage": {
-        "z_scored_sessions": 1334,
-        "start": "2021-02-26",
-        "end": "2026-08-18"
-      },
-      "parameters": {
-        "dependent": "daily log return EUR/NOK",
-        "factors": [
-          "daily log return EUR/SEK",
-          "daily log return Brent",
-          "daily log return VIX"
-        ],
-        "training_min_sessions": 504,
-        "training_max_sessions": 756,
-        "refit_every_sessions": 5,
-        "huber_delta": 1.345,
-        "huber_max_iterations": 8,
-        "residual_sum_sessions": 20,
-        "z_history_min_sessions": 252,
-        "z_history_max_sessions": 756,
-        "z_clip": 20.0
-      },
-      "no_lookahead": null
-    },
-    "method_note_v041": "URP requires a fresh risk-off onset. NKS and NRS use a walk-forward Huber residual of EUR/NOK against EUR/SEK, Brent and VIX. Every score at t is fitted and standardised only with information available before t. NRS gate completion is reported separately from its operational alert.",
-    "core_model_version": "0.4.1",
-    "operational": {
-      "level": "normal",
-      "rank": 0,
-      "label": "Normal",
-      "tone": "green",
-      "reasons": [
-        "Ningún bloque operativo supera sus umbrales de vigilancia"
-      ],
-      "summary": "El detector no identifica actualmente una configuración de crisis de deuda/dólar ni estrés material de NOK.",
-      "blocks": {
-        "URP": {
-          "key": "URP",
-          "label": "Rechazo USA",
-          "score": 0.0,
-          "state": "inactive",
-          "coverage": 1.0
-        },
-        "URR": {
-          "key": "URR",
-          "label": "Persistencia USA",
-          "score": 0.0,
-          "state": "inactive",
-          "coverage": 1.0
-        },
-        "DSS": {
-          "key": "DSS",
-          "label": "Escasez de dólares",
-          "score": 0.0,
-          "state": "inactive",
-          "coverage": 1.0
-        },
-        "NKS": {
-          "key": "NKS",
-          "label": "Estrés NOK",
-          "score": 0.0,
-          "state": "normal",
-          "coverage": 1.0
-        },
-        "NRS": {
-          "key": "NRS",
-          "label": "Reversión NOK",
-          "score": 0.0,
-          "state": "inactive",
-          "coverage": 1.0
-        }
-      },
-      "data_quality": "complete",
-      "missing_confirmations": [],
-      "optional_confirmations_missing": [
-        "nibor_ois"
-      ],
-      "notification_required": false
-    },
-    "method_note_v1": "The operational layer does not alter the validated v0.4.1 scores. It maps them to normal/watch/alert/critical states using declared rules. A confirmed NRS is a material regime-change alert, not a critical loss signal."
-  },
-  "previous": {
-    "model_version": "1.0.1",
-    "asof": "2026-08-18",
-    "status": "ok",
-    "urp": {
-      "asof": "2026-08-18",
-      "score": 0.0,
-      "state": "inactive",
-      "gate": false,
-      "relative_confirmed": false,
-      "coverage": 1.0,
-      "values": {
-        "ust30_change_10_bp": 10.000000000000053,
-        "broad_usd_drop_10_pct": 0.513889481152241,
-        "us10_bund10_spread_change_10_bp": -0.9999999999999787,
-        "gate": false,
-        "sp500_decline_10_pct": null,
-        "vix": 15.84,
-        "vix_change_10_points": -0.6600000000000001,
-        "vix_change_10_pct": -4.0000000000000036,
-        "vix_onset": false,
-        "method": "Severity is max(S&P 500 decline, VIX level); the gate requires an equity fall or a high and rising VIX. A high but falling VIX does not open the gate."
-      },
-      "component_scores": {
-        "yield": 16.50000000000009,
-        "usd": 16.958352878023952,
-        "risk": 20.9088,
-        "relative": 0.0
-      }
-    },
-    "urr": {
-      "state": "inactive",
-      "pulse": false,
-      "discrimination": false,
-      "rejection_regime": false,
-      "counts": {
-        "urp_ge_50_last_3": 0,
-        "urp_ge_50_last_10": 0,
-        "urp_ge_50_last_20": 0
-      },
-      "confirmations": {
-        "relative": false,
-        "usd_persistence": false,
-        "gold_up_with_real_yield_up": false
-      },
-      "values": {
-        "broad_usd_drop_20_pct": 1.3226304322765614,
-        "broad_usd_drop_60_pct": 0.32328326449916345,
-        "gold_change_20_pct": 8.012157905099437,
-        "real_yield_change_20_bp": 4.0000000000000036
-      }
-    },
-    "dss": {
-      "asof": "2026-08-18",
-      "score": 0.0,
-      "state": "inactive",
-      "gate": false,
-      "coverage": 1.0,
-      "values": {
-        "broad_usd_rise_10_pct": -0.513889481152241,
-        "broad_usd_rise_20_pct": -1.3226304322765614,
-        "vix": 15.84,
-        "ust30_change_10_bp": 10.000000000000053
       }
     },
     "nks": {
@@ -635,6 +390,89 @@
       "no_lookahead": null
     },
     "method_note_v041": "URP requires a fresh risk-off onset. NKS and NRS use a walk-forward Huber residual of EUR/NOK against EUR/SEK, Brent and VIX. Every score at t is fitted and standardised only with information available before t. NRS gate completion is reported separately from its operational alert.",
+    "block_asof": {
+      "URP": "2026-08-21",
+      "URR": "2026-08-21",
+      "DSS": "2026-08-21",
+      "NKS": "2026-08-18",
+      "NRS": "2026-08-18"
+    },
+    "freshness": {
+      "quality": "stale",
+      "label": "Obsoleto",
+      "latest_input_date": "2026-08-25",
+      "latest_block_date": "2026-08-21",
+      "oldest_block": "NKS",
+      "oldest_block_date": "2026-08-18",
+      "maximum_business_day_lag": 5,
+      "unavailable_blocks": [],
+      "blocks": {
+        "URP": {
+          "asof": "2026-08-21",
+          "business_day_lag": 2,
+          "status": "delayed",
+          "label": "Retrasado",
+          "inputs": {
+            "UST30": "2026-08-25",
+            "BROAD_USD": "2026-08-21",
+            "VIX": "2026-08-25",
+            "US_BUND": "2026-08-25"
+          }
+        },
+        "URR": {
+          "asof": "2026-08-21",
+          "business_day_lag": 2,
+          "status": "delayed",
+          "label": "Retrasado",
+          "inputs": {
+            "UST30": "2026-08-25",
+            "BROAD_USD": "2026-08-21",
+            "VIX": "2026-08-25",
+            "US_BUND": "2026-08-25",
+            "GOLD": "2026-08-25",
+            "REAL_10Y": "2026-08-25"
+          }
+        },
+        "DSS": {
+          "asof": "2026-08-21",
+          "business_day_lag": 2,
+          "status": "delayed",
+          "label": "Retrasado",
+          "inputs": {
+            "UST30": "2026-08-25",
+            "BROAD_USD": "2026-08-21",
+            "VIX": "2026-08-25"
+          }
+        },
+        "NKS": {
+          "asof": "2026-08-18",
+          "business_day_lag": 5,
+          "status": "stale",
+          "label": "Obsoleto",
+          "inputs": {
+            "EUR_NOK": "2026-08-21",
+            "NOK_SEK": "2026-08-21",
+            "NOK_RESIDUAL": "2026-08-18",
+            "NORWAY_BUND": "2026-08-25"
+          }
+        },
+        "NRS": {
+          "asof": "2026-08-18",
+          "business_day_lag": 5,
+          "status": "stale",
+          "label": "Obsoleto",
+          "inputs": {
+            "EUR_NOK": "2026-08-21",
+            "NOK_SEK": "2026-08-21",
+            "NOK_RESIDUAL": "2026-08-18",
+            "NORWAY_BUND": "2026-08-25",
+            "BRENT": "2026-08-18"
+          }
+        }
+      },
+      "lag_definition": "Días hábiles aproximados entre la fecha del bloque y el dato de mercado más reciente."
+    },
+    "method_note_freshness": "Each operational block is evaluated at its own latest complete input date. No score equation, weight or threshold in the v0.4.1 core is changed.",
     "core_model_version": "0.4.1",
     "operational": {
       "level": "normal",
@@ -651,51 +489,516 @@
           "label": "Rechazo USA",
           "score": 0.0,
           "state": "inactive",
-          "coverage": 1.0
+          "coverage": 1.0,
+          "asof": "2026-08-21",
+          "freshness_status": "delayed",
+          "freshness_label": "Retrasado",
+          "business_day_lag": 2
         },
         "URR": {
           "key": "URR",
           "label": "Persistencia USA",
           "score": 0.0,
           "state": "inactive",
-          "coverage": 1.0
+          "coverage": 1.0,
+          "asof": "2026-08-21",
+          "freshness_status": "delayed",
+          "freshness_label": "Retrasado",
+          "business_day_lag": 2
         },
         "DSS": {
           "key": "DSS",
           "label": "Escasez de dólares",
           "score": 0.0,
           "state": "inactive",
-          "coverage": 1.0
+          "coverage": 1.0,
+          "asof": "2026-08-21",
+          "freshness_status": "delayed",
+          "freshness_label": "Retrasado",
+          "business_day_lag": 2
         },
         "NKS": {
           "key": "NKS",
           "label": "Estrés NOK",
           "score": 0.0,
           "state": "normal",
-          "coverage": 1.0
+          "coverage": 1.0,
+          "asof": "2026-08-18",
+          "freshness_status": "stale",
+          "freshness_label": "Obsoleto",
+          "business_day_lag": 5
         },
         "NRS": {
           "key": "NRS",
           "label": "Reversión NOK",
           "score": 0.0,
           "state": "inactive",
-          "coverage": 1.0
+          "coverage": 1.0,
+          "asof": "2026-08-18",
+          "freshness_status": "stale",
+          "freshness_label": "Obsoleto",
+          "business_day_lag": 5
         }
       },
       "data_quality": "complete",
+      "data_freshness": "stale",
+      "data_freshness_label": "Obsoleto",
       "missing_confirmations": [],
       "optional_confirmations_missing": [
         "nibor_ois"
       ],
       "notification_required": false
     },
-    "method_note_v1": "The operational layer does not alter the validated v0.4.1 scores. It maps them to normal/watch/alert/critical states using declared rules. A confirmed NRS is a material regime-change alert, not a critical loss signal."
+    "method_note_v1": "The operational layer does not alter the validated v0.4.1 scores. It maps them to normal/watch/alert/critical states and evaluates each block at its own latest complete input date. A confirmed NRS is a material regime-change alert, not a critical loss signal."
+  },
+  "previous": {
+    "model_version": "1.0.2",
+    "asof": "2026-08-14",
+    "status": "ok",
+    "urp": {
+      "asof": "2026-08-14",
+      "score": 0.0,
+      "state": "inactive",
+      "gate": false,
+      "relative_confirmed": false,
+      "coverage": 1.0,
+      "values": {
+        "ust30_change_10_bp": -1.9999999999999574,
+        "broad_usd_drop_10_pct": 0.6688197661887663,
+        "us10_bund10_spread_change_10_bp": -7.000000000000028,
+        "gate": false,
+        "sp500_decline_10_pct": null,
+        "vix": 14.25,
+        "vix_change_10_points": -1.7400000000000002,
+        "vix_change_10_pct": -10.88180112570356,
+        "vix_onset": false,
+        "method": "Severity is max(S&P 500 decline, VIX level); the gate requires an equity fall or a high and rising VIX. A high but falling VIX does not open the gate."
+      },
+      "component_scores": {
+        "yield": 0.0,
+        "usd": 22.071052284229285,
+        "risk": 18.81,
+        "relative": 0.0
+      }
+    },
+    "urr": {
+      "state": "inactive",
+      "pulse": false,
+      "discrimination": false,
+      "rejection_regime": false,
+      "counts": {
+        "urp_ge_50_last_3": 0,
+        "urp_ge_50_last_10": 0,
+        "urp_ge_50_last_20": 0
+      },
+      "confirmations": {
+        "relative": false,
+        "usd_persistence": false,
+        "gold_up_with_real_yield_up": true
+      },
+      "values": {
+        "broad_usd_drop_20_pct": 1.3512650220066869,
+        "broad_usd_drop_60_pct": 0.45893295158684344,
+        "gold_change_20_pct": 8.780134040212051,
+        "real_yield_change_20_bp": 10.000000000000009
+      },
+      "asof": "2026-08-14"
+    },
+    "dss": {
+      "asof": "2026-08-14",
+      "score": 0.0,
+      "state": "inactive",
+      "gate": false,
+      "coverage": 1.0,
+      "values": {
+        "broad_usd_rise_10_pct": -0.6688197661887663,
+        "broad_usd_rise_20_pct": -1.3512650220066869,
+        "vix": 14.25,
+        "ust30_change_10_bp": -1.9999999999999574
+      }
+    },
+    "nks": {
+      "asof": "2026-08-11",
+      "score": 1.23,
+      "state": "normal",
+      "coverage": 1.0,
+      "values": {
+        "eurnok_change_20_pct": -0.9988729174140065,
+        "noksek_change_20_pct": -0.551481340295934,
+        "nok_residual_z20": 0.22331179450562974,
+        "norway_bund_change_20_bp": -10.899999999999999,
+        "nibor_ois_change_20_bp": null
+      },
+      "component_scores": {
+        "eurnok": 0.0,
+        "residual": 4.9128594791238545,
+        "noksek": 0.0,
+        "funding": 0.0
+      },
+      "note": "Brent and VIX are not added again when a residual series is supplied; doing so would double count them."
+    },
+    "nrs": {
+      "asof": "2026-08-11",
+      "score": 66.67,
+      "state": "inactive",
+      "prior_nks_max_60": 33.48,
+      "prior_nks_peak_date": "2026-06-30",
+      "gates": {
+        "prior_nks_stress": false,
+        "eurnok_recovery": true,
+        "noksek_recovery": true,
+        "norway_bund_normalised": true,
+        "brent_not_falling_further": true,
+        "negative_nok_residual": false
+      },
+      "values": {
+        "eurnok_recovery_from_60d_peak_pct": -3.357341811144765,
+        "eurnok_peak_date": "2026-06-29",
+        "noksek_recovery_from_60d_peak_pct": -2.299770469774054,
+        "noksek_peak_date": "2026-06-29",
+        "norway_bund_baseline_pct_points": 1.362,
+        "norway_bund_current_pct_points": 1.157,
+        "brent_change_since_eurnok_peak_pct": 30.26959072496158,
+        "nok_residual_z20": 0.22331179450562974
+      },
+      "note": "USD/NOK is deliberately excluded from the reversal gate.",
+      "gate_score": 66.67,
+      "operational_active": false,
+      "operational_score": 0.0,
+      "score_semantics": "gate_score is descriptive gate completion; operational_score is zero unless the full NRS confirmation state is reached."
+    },
+    "data_coverage": {
+      "urp_core": true,
+      "relative_us": true,
+      "nok_core": true,
+      "norway_funding": true,
+      "nok_residual": true,
+      "nibor_ois": false
+    },
+    "parameters": {
+      "windows": {
+        "pulse": 10,
+        "confirm": 20,
+        "structural": 60
+      },
+      "urp": {
+        "yield_bp": [
+          20.0,
+          35.0,
+          50.0
+        ],
+        "usd_drop_pct": [
+          1.0,
+          2.0,
+          4.0
+        ],
+        "spx_drop_pct": [
+          3.0,
+          7.0,
+          12.0
+        ],
+        "vix_level": [
+          25.0,
+          40.0,
+          60.0
+        ],
+        "us_bund_widening_bp": [
+          10.0,
+          25.0,
+          50.0
+        ],
+        "weights": {
+          "yield": 0.35,
+          "usd": 0.3,
+          "risk": 0.2,
+          "relative": 0.15
+        },
+        "unconfirmed_cap": 59.0,
+        "vix_onset_points": 5.0,
+        "vix_onset_pct": 20.0
+      },
+      "urr": {
+        "pulse_min": 50.0,
+        "pulse_days_last_3": 2,
+        "discrimination_days_last_10": 5,
+        "regime_days_last_20": 10,
+        "usd_drop_20_pct": 4.0,
+        "usd_drop_60_pct": 7.0,
+        "gold_rise_20_pct": 5.0,
+        "real_yield_rise_20_bp": 10.0
+      },
+      "dss": {
+        "usd_rise_10_pct": [
+          2.0,
+          4.0,
+          8.0
+        ],
+        "usd_rise_20_pct": [
+          4.0,
+          6.0,
+          10.0
+        ],
+        "vix_level": [
+          25.0,
+          40.0,
+          60.0
+        ]
+      },
+      "nks": {
+        "eurnok_rise_20_pct": [
+          3.0,
+          6.0,
+          10.0
+        ],
+        "noksek_rise_20_pct": [
+          1.5,
+          3.0,
+          6.0
+        ],
+        "residual_z20": [
+          1.5,
+          2.5,
+          3.5
+        ],
+        "no_bund_widening_20_bp": [
+          15.0,
+          30.0,
+          60.0
+        ],
+        "nibor_ois_widening_20_bp": [
+          15.0,
+          30.0,
+          60.0
+        ],
+        "weights": {
+          "eurnok": 0.35,
+          "residual": 0.25,
+          "noksek": 0.2,
+          "funding": 0.2
+        }
+      },
+      "nrs": {
+        "prior_nks_min": 65.0,
+        "eurnok_recovery_pct": -3.0,
+        "noksek_recovery_pct": -2.0,
+        "residual_z_max": -1.0,
+        "no_bund_baseline_buffer_bp": 10.0,
+        "brent_floor_from_peak_pct": -10.0
+      },
+      "nok_residual": {
+        "dependent": "daily log return EUR/NOK",
+        "factors": [
+          "daily log return EUR/SEK",
+          "daily log return Brent",
+          "daily log return VIX"
+        ],
+        "training_min_sessions": 504,
+        "training_max_sessions": 756,
+        "refit_every_sessions": 5,
+        "huber_delta": 1.345,
+        "huber_max_iterations": 8,
+        "residual_sum_sessions": 20,
+        "z_history_min_sessions": 252,
+        "z_history_max_sessions": 756,
+        "z_clip": 20.0
+      }
+    },
+    "method_note": "URP and DSS are mutually diagnostic, not mutually exclusive scores. NRS is only confirmed when the NOK residual is available and negative.",
+    "nok_residual": {
+      "model_version": "0.4.1",
+      "series_id": "NOK_RESIDUAL_Z20",
+      "source": "supplied",
+      "coverage": {
+        "z_scored_sessions": 1334,
+        "start": "2021-02-26",
+        "end": "2026-08-18"
+      },
+      "parameters": {
+        "dependent": "daily log return EUR/NOK",
+        "factors": [
+          "daily log return EUR/SEK",
+          "daily log return Brent",
+          "daily log return VIX"
+        ],
+        "training_min_sessions": 504,
+        "training_max_sessions": 756,
+        "refit_every_sessions": 5,
+        "huber_delta": 1.345,
+        "huber_max_iterations": 8,
+        "residual_sum_sessions": 20,
+        "z_history_min_sessions": 252,
+        "z_history_max_sessions": 756,
+        "z_clip": 20.0
+      },
+      "no_lookahead": null
+    },
+    "method_note_v041": "URP requires a fresh risk-off onset. NKS and NRS use a walk-forward Huber residual of EUR/NOK against EUR/SEK, Brent and VIX. Every score at t is fitted and standardised only with information available before t. NRS gate completion is reported separately from its operational alert.",
+    "block_asof": {
+      "URP": "2026-08-14",
+      "URR": "2026-08-14",
+      "DSS": "2026-08-14",
+      "NKS": "2026-08-11",
+      "NRS": "2026-08-11"
+    },
+    "freshness": {
+      "quality": "stale",
+      "label": "Obsoleto",
+      "latest_input_date": "2026-08-25",
+      "latest_block_date": "2026-08-14",
+      "oldest_block": "NKS",
+      "oldest_block_date": "2026-08-11",
+      "maximum_business_day_lag": 10,
+      "unavailable_blocks": [],
+      "blocks": {
+        "URP": {
+          "asof": "2026-08-14",
+          "business_day_lag": 7,
+          "status": "stale",
+          "label": "Obsoleto",
+          "inputs": {
+            "UST30": "2026-08-25",
+            "BROAD_USD": "2026-08-21",
+            "VIX": "2026-08-25",
+            "US_BUND": "2026-08-25"
+          }
+        },
+        "URR": {
+          "asof": "2026-08-14",
+          "business_day_lag": 7,
+          "status": "stale",
+          "label": "Obsoleto",
+          "inputs": {
+            "UST30": "2026-08-25",
+            "BROAD_USD": "2026-08-21",
+            "VIX": "2026-08-25",
+            "US_BUND": "2026-08-25",
+            "GOLD": "2026-08-25",
+            "REAL_10Y": "2026-08-25"
+          }
+        },
+        "DSS": {
+          "asof": "2026-08-14",
+          "business_day_lag": 7,
+          "status": "stale",
+          "label": "Obsoleto",
+          "inputs": {
+            "UST30": "2026-08-25",
+            "BROAD_USD": "2026-08-21",
+            "VIX": "2026-08-25"
+          }
+        },
+        "NKS": {
+          "asof": "2026-08-11",
+          "business_day_lag": 10,
+          "status": "stale",
+          "label": "Obsoleto",
+          "inputs": {
+            "EUR_NOK": "2026-08-21",
+            "NOK_SEK": "2026-08-21",
+            "NOK_RESIDUAL": "2026-08-18",
+            "NORWAY_BUND": "2026-08-25"
+          }
+        },
+        "NRS": {
+          "asof": "2026-08-11",
+          "business_day_lag": 10,
+          "status": "stale",
+          "label": "Obsoleto",
+          "inputs": {
+            "EUR_NOK": "2026-08-21",
+            "NOK_SEK": "2026-08-21",
+            "NOK_RESIDUAL": "2026-08-18",
+            "NORWAY_BUND": "2026-08-25",
+            "BRENT": "2026-08-18"
+          }
+        }
+      },
+      "lag_definition": "Días hábiles aproximados entre la fecha del bloque y el dato de mercado más reciente."
+    },
+    "method_note_freshness": "Each operational block is evaluated at its own latest complete input date. No score equation, weight or threshold in the v0.4.1 core is changed.",
+    "core_model_version": "0.4.1",
+    "operational": {
+      "level": "normal",
+      "rank": 0,
+      "label": "Normal",
+      "tone": "green",
+      "reasons": [
+        "Ningún bloque operativo supera sus umbrales de vigilancia"
+      ],
+      "summary": "El detector no identifica actualmente una configuración de crisis de deuda/dólar ni estrés material de NOK.",
+      "blocks": {
+        "URP": {
+          "key": "URP",
+          "label": "Rechazo USA",
+          "score": 0.0,
+          "state": "inactive",
+          "coverage": 1.0,
+          "asof": "2026-08-14",
+          "freshness_status": "stale",
+          "freshness_label": "Obsoleto",
+          "business_day_lag": 7
+        },
+        "URR": {
+          "key": "URR",
+          "label": "Persistencia USA",
+          "score": 0.0,
+          "state": "inactive",
+          "coverage": 1.0,
+          "asof": "2026-08-14",
+          "freshness_status": "stale",
+          "freshness_label": "Obsoleto",
+          "business_day_lag": 7
+        },
+        "DSS": {
+          "key": "DSS",
+          "label": "Escasez de dólares",
+          "score": 0.0,
+          "state": "inactive",
+          "coverage": 1.0,
+          "asof": "2026-08-14",
+          "freshness_status": "stale",
+          "freshness_label": "Obsoleto",
+          "business_day_lag": 7
+        },
+        "NKS": {
+          "key": "NKS",
+          "label": "Estrés NOK",
+          "score": 1.23,
+          "state": "normal",
+          "coverage": 1.0,
+          "asof": "2026-08-11",
+          "freshness_status": "stale",
+          "freshness_label": "Obsoleto",
+          "business_day_lag": 10
+        },
+        "NRS": {
+          "key": "NRS",
+          "label": "Reversión NOK",
+          "score": 0.0,
+          "state": "inactive",
+          "coverage": 1.0,
+          "asof": "2026-08-11",
+          "freshness_status": "stale",
+          "freshness_label": "Obsoleto",
+          "business_day_lag": 10
+        }
+      },
+      "data_quality": "complete",
+      "data_freshness": "stale",
+      "data_freshness_label": "Obsoleto",
+      "missing_confirmations": [],
+      "optional_confirmations_missing": [
+        "nibor_ois"
+      ],
+      "notification_required": false
+    },
+    "method_note_v1": "The operational layer does not alter the validated v0.4.1 scores. It maps them to normal/watch/alert/critical states and evaluates each block at its own latest complete input date. A confirmed NRS is a material regime-change alert, not a critical loss signal."
   },
   "score_deltas_5_sessions": {
     "URP": 0.0,
     "URR": 0.0,
     "DSS": 0.0,
-    "NKS": 0.0,
+    "NKS": -1.23,
     "NRS": 0.0
   },
   "schedule": {
@@ -705,7 +1008,7 @@
     "delivery": "Panel web y notificación de GitHub asignada a Alonides"
   },
   "delivery_note": "El informe periódico se publica en el panel. GitHub crea o comenta un hilo asignado a Alonides, que normalmente genera un aviso por correo.",
-  "notification_title": "Debt/NOK · Normal · 2026-08-21",
+  "notification_title": "Debt/NOK · Normal · 2026-08-26",
   "source_status": {
     "factor_start": "2018-01-01",
     "factor_observations": {

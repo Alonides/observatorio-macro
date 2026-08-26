@@ -1,6 +1,89 @@
 {
-  "updated_at": "2026-08-26T12:06:46.713030+00:00",
+  "updated_at": "2026-08-26T12:25:02.304264+00:00",
+  "report_date": "2026-08-26",
   "asof": "2026-08-21",
+  "block_asof": {
+    "URP": "2026-08-21",
+    "URR": "2026-08-21",
+    "DSS": "2026-08-21",
+    "NKS": "2026-08-18",
+    "NRS": "2026-08-18"
+  },
+  "freshness": {
+    "quality": "stale",
+    "label": "Obsoleto",
+    "latest_input_date": "2026-08-25",
+    "latest_block_date": "2026-08-21",
+    "oldest_block": "NKS",
+    "oldest_block_date": "2026-08-18",
+    "maximum_business_day_lag": 5,
+    "unavailable_blocks": [],
+    "blocks": {
+      "URP": {
+        "asof": "2026-08-21",
+        "business_day_lag": 2,
+        "status": "delayed",
+        "label": "Retrasado",
+        "inputs": {
+          "UST30": "2026-08-25",
+          "BROAD_USD": "2026-08-21",
+          "VIX": "2026-08-25",
+          "US_BUND": "2026-08-25"
+        }
+      },
+      "URR": {
+        "asof": "2026-08-21",
+        "business_day_lag": 2,
+        "status": "delayed",
+        "label": "Retrasado",
+        "inputs": {
+          "UST30": "2026-08-25",
+          "BROAD_USD": "2026-08-21",
+          "VIX": "2026-08-25",
+          "US_BUND": "2026-08-25",
+          "GOLD": "2026-08-25",
+          "REAL_10Y": "2026-08-25"
+        }
+      },
+      "DSS": {
+        "asof": "2026-08-21",
+        "business_day_lag": 2,
+        "status": "delayed",
+        "label": "Retrasado",
+        "inputs": {
+          "UST30": "2026-08-25",
+          "BROAD_USD": "2026-08-21",
+          "VIX": "2026-08-25"
+        }
+      },
+      "NKS": {
+        "asof": "2026-08-18",
+        "business_day_lag": 5,
+        "status": "stale",
+        "label": "Obsoleto",
+        "inputs": {
+          "EUR_NOK": "2026-08-21",
+          "NOK_SEK": "2026-08-21",
+          "NOK_RESIDUAL": "2026-08-18",
+          "NORWAY_BUND": "2026-08-25"
+        }
+      },
+      "NRS": {
+        "asof": "2026-08-18",
+        "business_day_lag": 5,
+        "status": "stale",
+        "label": "Obsoleto",
+        "inputs": {
+          "EUR_NOK": "2026-08-21",
+          "NOK_SEK": "2026-08-21",
+          "NOK_RESIDUAL": "2026-08-18",
+          "NORWAY_BUND": "2026-08-25",
+          "BRENT": "2026-08-18"
+        }
+      }
+    },
+    "lag_definition": "Días hábiles aproximados entre la fecha del bloque y el dato de mercado más reciente."
+  },
   "level": "normal",
   "fingerprint": "normal|inactive|inactive|inactive|normal|inactive"
 }
