@@ -144,7 +144,7 @@ def evaluate_operational(
     result = evaluate_core(series, asof=asof)
     core_version = result.get("model_version")
     level, reasons = classify_level(result)
-    blocks = {key: _block(result, key) for key in ("urp", "urr", "dss", "nks", "nrs")}
+    blocks = {key.upper(): _block(result, key) for key in ("urp", "urr", "dss", "nks", "nrs")}
     data_coverage = result.get("data_coverage") if isinstance(result.get("data_coverage"), dict) else {}
     required_keys = ("urp_core", "relative_us", "nok_core", "norway_funding", "nok_residual")
     missing = sorted(key for key in required_keys if data_coverage.get(key) is False)
