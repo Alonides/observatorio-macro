@@ -1,9 +1,11 @@
 #!/usr/bin/env python3
 """Scheduled operational agent for the Debt/NOK monitor.
 
-The agent reads the repository's daily market history, enriches it with SEK/USD,
-calculates the causal NOK residual, evaluates v1.0, writes the web payload and
-emits GitHub Actions outputs for weekly delivery or material alerts.
+The daily macro store intentionally retains a compact history for the public
+panel.  The NOK residual needs a longer common sample after aligning Norwegian,
+Swedish, oil and volatility calendars.  This agent therefore maintains a
+separate, official factor cache from 2018 onward and never lowers the frozen
+walk-forward calibration merely to fit the compact store.
 """
 
 from __future__ import annotations
@@ -18,12 +20,21 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
 
+from observatorio.debt_nok_v04.history import fetch_historical_series  # noqa: E402
 from observatorio.debt_nok_v04.residual import build_nok_residual  # noqa: E402
 from observatorio.debt_nok_v1.report import build_report  # noqa: E402
-from observatorio.official import _fed_package  # noqa: E402
 
 DATA_DIR = ROOT / "data"
 MONITOR_DIR = DATA_DIR / "debt_nok"
+FACTOR_START = "2018-01-01"
+FACTOR_LIMIT = 2600
+FACTOR_IDS = (
+    "DEXNOUS",
+    "DEXUSEU",
+    "DEXSDUS",
+    "DCOILBRENTEU",
+    "VIXCLS",
+)
 
 
 def _load(path: Path, default):
@@ -47,7 +58,7 @@ def _atomic_text(path: Path, text: str) -> None:
     temporary.replace(path)
 
 
-def _merge_points(*groups: list[dict], limit: int = 1200) -> list[dict]:
+def _merge_points(*groups: list[dict], limit: int = FACTOR_LIMIT) -> list[dict]:
     by_day: dict[str, dict] = {}
     for group in groups:
         for point in group or []:
@@ -80,14 +91,34 @@ def _exact_ratio(numerator: list[dict], denominator: list[dict]) -> list[dict]:
     ]
 
 
-def _fetch_sek(existing: list[dict]) -> tuple[list[dict], str | None]:
-    try:
-        points = _fed_package("H10", "rates", 1200).get("RXI_N.B.SD", [])
-        if not points:
-            raise RuntimeError("Federal Reserve H.10 returned no SEK/USD observations")
-        return _merge_points(existing, points), None
-    except Exception as exc:  # the monitor remains readable with the last valid history
-        return _merge_points(existing), str(exc)
+def _factor_history(
+    compact_series: dict[str, list[dict]],
+    cached_series: dict[str, list[dict]],
+    no_network: bool,
+) -> tuple[dict[str, list[dict]], dict[str, str]]:
+    """Return long factor histories, preserving valid cache on source failure."""
+    output = dict(compact_series)
+    errors: dict[str, str] = {}
+    for series_id in FACTOR_IDS:
+        fetched: list[dict] = []
+        if not no_network:
+            try:
+                fetched = fetch_historical_series(series_id, start=FACTOR_START)
+                if not fetched:
+                    raise RuntimeError("official source returned no observations")
+            except Exception as exc:  # isolation by factor; cached data remains usable
+                errors[series_id] = str(exc)
+        merged = _merge_points(
+            cached_series.get(series_id, []),
+            compact_series.get(series_id, []),
+            fetched,
+            limit=FACTOR_LIMIT,
+        )
+        if merged:
+            output[series_id] = merged
+        elif series_id not in errors:
+            errors[series_id] = "no cached or current observations available"
+    return output, errors
 
 
 def _github_output(key: str, value: str) -> None:
@@ -109,34 +140,29 @@ def _fingerprint(report: dict) -> str:
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--mode", choices=("daily", "weekly"), default="daily")
-    parser.add_argument("--no-network", action="store_true", help="Use only the previously cached SEK series")
+    parser.add_argument("--no-network", action="store_true", help="Use only compact and previously cached factor histories")
     args = parser.parse_args()
 
     source = _load(DATA_DIR / "series.json", {})
-    series = source.get("series")
-    if not isinstance(series, dict):
+    compact_series = source.get("series")
+    if not isinstance(compact_series, dict):
         raise SystemExit("data/series.json does not contain a series object")
 
     prior_history = _load(MONITOR_DIR / "history.json", {"series": {}}).get("series", {})
-    previous_sek = prior_history.get("DEXSDUS", []) if isinstance(prior_history, dict) else []
-    if args.no_network:
-        sek = _merge_points(previous_sek)
-        sek_error = None if sek else "network disabled and no cached SEK/USD history exists"
-    else:
-        sek, sek_error = _fetch_sek(previous_sek)
-    if sek:
-        series = dict(series)
-        series["DEXSDUS"] = sek
+    cached_series = prior_history if isinstance(prior_history, dict) else {}
+    series, factor_errors = _factor_history(compact_series, cached_series, args.no_network)
 
     residual = build_nok_residual(series)
-    if residual.get("points"):
-        series["NOK_RESIDUAL_Z20"] = residual["points"]
+    residual_points = residual.get("points", [])
+    if residual_points:
+        series["NOK_RESIDUAL_Z20"] = residual_points
 
     report = build_report(series, mode=args.mode)
     report["source_status"] = {
-        "sek_usd": "ok" if sek else "missing",
-        "sek_error": sek_error,
-        "residual_points": len(residual.get("points", [])),
+        "factor_start": FACTOR_START,
+        "factor_observations": {series_id: len(series.get(series_id, [])) for series_id in FACTOR_IDS},
+        "factor_errors": factor_errors,
+        "residual_points": len(residual_points),
         "residual_start": residual.get("coverage", {}).get("start"),
         "residual_end": residual.get("coverage", {}).get("end"),
     }
@@ -157,13 +183,14 @@ def main() -> int:
     eurnok = _exact_product(series.get("DEXNOUS", []), series.get("DEXUSEU", []))
     noksek = _exact_ratio(series.get("DEXNOUS", []), series.get("DEXSDUS", []))
     history_payload = {
-        "schema_version": 1,
+        "schema_version": 2,
         "generated_at": report["generated_at"],
+        "factor_start": FACTOR_START,
         "series": {
-            "DEXSDUS": sek,
-            "EURNOK": eurnok[-1200:],
-            "NOKSEK": noksek[-1200:],
-            "NOK_RESIDUAL_Z20": residual.get("points", [])[-1200:],
+            **{series_id: series.get(series_id, [])[-FACTOR_LIMIT:] for series_id in FACTOR_IDS},
+            "EURNOK": eurnok[-FACTOR_LIMIT:],
+            "NOKSEK": noksek[-FACTOR_LIMIT:],
+            "NOK_RESIDUAL_Z20": residual_points[-FACTOR_LIMIT:],
         },
     }
 
@@ -188,10 +215,12 @@ def main() -> int:
 
     print(
         f"Debt/NOK {report['model_version']} · {report.get('asof')} · "
-        f"{report['alert']['level']} · notify={notify}"
+        f"{report['alert']['level']} · residual={len(residual_points)} · notify={notify}"
     )
-    if sek_error:
-        print(f"SEK/USD warning: {sek_error}", file=sys.stderr)
+    for series_id, error in sorted(factor_errors.items()):
+        print(f"{series_id} warning: {error}", file=sys.stderr)
+    if not residual_points:
+        print("NOK residual unavailable: operational coverage remains partial", file=sys.stderr)
     return 0
 
 
