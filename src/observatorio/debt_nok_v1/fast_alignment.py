@@ -169,7 +169,13 @@ def _secondary_brent_for_agent(*args, **kwargs):
         metadata["source_id"] = "AMERICASOILWATCH_BRENT"
         return points, metadata
     except Exception as americas_error:
-        points, metadata = _original_yahoo_fetch(*args, **kwargs)
+        try:
+            points, metadata = _original_yahoo_fetch(*args, **kwargs)
+        except Exception as yahoo_error:
+            raise RuntimeError(
+                "AmericasOilWatch failed: " + str(americas_error)
+                + "; Yahoo Finance failed: " + str(yahoo_error)
+            ) from yahoo_error
         metadata = dict(metadata)
         metadata["source_id"] = "YAHOO_BRENT_DELAYED"
         metadata["preferred_source_error"] = str(americas_error)
