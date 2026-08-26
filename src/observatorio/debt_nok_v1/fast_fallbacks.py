@@ -14,12 +14,13 @@ Fallback order:
 from __future__ import annotations
 
 import json
-from datetime import date, datetime, timezone
+from datetime import datetime, timezone
 from math import isfinite
 from typing import Callable, Mapping, Sequence
 from urllib.parse import urlencode
 
 from ..official import SourceError, _read
+from .fast_shapes import parse_dated_price_payload
 
 
 AMERICAS_BRENT_HISTORY_URL = "https://americasoilwatch.com/api/v1/brent-history"
@@ -39,88 +40,10 @@ YAHOO_BROWSER_HEADERS = {
     "Accept": "application/json,text/plain,*/*",
 }
 
-DATE_KEYS = (
-    "date", "period", "day", "time", "timestamp", "datetime",
-    "asof", "as_of", "asOf", "updated", "updated_at",
-)
-VALUE_KEYS = (
-    "close", "price", "value", "settle", "settlement", "brent",
-    "last", "last_price", "current",
-)
-
-
-def _parse_date(raw) -> date | None:
-    if raw is None:
-        return None
-    if isinstance(raw, (int, float)):
-        try:
-            value = float(raw)
-            if value > 1e12:
-                value /= 1000.0
-            return datetime.fromtimestamp(value, tz=timezone.utc).date()
-        except (OSError, OverflowError, ValueError):
-            return None
-    text = str(raw).strip()
-    if not text:
-        return None
-    if text.isdigit():
-        return _parse_date(float(text))
-    normalized = text.replace("Z", "+00:00")
-    try:
-        return datetime.fromisoformat(normalized).date()
-    except ValueError:
-        pass
-    for fmt in (
-        "%Y-%m-%d", "%Y/%m/%d", "%m/%d/%Y", "%d/%m/%Y",
-        "%d %b %Y", "%b %d, %Y", "%B %d, %Y",
-    ):
-        try:
-            return datetime.strptime(text, fmt).date()
-        except ValueError:
-            continue
-    return None
-
-
-def _parse_value(raw) -> float | None:
-    if raw is None or isinstance(raw, bool):
-        return None
-    try:
-        value = float(str(raw).replace(",", "").strip())
-    except (TypeError, ValueError):
-        return None
-    return value if isfinite(value) and value > 0.0 else None
-
-
-def _extract_recursive(node, output: dict[date, float]) -> None:
-    if isinstance(node, Mapping):
-        day = next(
-            (_parse_date(node.get(key)) for key in DATE_KEYS if node.get(key) is not None),
-            None,
-        )
-        value = next(
-            (_parse_value(node.get(key)) for key in VALUE_KEYS if node.get(key) is not None),
-            None,
-        )
-        if day is not None and value is not None:
-            output[day] = value
-        for child in node.values():
-            if isinstance(child, (Mapping, list, tuple)):
-                _extract_recursive(child, output)
-    elif isinstance(node, (list, tuple)):
-        for child in node:
-            _extract_recursive(child, output)
-
 
 def parse_americas_brent(payload: Mapping[str, object] | Sequence[object]) -> list[dict]:
-    """Parse common nested JSON shapes without depending on UI internals."""
-    by_day: dict[date, float] = {}
-    _extract_recursive(payload, by_day)
-    if not by_day:
-        raise SourceError("AmericasOilWatch returned no dated Brent prices")
-    return [
-        {"date": day.isoformat(), "value": by_day[day]}
-        for day in sorted(by_day)
-    ]
+    """Parse only explicit dated USD prices from the public JSON payload."""
+    return parse_dated_price_payload(payload)
 
 
 def _json_request(
