@@ -16,6 +16,7 @@ from __future__ import annotations
 from dataclasses import replace
 from typing import Sequence
 
+from . import fast_shapes as _fast_shapes  # noqa: F401  installs bounded parser
 from .fast_bridge import BridgeRule
 
 
