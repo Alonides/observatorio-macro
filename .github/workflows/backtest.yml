@@ -7,6 +7,16 @@ on:
         description: Historical start date
         required: false
         default: "2006-01-01"
+  pull_request:
+    paths:
+      - ".github/workflows/backtest.yml"
+      - "scripts/backtest_regimes.py"
+      - "src/observatorio/backtest.py"
+      - "src/observatorio/history.py"
+      - "src/observatorio/regime.py"
+      - "src/observatorio/scenarios.py"
+      - "tests/test_backtest.py"
+      - "tests/test_regime.py"
 
 permissions:
   contents: read
@@ -21,10 +31,12 @@ jobs:
         with:
           python-version: "3.12"
       - run: python -m unittest discover -s tests -v
-      - run: python scripts/backtest_regimes.py --fetch --start "${{ inputs.start }}"
+      - run: python scripts/backtest_regimes.py --fetch --start "${{ github.event.inputs.start || '2006-01-01' }}"
       - uses: actions/upload-artifact@v4
+        if: always()
         with:
           name: debt-nok-backtest
           path: |
             data/backtest_series.json
             data/regime_backtest.json
+          if-no-files-found: warn
