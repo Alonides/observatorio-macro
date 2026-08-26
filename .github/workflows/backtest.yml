@@ -16,6 +16,7 @@ on:
       - "src/observatorio/regime.py"
       - "src/observatorio/scenarios.py"
       - "tests/test_backtest.py"
+      - "tests/test_history.py"
       - "tests/test_regime.py"
 
 permissions:

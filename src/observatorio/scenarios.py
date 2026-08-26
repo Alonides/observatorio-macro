@@ -18,6 +18,7 @@ def _shock(base: float, delta: float, count: int = 100, shock_sessions: int = 20
 
 
 def _path(anchors: list[tuple[int, float]], count: int = 100) -> list[float]:
+    """Piecewise-linear path through inclusive index/value anchors."""
     if not anchors or anchors[0][0] != 0 or anchors[-1][0] != count - 1:
         raise ValueError("anchors must cover index 0 through count - 1")
     values = [0.0] * count
@@ -73,6 +74,19 @@ def us_rejection() -> dict:
     return data
 
 
+def us_rejection_regime() -> dict:
+    """Persistent US-specific rejection with structural confirmation."""
+    data = _base()
+    days = _days(100)
+    data["DGS30"] = _series(_shock(4.2, 0.80, shock_sessions=20), days)
+    data["DGS10"] = _series(_shock(4.0, 0.70, shock_sessions=20), days)
+    data["DTWEXBGS"] = _series(_shock(100.0, -8.0, shock_sessions=20), days)
+    data["VIXCLS"] = _series(_shock(18.0, 42.0, shock_sessions=20), days)
+    data["GOLDAMGBD228NLBM"] = _series(_shock(2500.0, 450.0, shock_sessions=20), days)
+    data["DFII10"] = _series(_shock(2.0, 0.35, shock_sessions=20), days)
+    return data
+
+
 def dollar_shortage() -> dict:
     data = _base()
     days = _days(100)
@@ -93,6 +107,7 @@ def nok_stress() -> dict:
 
 
 def false_usdnok_reversal() -> dict:
+    """USD/NOK falls, but EUR/NOK and NOK/SEK do not improve."""
     data = _base()
     days = _days(100)
     data["DEXNOUS"] = _series(_path([(0, 10.0), (59, 10.0), (79, 12.0), (99, 11.4)]), days)
@@ -113,14 +128,26 @@ def norwegian_reversal_candidate() -> dict:
     return data
 
 
+def norwegian_reversal_confirmed() -> dict:
+    data = norwegian_reversal_candidate()
+    days = _days(100)
+    data["NOK_RESIDUAL_Z20"] = _series(
+        _path([(0, 0.0), (59, 0.0), (79, 3.0), (99, -1.5)]),
+        days,
+    )
+    return data
+
+
 def synthetic_results() -> dict:
     scenarios = {
         "duration_shock": duration_shock(),
         "us_rejection": us_rejection(),
+        "us_rejection_regime": us_rejection_regime(),
         "dollar_shortage": dollar_shortage(),
         "nok_stress": nok_stress(),
         "false_usdnok_reversal": false_usdnok_reversal(),
         "norwegian_reversal_candidate": norwegian_reversal_candidate(),
+        "norwegian_reversal_confirmed": norwegian_reversal_confirmed(),
     }
     return {name: evaluate_regimes(data) for name, data in scenarios.items()}
 
@@ -128,9 +155,11 @@ def synthetic_results() -> dict:
 __all__ = [
     "duration_shock",
     "us_rejection",
+    "us_rejection_regime",
     "dollar_shortage",
     "nok_stress",
     "false_usdnok_reversal",
     "norwegian_reversal_candidate",
+    "norwegian_reversal_confirmed",
     "synthetic_results",
 ]

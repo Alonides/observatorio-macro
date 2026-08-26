@@ -12,16 +12,37 @@ import io
 import json
 import re
 import time
-from concurrent.futures import ThreadPoolExecutor, as_completed
+from concurrent.futures import Future, ThreadPoolExecutor, as_completed
 from datetime import date, datetime
 from html.parser import HTMLParser
 from pathlib import Path
+from threading import Lock
 from urllib.error import HTTPError, URLError
 from urllib.parse import urlencode
 from urllib.request import Request, urlopen
 
 
 USER_AGENT = "observatorio-macro-backtest/0.3 (+https://github.com/Alonides/observatorio-macro)"
+
+_PACKAGE_CACHE: dict[str, Future] = {}
+_PACKAGE_LOCK = Lock()
+
+
+def _memo(key: str, loader):
+    """Share one download between concurrent series from the same package."""
+    owner = False
+    with _PACKAGE_LOCK:
+        future = _PACKAGE_CACHE.get(key)
+        if future is None:
+            future = Future()
+            _PACKAGE_CACHE[key] = future
+            owner = True
+    if owner:
+        try:
+            future.set_result(loader())
+        except BaseException as exc:
+            future.set_exception(exc)
+    return future.result()
 
 BACKTEST_SERIES = (
     "DGS10",
@@ -61,7 +82,7 @@ class HistorySourceError(RuntimeError):
     pass
 
 
-def _read(url: str, timeout: int = 45, retries: int = 3, headers: dict[str, str] | None = None) -> bytes:
+def _read(url: str, timeout: int = 25, retries: int = 2, headers: dict[str, str] | None = None) -> bytes:
     merged_headers = {"User-Agent": USER_AGENT, "Accept": "*/*"}
     if headers:
         merged_headers.update(headers)
@@ -211,7 +232,8 @@ def _treasury_history(series_id: str, start: str, end: str) -> list[dict]:
             f"daily-treasury-rates.csv/{year}/all?type={kind}&field_tdr_date_value={year}"
             "&page&_format=csv"
         )
-        points.extend(_parse_treasury_csv(_text(url), column))
+        text = _memo(f"treasury:{kind}:{year}", lambda url=url: _text(url))
+        points.extend(_parse_treasury_csv(text, column))
     return _dedupe(points, start, end)
 
 
@@ -223,7 +245,8 @@ def _fed_history(series_id: str, start: str, end: str) -> list[dict]:
         f"rel=H10&series={package_id}&lastobs=20000"
         "&filetype=csv&label=include&layout=seriescolumn"
     )
-    return _dedupe(_parse_fed_ddp(_text(url), code), start, end)
+    text = _memo(f"fed:H10:{package_id}", lambda: _text(url))
+    return _dedupe(_parse_fed_ddp(text, code), start, end)
 
 
 def _vix_history(start: str, end: str) -> list[dict]:
