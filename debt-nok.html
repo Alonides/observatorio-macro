@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <meta name="theme-color" content="#07100f">
+  <title>Debt/NOK Monitor · Observatorio macro</title>
+  <link rel="stylesheet" href="web/styles.css">
+  <link rel="stylesheet" href="web/debt-nok.css">
+</head>
+<body>
+  <header class="topbar shell monitor-topbar">
+    <div>
+      <p class="eyebrow">OBSERVATORIO MACRO · AGENTE DEUDA/NOK</p>
+      <h1>Debt/NOK Monitor</h1>
+      <p class="subtitle">Rechazo de activos estadounidenses, escasez de dólares y comportamiento diferencial de la corona noruega.</p>
+    </div>
+    <div class="monitor-actions">
+      <a class="back-link" href="index.html">← Observatorio general</a>
+      <div id="monitor-health" class="health" aria-live="polite">Cargando monitor…</div>
+    </div>
+  </header>
+
+  <main class="shell monitor-main">
+    <section class="monitor-hero">
+      <article id="alert-card" class="card alert-card pending">
+        <div class="alert-head">
+          <div><p class="eyebrow">ESTADO OPERATIVO</p><h2 id="alert-label">Pendiente</h2></div>
+          <div id="alert-score" class="alert-score">—</div>
+        </div>
+        <h3 id="headline">Esperando el primer informe operativo.</h3>
+        <p id="summary" class="method">El agente publicará aquí su lectura actual.</p>
+        <div id="reasons" class="reason-list"></div>
+      </article>
+
+      <article class="card cadence-card">
+        <p class="eyebrow">CADENCIA Y ENTREGA</p>
+        <h2>Agente programado</h2>
+        <dl id="schedule" class="schedule-list"></dl>
+        <p class="delivery-note">Los informes completos quedan en este panel. Las entregas periódicas y las alertas materiales se publican en un hilo de GitHub asignado a Alonides, normalmente acompañado de notificación por correo.</p>
+      </article>
+    </section>
+
+    <section class="card">
+      <div class="section-head">
+        <div>
+          <p class="eyebrow">MATRIZ DE RÉGIMEN</p>
+          <h2>Cinco bloques independientes</h2>
+          <p>Los números son scores operativos de 0 a 100. NRS sólo puntúa operativamente cuando la reversión está confirmada.</p>
+        </div>
+        <a class="report-link" href="data/debt_nok/latest.md" target="_blank" rel="noreferrer">Abrir informe Markdown ↗</a>
+      </div>
+      <div id="block-grid" class="block-grid"></div>
+    </section>
+
+    <section class="card charts-section">
+      <div class="section-head">
+        <div>
+          <p class="eyebrow">FOCO NORUEGA</p>
+          <h2>EUR/NOK, NOK/SEK y residual walk-forward</h2>
+          <p>El residual positivo indica que NOK se debilita más de lo esperado frente a SEK, Brent y VIX; no prueba por sí mismo una causa.</p>
+        </div>
+        <div class="range-picker" aria-label="Ventana temporal del monitor">
+          <button type="button" data-monitor-range="92">3 meses</button>
+          <button type="button" data-monitor-range="365" class="selected">1 año</button>
+          <button type="button" data-monitor-range="all">Todo</button>
+        </div>
+      </div>
+      <div class="monitor-chart-grid">
+        <article class="chart-card">
+          <div><p class="chart-kicker">DIVISAS</p><h3>EUR/NOK y NOK/SEK · base 100</h3></div>
+          <div id="fx-chart" class="chart"></div>
+        </article>
+        <article class="chart-card">
+          <div><p class="chart-kicker">ANOMALÍA NOK</p><h3>Residual acumulado 20 sesiones · z-score</h3></div>
+          <div id="residual-chart" class="chart"></div>
+        </article>
+      </div>
+    </section>
+
+    <section class="monitor-detail-grid">
+      <article class="card">
+        <p class="eyebrow">VARIABLES ACTUALES</p>
+        <h2>Qué está moviendo la lectura</h2>
+        <div id="key-values" class="key-values"></div>
+      </article>
+      <article class="card">
+        <p class="eyebrow">CAMBIO RECIENTE</p>
+        <h2>Variación frente a hace cinco sesiones</h2>
+        <div id="deltas" class="delta-grid"></div>
+      </article>
+    </section>
+
+    <section class="card report-card">
+      <div class="section-head">
+        <div><p class="eyebrow">INFORME DEL AGENTE</p><h2 id="report-date">Último informe</h2></div>
+        <span id="report-mode" class="mode-pill">—</span>
+      </div>
+      <div id="report-summary" class="report-summary"></div>
+      <details class="method-details">
+        <summary>Método, cobertura y límites</summary>
+        <div id="method-content"></div>
+      </details>
+    </section>
+  </main>
+
+  <footer class="shell">
+    <p>Instrumento de vigilancia y falsificación. No ejecuta operaciones ni constituye recomendación financiera.</p>
+    <p>Modelo operativo v1.0 · núcleo validado v0.4.1 · código y umbrales auditables en Git.</p>
+  </footer>
+  <script src="web/debt-nok.js"></script>
+</body>
+</html>

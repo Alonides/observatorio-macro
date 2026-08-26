@@ -1,0 +1,107 @@
+name: Debt and NOK monitoring agent
+
+on:
+  schedule:
+    # Monday: full report after the daily macro ingestion has normally finished.
+    - cron: "30 7 * * 1"
+    # Tuesday-Friday: intermediate check and material alerts only.
+    - cron: "0 7 * * 2-5"
+  push:
+    branches:
+      - main
+    paths:
+      - "src/observatorio/debt_nok_v1/**"
+      - "src/observatorio/debt_nok_v04/**"
+      - "scripts/debt_nok_agent.py"
+      - "tests/test_debt_nok_v1.py"
+      - ".github/workflows/debt_nok_agent.yml"
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: Report mode
+        required: true
+        default: weekly
+        type: choice
+        options:
+          - daily
+          - weekly
+
+permissions:
+  contents: write
+  issues: write
+
+concurrency:
+  group: debt-nok-monitoring-agent
+  cancel-in-progress: false
+
+jobs:
+  monitor:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - run: pip install -r requirements.txt
+
+      - name: Run model tests
+        run: python -m unittest discover -s tests -v
+
+      - name: Select report mode
+        id: mode
+        shell: bash
+        run: |
+          mode="daily"
+          if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
+            mode="${{ inputs.mode }}"
+          elif [[ "${{ github.event_name }}" == "push" ]]; then
+            mode="weekly"
+          elif [[ "${{ github.event.schedule }}" == "30 7 * * 1" ]]; then
+            mode="weekly"
+          fi
+          echo "mode=$mode" >> "$GITHUB_OUTPUT"
+
+      - name: Run Debt/NOK agent
+        id: agent
+        run: python scripts/debt_nok_agent.py --mode "${{ steps.mode.outputs.mode }}"
+
+      - name: Commit monitor snapshot and report
+        shell: bash
+        run: |
+          git config user.name "debt-nok-agent"
+          git config user.email "debt-nok-agent@users.noreply.github.com"
+          git add -- data/debt_nok
+          if git diff --cached --quiet; then
+            echo "No monitor changes"
+            exit 0
+          fi
+          git commit -m "data: Debt/NOK ${{ steps.mode.outputs.mode }} report ${{ steps.agent.outputs.asof }}"
+          git pull --rebase origin main
+          git push origin HEAD:main
+
+      - name: Deliver weekly report through GitHub notifications
+        if: steps.mode.outputs.mode == 'weekly'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          title="Debt/NOK · informes periódicos"
+          issue_url="$(gh issue list --repo "$GITHUB_REPOSITORY" --state open --search "$title in:title" --json url --jq '.[0].url // empty')"
+          if [[ -z "$issue_url" ]]; then
+            issue_url="$(gh issue create --repo "$GITHUB_REPOSITORY" --title "$title" --body "Hilo automático del agente Debt/NOK. Cada lunes se añade el informe completo; las alertas materiales se abren además como incidencias separadas." --assignee Alonides)"
+          fi
+          issue_number="${issue_url##*/}"
+          gh issue comment "$issue_number" --repo "$GITHUB_REPOSITORY" --body-file data/debt_nok/latest.md
+
+      - name: Deliver new material alert
+        if: steps.mode.outputs.mode == 'daily' && steps.agent.outputs.notify == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          ALERT_TITLE: ${{ steps.agent.outputs.title }}
+        run: gh issue create --repo "$GITHUB_REPOSITORY" --title "$ALERT_TITLE" --body-file data/debt_nok/latest.md --assignee Alonides
