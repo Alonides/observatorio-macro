@@ -1,6 +1,6 @@
 {
-  "updated_at": "2026-08-28T19:06:03.012287+00:00",
-  "report_date": "2026-08-28",
+  "updated_at": "2026-08-29T10:13:38.793783+00:00",
+  "report_date": "2026-08-29",
   "asof": "2026-08-21",
   "block_asof": {
     "URP": "2026-08-21",
@@ -12,34 +12,34 @@
   "freshness": {
     "quality": "stale",
     "label": "Obsoleto",
-    "latest_input_date": "2026-08-27",
+    "latest_input_date": "2026-08-28",
     "latest_block_date": "2026-08-21",
     "oldest_block": "URP",
     "oldest_block_date": "2026-08-21",
-    "maximum_business_day_lag": 4,
+    "maximum_business_day_lag": 5,
     "unavailable_blocks": [],
     "blocks": {
       "URP": {
         "asof": "2026-08-21",
-        "business_day_lag": 4,
+        "business_day_lag": 5,
         "status": "stale",
         "label": "Obsoleto",
         "inputs": {
           "UST30": "2026-08-27",
           "BROAD_USD": "2026-08-21",
-          "VIX": "2026-08-27",
+          "VIX": "2026-08-28",
           "US_BUND": "2026-08-27"
         }
       },
       "URR": {
         "asof": "2026-08-21",
-        "business_day_lag": 4,
+        "business_day_lag": 5,
         "status": "stale",
         "label": "Obsoleto",
         "inputs": {
           "UST30": "2026-08-27",
           "BROAD_USD": "2026-08-21",
-          "VIX": "2026-08-27",
+          "VIX": "2026-08-28",
           "US_BUND": "2026-08-27",
           "GOLD": "2026-08-27",
           "REAL_10Y": "2026-08-27"
@@ -47,18 +47,18 @@
       },
       "DSS": {
         "asof": "2026-08-21",
-        "business_day_lag": 4,
+        "business_day_lag": 5,
         "status": "stale",
         "label": "Obsoleto",
         "inputs": {
           "UST30": "2026-08-27",
           "BROAD_USD": "2026-08-21",
-          "VIX": "2026-08-27"
+          "VIX": "2026-08-28"
         }
       },
       "NKS": {
         "asof": "2026-08-21",
-        "business_day_lag": 4,
+        "business_day_lag": 5,
         "status": "stale",
         "label": "Obsoleto",
         "inputs": {
@@ -70,7 +70,7 @@
       },
       "NRS": {
         "asof": "2026-08-21",
-        "business_day_lag": 4,
+        "business_day_lag": 5,
         "status": "stale",
         "label": "Obsoleto",
         "inputs": {
@@ -97,5 +97,5 @@
       "DEXUSEU"
     ]
   },
-  "fingerprint": "normal|inactive|inactive|inactive|normal|inactive|normal|normal|inactive,inactive,inactive,normal,inactive|DCOILBRENTEU:2026-08-28,DEXNOUS:2026-08-28,DEXSDUS:2026-08-28,DEXUSEU:2026-08-28"
+  "fingerprint": "normal|inactive|inactive|inactive|normal|inactive|normal|normal|inactive,inactive,inactive,normal,inactive|DCOILBRENTEU:2026-08-29,DEXNOUS:2026-08-28,DEXSDUS:2026-08-28,DEXUSEU:2026-08-28"
 }
