@@ -105,7 +105,11 @@ jobs:
         run: gh workflow run pages.yml --repo "$GITHUB_REPOSITORY" --ref main
 
       - name: Deliver weekly report through GitHub notifications
-        if: github.event_name != 'pull_request' && steps.mode.outputs.mode == 'weekly'
+        # Code pushes exercise the complete weekly report, but must not notify
+        # subscribers. Only scheduled and explicitly requested runs deliver it.
+        if: >-
+          steps.mode.outputs.mode == 'weekly' &&
+          (github.event_name == 'schedule' || github.event_name == 'workflow_dispatch')
         env:
           GH_TOKEN: ${{ github.token }}
         shell: bash
@@ -116,10 +120,29 @@ jobs:
             issue_url="$(gh issue create --repo "$GITHUB_REPOSITORY" --title "$title" --body "Hilo automático del agente Debt/NOK. Cada lunes se añade el informe completo; las alertas materiales se abren además como incidencias separadas." --assignee Alonides)"
           fi
           issue_number="${issue_url##*/}"
-          gh issue comment "$issue_number" --repo "$GITHUB_REPOSITORY" --body-file data/debt_nok/latest.md
+          report_date="$(jq -r '.report_date' data/debt_nok/latest.json)"
+          marker="<!-- debt-nok-report:${report_date} -->"
+          comment_id="$(
+            gh api --paginate "repos/$GITHUB_REPOSITORY/issues/$issue_number/comments" \
+              --jq ".[] | select(.body | contains(\"$marker\")) | .id" \
+              | tail -n 1
+          )"
+          comment_body="$(mktemp)"
+          printf '%s\n\n' "$marker" > "$comment_body"
+          sed '/^<!-- debt-nok-report:/d' data/debt_nok/latest.md >> "$comment_body"
+
+          if [[ -n "$comment_id" ]]; then
+            jq -Rs '{body: .}' "$comment_body" \
+              | gh api --method PATCH "repos/$GITHUB_REPOSITORY/issues/comments/$comment_id" --input -
+          else
+            gh issue comment "$issue_number" --repo "$GITHUB_REPOSITORY" --body-file "$comment_body"
+          fi
 
       - name: Deliver new material alert
-        if: github.event_name != 'pull_request' && steps.mode.outputs.mode == 'daily' && steps.agent.outputs.notify == 'true'
+        if: >-
+          steps.mode.outputs.mode == 'daily' &&
+          steps.agent.outputs.notify == 'true' &&
+          (github.event_name == 'schedule' || github.event_name == 'workflow_dispatch')
         env:
           GH_TOKEN: ${{ github.token }}
           ALERT_TITLE: ${{ steps.agent.outputs.title }}
