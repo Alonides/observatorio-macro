@@ -1,6 +1,6 @@
 {
-  "updated_at": "2026-08-29T10:13:38.793783+00:00",
-  "report_date": "2026-08-29",
+  "updated_at": "2026-08-31T15:17:58.136418+00:00",
+  "report_date": "2026-08-31",
   "asof": "2026-08-21",
   "block_asof": {
     "URP": "2026-08-21",
@@ -25,10 +25,10 @@
         "status": "stale",
         "label": "Obsoleto",
         "inputs": {
-          "UST30": "2026-08-27",
+          "UST30": "2026-08-28",
           "BROAD_USD": "2026-08-21",
           "VIX": "2026-08-28",
-          "US_BUND": "2026-08-27"
+          "US_BUND": "2026-08-28"
         }
       },
       "URR": {
@@ -37,12 +37,12 @@
         "status": "stale",
         "label": "Obsoleto",
         "inputs": {
-          "UST30": "2026-08-27",
+          "UST30": "2026-08-28",
           "BROAD_USD": "2026-08-21",
           "VIX": "2026-08-28",
-          "US_BUND": "2026-08-27",
-          "GOLD": "2026-08-27",
-          "REAL_10Y": "2026-08-27"
+          "US_BUND": "2026-08-28",
+          "GOLD": "2026-08-28",
+          "REAL_10Y": "2026-08-28"
         }
       },
       "DSS": {
@@ -51,7 +51,7 @@
         "status": "stale",
         "label": "Obsoleto",
         "inputs": {
-          "UST30": "2026-08-27",
+          "UST30": "2026-08-28",
           "BROAD_USD": "2026-08-21",
           "VIX": "2026-08-28"
         }
@@ -65,7 +65,7 @@
           "EUR_NOK": "2026-08-21",
           "NOK_SEK": "2026-08-21",
           "NOK_RESIDUAL": "2026-08-21",
-          "NORWAY_BUND": "2026-08-27"
+          "NORWAY_BUND": "2026-08-28"
         }
       },
       "NRS": {
@@ -77,7 +77,7 @@
           "EUR_NOK": "2026-08-21",
           "NOK_SEK": "2026-08-21",
           "NOK_RESIDUAL": "2026-08-21",
-          "NORWAY_BUND": "2026-08-27",
+          "NORWAY_BUND": "2026-08-28",
           "BRENT": "2026-08-25"
         }
       }
@@ -91,11 +91,8 @@
     "raw_level": "normal",
     "review_required": false,
     "active_targets": [
-      "DCOILBRENTEU",
-      "DEXNOUS",
-      "DEXSDUS",
-      "DEXUSEU"
+      "DCOILBRENTEU"
     ]
   },
-  "fingerprint": "normal|inactive|inactive|inactive|normal|inactive|normal|normal|inactive,inactive,inactive,normal,inactive|DCOILBRENTEU:2026-08-29,DEXNOUS:2026-08-28,DEXSDUS:2026-08-28,DEXUSEU:2026-08-28"
+  "fingerprint": "normal|inactive|inactive|inactive|normal|inactive|normal|normal|inactive,inactive,inactive,normal,inactive|DCOILBRENTEU:2026-08-28"
 }
