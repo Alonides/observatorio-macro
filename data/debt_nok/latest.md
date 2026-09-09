@@ -1,40 +1,40 @@
-# Informe Debt/NOK · 2026-09-08
+# Informe Debt/NOK · 2026-09-09
 
 **Estado oficial: Normal.** Sin configuración activa de crisis; vigilancia estructural normal
 
 El detector no identifica actualmente una configuración de crisis de deuda/dólar ni estrés material de NOK.
 
-**Actualizado en Oslo:** 2026-09-08 13:47. **Último dato oficial disponible:** 2026-09-07. **Bloque oficial más retrasado:** URP (6 días hábiles).
+**Actualizado en Oslo:** 2026-09-09 14:00. **Último dato oficial disponible:** 2026-09-08. **Bloque oficial más retrasado:** NKS (5 días hábiles).
 
 ## Frescura oficial de los bloques
 
 | Bloque | Datos a | Retraso aproximado | Estado |
 |---|---|---:|---|
-| URP | 2026-08-28 | 6 días hábiles | Obsoleto |
-| URR | 2026-08-28 | 6 días hábiles | Obsoleto |
-| DSS | 2026-08-28 | 6 días hábiles | Obsoleto |
-| NKS | 2026-08-28 | 6 días hábiles | Obsoleto |
-| NRS | 2026-08-28 | 6 días hábiles | Obsoleto |
+| URP | 2026-09-04 | 2 días hábiles | Retrasado |
+| URR | 2026-09-04 | 2 días hábiles | Retrasado |
+| DSS | 2026-09-04 | 2 días hábiles | Retrasado |
+| NKS | 2026-09-01 | 5 días hábiles | Obsoleto |
+| NRS | 2026-09-01 | 5 días hábiles | Obsoleto |
 
 ## Panel oficial de bloques
 
 | Bloque | Actual | Estado | Datos a | Hace 5 sesiones | Δ |
 |---|---:|---|---|---:|---:|
-| URP · Rechazo USA | 0.00 | inactive | 2026-08-28 | 0.00 | +0.00 |
-| URR · Persistencia USA | 0.00 | inactive | 2026-08-28 | 0.00 | +0.00 |
-| DSS · Escasez de dólares | 0.00 | inactive | 2026-08-28 | 0.00 | +0.00 |
-| NKS · Estrés NOK | 0.00 | normal | 2026-08-28 | 0.00 | +0.00 |
-| NRS · Reversión NOK | 0.00 | inactive | 2026-08-28 | 0.00 | +0.00 |
+| URP · Rechazo USA | 0.00 | inactive | 2026-09-04 | 0.00 | +0.00 |
+| URR · Persistencia USA | 0.00 | inactive | 2026-09-04 | 0.00 | +0.00 |
+| DSS · Escasez de dólares | 0.00 | inactive | 2026-09-04 | 0.00 | +0.00 |
+| NKS · Estrés NOK | 0.00 | normal | 2026-09-01 | 0.00 | +0.00 |
+| NRS · Reversión NOK | 0.00 | inactive | 2026-09-01 | 0.00 | +0.00 |
 
 ## Variables discriminantes oficiales
 
 - Treasury 30 años, cambio 10 sesiones: **-3.0 pb**.
-- Dólar amplio, caída 10 sesiones: **0.13 %**.
-- VIX: **14.43**.
-- EUR/NOK, cambio 20 sesiones: **-0.47 %**.
-- Debilidad NOK frente a SEK, 20 sesiones: **-1.85 %**.
-- Residual NOK: **-1.45σ**.
-- Norway–Bund, cambio 20 sesiones: **-16.8 pb**.
+- Dólar amplio, caída 10 sesiones: **-0.01 %**.
+- VIX: **14.53**.
+- EUR/NOK, cambio 20 sesiones: **-1.82 %**.
+- Debilidad NOK frente a SEK, 20 sesiones: **-3.05 %**.
+- Residual NOK: **-1.36σ**.
+- Norway–Bund, cambio 20 sesiones: **-12.3 pb**.
 
 ## Lectura operativa oficial
 
@@ -48,24 +48,24 @@ La vía rápida usa proxies primarios o secundarios expresamente identificados y
 
 | Bloque | Oficial | Provisional | Δ | Estado provisional | Datos provisionales a |
 |---|---:|---:|---:|---|---|
-| URP | 0.00 | 0.00 | 0.00 | inactive | 2026-08-28 |
-| URR | 0.00 | 0.00 | 0.00 | inactive | 2026-08-28 |
-| DSS | 0.00 | 0.00 | 0.00 | inactive | 2026-08-28 |
-| NKS | 0.00 | 0.00 | 0.00 | normal | 2026-08-28 |
-| NRS | 0.00 | 0.00 | 0.00 | inactive | 2026-08-28 |
+| URP | 0.00 | 0.00 | 0.00 | inactive | 2026-09-08 |
+| URR | 0.00 | 0.00 | 0.00 | inactive | 2026-09-08 |
+| DSS | 0.00 | 0.00 | 0.00 | inactive | 2026-09-08 |
+| NKS | 0.00 | 0.00 | 0.00 | normal | 2026-09-08 |
+| NRS | 0.00 | 0.00 | 0.00 | inactive | 2026-09-08 |
 
 ### Puentes de datos
 
 | Serie | Estado | Oficial hasta | Proxy hasta | Extensión hasta | Correlación | Error medio |
 |---|---|---|---|---|---:|---:|
-| DEXUSEU | expired | 2026-08-28 | 2026-09-07 | — | 0.688 | 0.210 pp |
-| DEXNOUS | expired | 2026-08-28 | 2026-09-07 | — | 0.799 | 0.262 pp |
-| DEXSDUS | expired | 2026-08-28 | 2026-09-07 | — | 0.709 | 0.366 pp |
-| DTWEXBGS | expired | 2026-08-28 | 2026-09-07 | — | 0.669 | 0.179 pp |
-| DCOILBRENTEU | active | 2026-09-01 | 2026-09-04 | 2026-09-04 | 0.908 | 1.281 pp |
+| DEXUSEU | active | 2026-09-04 | 2026-09-08 | 2026-09-08 | 0.671 | 0.208 pp |
+| DEXNOUS | active | 2026-09-04 | 2026-09-08 | 2026-09-08 | 0.788 | 0.254 pp |
+| DEXSDUS | active | 2026-09-04 | 2026-09-08 | 2026-09-08 | 0.696 | 0.361 pp |
+| DTWEXBGS | active | 2026-09-04 | 2026-09-08 | 2026-09-08 | 0.657 | 0.182 pp |
+| DCOILBRENTEU | active | 2026-09-01 | 2026-09-08 | 2026-09-08 | 0.908 | 1.281 pp |
 
 **Fuentes rápidas no disponibles:**
-- CME_WTI_SETTLEMENT: CME WTI settlements unavailable: 2026-08-21: https://www.cmegroup.com/CmeWS/mvc/Settlements/Futures/Settlements/425/FUT?tradeDate=08%2F21%2F2026: HTTP Error 403: Forbidden
+- CME_WTI_SETTLEMENT: CME WTI settlements unavailable: 2026-08-24: https://www.cmegroup.com/CmeWS/mvc/Settlements/Futures/Settlements/425/FUT?tradeDate=08%2F24%2F2026: HTTP Error 403: Forbidden
 
 ## Método y límites
 
