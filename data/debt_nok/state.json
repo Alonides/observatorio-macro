@@ -1,83 +1,83 @@
 {
-  "updated_at": "2026-09-28T15:47:13.204412+00:00",
-  "report_date": "2026-09-28",
-  "asof": "2026-09-18",
+  "updated_at": "2026-09-29T13:27:02.083402+00:00",
+  "report_date": "2026-09-29",
+  "asof": "2026-09-25",
   "block_asof": {
-    "URP": "2026-09-18",
-    "URR": "2026-09-18",
-    "DSS": "2026-09-18",
+    "URP": "2026-09-25",
+    "URR": "2026-09-25",
+    "DSS": "2026-09-25",
     "NKS": "2026-09-18",
     "NRS": "2026-09-18"
   },
   "freshness": {
     "quality": "stale",
     "label": "Obsoleto",
-    "latest_input_date": "2026-09-25",
-    "latest_block_date": "2026-09-18",
-    "oldest_block": "URP",
+    "latest_input_date": "2026-09-28",
+    "latest_block_date": "2026-09-25",
+    "oldest_block": "NKS",
     "oldest_block_date": "2026-09-18",
-    "maximum_business_day_lag": 5,
+    "maximum_business_day_lag": 6,
     "unavailable_blocks": [],
     "blocks": {
       "URP": {
-        "asof": "2026-09-18",
-        "business_day_lag": 5,
-        "status": "stale",
-        "label": "Obsoleto",
+        "asof": "2026-09-25",
+        "business_day_lag": 1,
+        "status": "fresh",
+        "label": "Actualizado",
         "inputs": {
-          "UST30": "2026-09-25",
-          "BROAD_USD": "2026-09-18",
-          "VIX": "2026-09-25",
-          "US_BUND": "2026-09-25"
+          "UST30": "2026-09-28",
+          "BROAD_USD": "2026-09-25",
+          "VIX": "2026-09-28",
+          "US_BUND": "2026-09-28"
         }
       },
       "URR": {
-        "asof": "2026-09-18",
-        "business_day_lag": 5,
-        "status": "stale",
-        "label": "Obsoleto",
+        "asof": "2026-09-25",
+        "business_day_lag": 1,
+        "status": "fresh",
+        "label": "Actualizado",
         "inputs": {
-          "UST30": "2026-09-25",
-          "BROAD_USD": "2026-09-18",
-          "VIX": "2026-09-25",
-          "US_BUND": "2026-09-25",
-          "GOLD": "2026-09-25",
-          "REAL_10Y": "2026-09-25"
+          "UST30": "2026-09-28",
+          "BROAD_USD": "2026-09-25",
+          "VIX": "2026-09-28",
+          "US_BUND": "2026-09-28",
+          "GOLD": "2026-09-28",
+          "REAL_10Y": "2026-09-28"
         }
       },
       "DSS": {
-        "asof": "2026-09-18",
-        "business_day_lag": 5,
-        "status": "stale",
-        "label": "Obsoleto",
+        "asof": "2026-09-25",
+        "business_day_lag": 1,
+        "status": "fresh",
+        "label": "Actualizado",
         "inputs": {
-          "UST30": "2026-09-25",
-          "BROAD_USD": "2026-09-18",
-          "VIX": "2026-09-25"
+          "UST30": "2026-09-28",
+          "BROAD_USD": "2026-09-25",
+          "VIX": "2026-09-28"
         }
       },
       "NKS": {
         "asof": "2026-09-18",
-        "business_day_lag": 5,
+        "business_day_lag": 6,
         "status": "stale",
         "label": "Obsoleto",
         "inputs": {
-          "EUR_NOK": "2026-09-18",
+          "EUR_NOK": "2026-09-25",
           "NOK_SEK": "2026-09-18",
           "NOK_RESIDUAL": "2026-09-18",
-          "NORWAY_BUND": "2026-09-25"
+          "NORWAY_BUND": "2026-09-28"
         }
       },
       "NRS": {
         "asof": "2026-09-18",
-        "business_day_lag": 5,
+        "business_day_lag": 6,
         "status": "stale",
         "label": "Obsoleto",
         "inputs": {
-          "EUR_NOK": "2026-09-18",
+          "EUR_NOK": "2026-09-25",
           "NOK_SEK": "2026-09-18",
           "NOK_RESIDUAL": "2026-09-18",
-          "NORWAY_BUND": "2026-09-25",
+          "NORWAY_BUND": "2026-09-28",
           "BRENT": "2026-09-22"
         }
       }
@@ -91,8 +91,11 @@
     "raw_level": "normal",
     "review_required": false,
     "active_targets": [
-      "DCOILBRENTEU"
+      "DCOILBRENTEU",
+      "DEXNOUS",
+      "DEXUSEU",
+      "DTWEXBGS"
     ]
   },
-  "fingerprint": "normal|inactive|inactive|inactive|normal|inactive|normal|normal|inactive,inactive,inactive,normal,inactive|DCOILBRENTEU:2026-09-25"
+  "fingerprint": "normal|inactive|inactive|inactive|normal|inactive|normal|normal|inactive,inactive,inactive,normal,inactive|DCOILBRENTEU:2026-09-28,DEXNOUS:2026-09-28,DEXUSEU:2026-09-28,DTWEXBGS:2026-09-28"
 }
