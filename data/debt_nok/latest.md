@@ -1,20 +1,20 @@
-# Informe Debt/NOK · 2026-10-08
+# Informe Debt/NOK · 2026-10-09
 
 **Estado oficial: Normal.** Sin configuración activa de crisis; vigilancia estructural normal
 
 El detector no identifica actualmente una configuración de crisis de deuda/dólar ni estrés material de NOK.
 
-**Actualizado en Oslo:** 2026-10-08 16:06. **Último dato oficial disponible:** 2026-10-07. **Bloque oficial más retrasado:** URR (7 días hábiles).
+**Actualizado en Oslo:** 2026-10-09 15:53. **Último dato oficial disponible:** 2026-10-08. **Bloque oficial más retrasado:** URR (8 días hábiles).
 
 ## Frescura oficial de los bloques
 
 | Bloque | Datos a | Retraso aproximado | Estado |
 |---|---|---:|---|
-| URP | 2026-10-02 | 3 días hábiles | Retrasado |
-| URR | 2026-09-28 | 7 días hábiles | Obsoleto |
-| DSS | 2026-10-02 | 3 días hábiles | Retrasado |
-| NKS | 2026-10-02 | 3 días hábiles | Retrasado |
-| NRS | 2026-10-02 | 3 días hábiles | Retrasado |
+| URP | 2026-10-02 | 4 días hábiles | Obsoleto |
+| URR | 2026-09-28 | 8 días hábiles | Obsoleto |
+| DSS | 2026-10-02 | 4 días hábiles | Obsoleto |
+| NKS | 2026-10-02 | 4 días hábiles | Obsoleto |
+| NRS | 2026-10-02 | 4 días hábiles | Obsoleto |
 
 ## Panel oficial de bloques
 
@@ -62,6 +62,7 @@ La vía rápida usa proxies primarios o secundarios expresamente identificados y
 | DEXNOUS | active | 2026-10-02 | 2026-10-08 | 2026-10-08 | 0.771 | 0.206 pp |
 | DEXSDUS | rejected | 2026-10-02 | 2026-10-08 | — | 0.578 | 0.332 pp |
 | DTWEXBGS | rejected | 2026-10-02 | 2026-10-08 | — | 0.587 | 0.187 pp |
+| DCOILBRENTEU | active | 2026-10-06 | 2026-10-08 | 2026-10-08 | 0.784 | 1.881 pp |
 
 **Fuentes rápidas no disponibles:**
 - CME_WTI_SETTLEMENT: CME WTI settlements unavailable: 2026-09-21: https://www.cmegroup.com/CmeWS/mvc/Settlements/Futures/Settlements/425/FUT?tradeDate=09%2F21%2F2026: HTTP Error 403: Forbidden
