@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "generated_at": "2026-10-09T11:59:53.488838+00:00",
+  "generated_at": "2026-10-10T11:16:46.166549+00:00",
   "status": "operational_partial",
   "operational": true,
   "missing_core": [],
@@ -9,7 +9,7 @@
   "errors": [
     {
       "series_id": "GOLDAMGBD228NLBM",
-      "error": "LBMA: respuesta no interpretable: https://prices.lbma.org.uk/json/gold_am.json?cache=1791547201-2: HTTP Error 403: Forbidden",
+      "error": "LBMA: respuesta no interpretable: https://prices.lbma.org.uk/json/gold_am.json?cache=1791631014-2: HTTP Error 403: Forbidden",
       "fallback_used": true
     },
     {
@@ -22,19 +22,19 @@
     {
       "id": "US_2S10S",
       "title": "Pendiente EE. UU. 2–10",
-      "value": 47.0,
+      "value": 44.0,
       "unit": "pb"
     },
     {
       "id": "US_2S30S",
       "title": "Pendiente EE. UU. 2–30",
-      "value": 85.0,
+      "value": 80.0,
       "unit": "pb"
     },
     {
       "id": "US_DEBT_GDP",
       "title": "Deuda federal bruta / PIB",
-      "value": 123.7,
+      "value": 123.8,
       "unit": "%"
     },
     {
@@ -62,7 +62,7 @@
         "key": "real_yield",
         "label": "Rendimiento real a la alza",
         "active": true,
-        "value": 0.56,
+        "value": 0.6000000000000001,
         "threshold": "≥ +50 pb en 92 días",
         "explanation": "El mercado exige más rentabilidad real."
       },
@@ -86,7 +86,7 @@
         "key": "stress",
         "label": "Pérdida de la función refugio / estrés",
         "active": false,
-        "value": 15.41,
+        "value": 14.84,
         "threshold": "VIX ≥ 35",
         "explanation": "Filtro conservador: exige estrés de mercado además del movimiento de precios."
       },
@@ -102,7 +102,7 @@
         "key": "us_specific",
         "label": "Prima estadounidense relativa",
         "active": false,
-        "value": 0.2889249399,
+        "value": 0.32892493990000005,
         "threshold": "EE. UU.−pares ≥ +35 pb en 92 días",
         "explanation": "Busca deterioro relativo y no solo un movimiento mundial de duración."
       }
@@ -128,8 +128,8 @@
       "stale_after_days": 7,
       "source": "U.S. Treasury",
       "source_url": "https://home.treasury.gov/resource-center/data-chart-center/interest-rates",
-      "value": 4.23,
-      "observation_date": "2026-10-08",
+      "value": 4.25,
+      "observation_date": "2026-10-09",
       "age_days": 1,
       "quality": "ok"
     },
@@ -142,8 +142,8 @@
       "stale_after_days": 7,
       "source": "U.S. Treasury",
       "source_url": "https://home.treasury.gov/resource-center/data-chart-center/interest-rates",
-      "value": 4.75,
-      "observation_date": "2026-10-08",
+      "value": 4.8,
+      "observation_date": "2026-10-09",
       "age_days": 1,
       "quality": "ok"
     },
@@ -156,8 +156,8 @@
       "stale_after_days": 7,
       "source": "U.S. Treasury",
       "source_url": "https://home.treasury.gov/resource-center/data-chart-center/interest-rates",
-      "value": 5.22,
-      "observation_date": "2026-10-08",
+      "value": 5.24,
+      "observation_date": "2026-10-09",
       "age_days": 1,
       "quality": "ok"
     },
@@ -171,7 +171,7 @@
       "source": "U.S. Treasury",
       "source_url": "https://home.treasury.gov/resource-center/data-chart-center/interest-rates",
       "value": 5.6,
-      "observation_date": "2026-10-08",
+      "observation_date": "2026-10-09",
       "age_days": 1,
       "quality": "ok"
     },
@@ -184,8 +184,8 @@
       "stale_after_days": 7,
       "source": "U.S. Treasury",
       "source_url": "https://home.treasury.gov/resource-center/data-chart-center/interest-rates",
-      "value": 2.87,
-      "observation_date": "2026-10-08",
+      "value": 2.91,
+      "observation_date": "2026-10-09",
       "age_days": 1,
       "quality": "ok"
     },
@@ -198,8 +198,8 @@
       "stale_after_days": 7,
       "source": "Derivado Treasury nominal − real",
       "source_url": "https://home.treasury.gov/resource-center/data-chart-center/interest-rates",
-      "value": 2.3499999999999996,
-      "observation_date": "2026-10-08",
+      "value": 2.33,
+      "observation_date": "2026-10-09",
       "age_days": 1,
       "quality": "ok"
     },
@@ -214,7 +214,7 @@
       "source_url": "https://markets.newyorkfed.org/",
       "value": 3.87,
       "observation_date": "2026-10-08",
-      "age_days": 1,
+      "age_days": 2,
       "quality": "ok"
     },
     {
@@ -228,7 +228,7 @@
       "source_url": "https://www.federalreserve.gov/datadownload/",
       "value": 3.9,
       "observation_date": "2026-10-07",
-      "age_days": 2,
+      "age_days": 3,
       "quality": "ok"
     },
     {
@@ -240,8 +240,8 @@
       "stale_after_days": 7,
       "source": "Federal Reserve Bank of New York",
       "source_url": "https://markets.newyorkfed.org/",
-      "value": 0.335,
-      "observation_date": "2026-10-08",
+      "value": 0.3,
+      "observation_date": "2026-10-09",
       "age_days": 1,
       "quality": "ok"
     },
@@ -256,7 +256,7 @@
       "source_url": "https://www.federalreserve.gov/releases/h41/current/h41.htm",
       "value": 6747560.0,
       "observation_date": "2026-10-07",
-      "age_days": 2,
+      "age_days": 3,
       "quality": "ok"
     },
     {
@@ -270,7 +270,7 @@
       "source_url": "https://www.federalreserve.gov/releases/h41/current/h41.htm",
       "value": 885783.0,
       "observation_date": "2026-10-07",
-      "age_days": 2,
+      "age_days": 3,
       "quality": "ok"
     },
     {
@@ -282,8 +282,8 @@
       "stale_after_days": 7,
       "source": "Cboe Global Markets",
       "source_url": "https://www.cboe.com/tradable_products/vix/vix_historical_data/",
-      "value": 15.41,
-      "observation_date": "2026-10-08",
+      "value": 14.84,
+      "observation_date": "2026-10-09",
       "age_days": 1,
       "quality": "ok"
     },
@@ -298,8 +298,8 @@
       "source_url": "https://www.federalreserve.gov/releases/h10/current/",
       "value": 121.3848,
       "observation_date": "2026-10-02",
-      "age_days": 7,
-      "quality": "ok"
+      "age_days": 8,
+      "quality": "warning"
     },
     {
       "id": "DEXUSEU",
@@ -312,8 +312,8 @@
       "source_url": "https://www.federalreserve.gov/releases/h10/current/",
       "value": 1.1259,
       "observation_date": "2026-10-02",
-      "age_days": 7,
-      "quality": "ok"
+      "age_days": 8,
+      "quality": "warning"
     },
     {
       "id": "DEXNOUS",
@@ -326,8 +326,8 @@
       "source_url": "https://www.federalreserve.gov/releases/h10/current/",
       "value": 9.6386,
       "observation_date": "2026-10-02",
-      "age_days": 7,
-      "quality": "ok"
+      "age_days": 8,
+      "quality": "warning"
     },
     {
       "id": "DEXJPUS",
@@ -340,8 +340,8 @@
       "source_url": "https://www.federalreserve.gov/releases/h10/current/",
       "value": 157.81,
       "observation_date": "2026-10-02",
-      "age_days": 7,
-      "quality": "ok"
+      "age_days": 8,
+      "quality": "warning"
     },
     {
       "id": "DEXCHUS",
@@ -354,8 +354,8 @@
       "source_url": "https://www.federalreserve.gov/releases/h10/current/",
       "value": 6.7038,
       "observation_date": "2026-10-02",
-      "age_days": 7,
-      "quality": "ok"
+      "age_days": 8,
+      "quality": "warning"
     },
     {
       "id": "GOLDAMGBD228NLBM",
@@ -368,7 +368,7 @@
       "source_url": "https://www.lbma.org.uk/prices-and-data/precious-metal-prices",
       "value": 4144.4,
       "observation_date": "2026-09-28",
-      "age_days": 11,
+      "age_days": 12,
       "quality": "warning"
     },
     {
@@ -380,8 +380,8 @@
       "stale_after_days": 7,
       "source": "CoinGecko",
       "source_url": "https://www.coingecko.com/en/coins/bitcoin",
-      "value": 83148.32669176617,
-      "observation_date": "2026-10-09",
+      "value": 82736.1635156084,
+      "observation_date": "2026-10-10",
       "age_days": 0,
       "quality": "ok"
     },
@@ -396,7 +396,7 @@
       "source_url": "https://www.eia.gov/opendata/",
       "value": 125.44,
       "observation_date": "2026-10-06",
-      "age_days": 3,
+      "age_days": 4,
       "quality": "ok"
     },
     {
@@ -410,7 +410,7 @@
       "source_url": "https://www.eia.gov/opendata/",
       "value": 3.03,
       "observation_date": "2026-10-06",
-      "age_days": 3,
+      "age_days": 4,
       "quality": "ok"
     },
     {
@@ -424,7 +424,7 @@
       "source_url": "https://www.mof.go.jp/english/policy/jgbs/reference/interest_rate/",
       "value": 3.089,
       "observation_date": "2026-10-08",
-      "age_days": 1,
+      "age_days": 2,
       "quality": "ok"
     },
     {
@@ -438,7 +438,7 @@
       "source_url": "https://www.bundesbank.de/en/statistics/money-and-capital-markets/interest-rates-and-yields",
       "value": 3.47,
       "observation_date": "2026-10-09",
-      "age_days": 0,
+      "age_days": 1,
       "quality": "ok"
     },
     {
@@ -452,7 +452,7 @@
       "source_url": "https://www.bankofengland.co.uk/boeapps/database/",
       "value": 5.3852,
       "observation_date": "2026-10-07",
-      "age_days": 2,
+      "age_days": 3,
       "quality": "ok"
     },
     {
@@ -466,7 +466,7 @@
       "source_url": "https://www.norges-bank.no/en/topics/Statistics/norwegian-government-securities/generiske-statsrenter/",
       "value": 4.641,
       "observation_date": "2026-10-08",
-      "age_days": 1,
+      "age_days": 2,
       "quality": "ok"
     },
     {
@@ -480,7 +480,7 @@
       "source_url": "https://data.ecb.europa.eu/data/datasets/YC/YC.B.U2.EUR.4F.G_N_A.SV_C_YM.SR_10Y",
       "value": 3.51918971,
       "observation_date": "2026-10-08",
-      "age_days": 1,
+      "age_days": 2,
       "quality": "ok"
     },
     {
@@ -492,8 +492,8 @@
       "stale_after_days": 7,
       "source": "U.S. Treasury Fiscal Data",
       "source_url": "https://fiscaldata.treasury.gov/datasets/debt-to-the-penny/",
-      "value": 40284036.14736719,
-      "observation_date": "2026-10-07",
+      "value": 40305316.21082972,
+      "observation_date": "2026-10-08",
       "age_days": 2,
       "quality": "ok"
     },
@@ -508,7 +508,7 @@
       "source_url": "https://db.nomics.world/BEA/NIPA-T30200/A091RC-Q",
       "value": 1279.734,
       "observation_date": "2026-06-30",
-      "age_days": 101,
+      "age_days": 102,
       "quality": "ok"
     },
     {
@@ -522,7 +522,7 @@
       "source_url": "https://db.nomics.world/BEA/NIPA-T10105/A191RC-Q",
       "value": 32563.03,
       "observation_date": "2026-06-30",
-      "age_days": 101,
+      "age_days": 102,
       "quality": "ok"
     },
     {
@@ -536,7 +536,7 @@
       "source_url": "https://www.bls.gov/cpi/data.htm",
       "value": 334.131,
       "observation_date": "2026-08-01",
-      "age_days": 69,
+      "age_days": 70,
       "quality": "warning"
     },
     {
@@ -550,7 +550,7 @@
       "source_url": "https://www.bls.gov/cps/data.htm",
       "value": 4.2,
       "observation_date": "2026-09-01",
-      "age_days": 38,
+      "age_days": 39,
       "quality": "ok"
     },
     {
@@ -564,7 +564,7 @@
       "source_url": "https://www.regardsofwallstreet.com/data/capex",
       "value": 41.0,
       "observation_date": "2026-06-30",
-      "age_days": 101,
+      "age_days": 102,
       "quality": "ok"
     },
     {
@@ -578,7 +578,7 @@
       "source_url": "https://www.regardsofwallstreet.com/data/capex",
       "value": 44.9,
       "observation_date": "2026-06-30",
-      "age_days": 101,
+      "age_days": 102,
       "quality": "ok"
     },
     {
@@ -592,7 +592,7 @@
       "source_url": "https://www.regardsofwallstreet.com/data/capex",
       "value": 54.2,
       "observation_date": "2026-06-30",
-      "age_days": 101,
+      "age_days": 102,
       "quality": "ok"
     },
     {
@@ -606,7 +606,7 @@
       "source_url": "https://www.regardsofwallstreet.com/data/capex",
       "value": 31.08,
       "observation_date": "2026-06-30",
-      "age_days": 101,
+      "age_days": 102,
       "quality": "ok"
     },
     {
@@ -620,7 +620,7 @@
       "source_url": "https://www.regardsofwallstreet.com/data/capex",
       "value": 15.9,
       "observation_date": "2026-05-31",
-      "age_days": 131,
+      "age_days": 132,
       "quality": "ok"
     }
   ]
