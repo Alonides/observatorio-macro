@@ -1,83 +1,83 @@
 {
-  "updated_at": "2026-10-26T14:29:19.734788+00:00",
-  "report_date": "2026-10-26",
-  "asof": "2026-10-16",
+  "updated_at": "2026-10-27T12:47:40.355371+00:00",
+  "report_date": "2026-10-27",
+  "asof": "2026-10-23",
   "block_asof": {
-    "URP": "2026-10-16",
+    "URP": "2026-10-23",
     "URR": "2026-09-28",
-    "DSS": "2026-10-16",
-    "NKS": "2026-10-16",
-    "NRS": "2026-10-16"
+    "DSS": "2026-10-23",
+    "NKS": "2026-10-20",
+    "NRS": "2026-10-20"
   },
   "freshness": {
     "quality": "stale",
     "label": "Obsoleto",
-    "latest_input_date": "2026-10-23",
-    "latest_block_date": "2026-10-16",
+    "latest_input_date": "2026-10-26",
+    "latest_block_date": "2026-10-23",
     "oldest_block": "URR",
     "oldest_block_date": "2026-09-28",
-    "maximum_business_day_lag": 19,
+    "maximum_business_day_lag": 20,
     "unavailable_blocks": [],
     "blocks": {
       "URP": {
-        "asof": "2026-10-16",
-        "business_day_lag": 5,
-        "status": "stale",
-        "label": "Obsoleto",
+        "asof": "2026-10-23",
+        "business_day_lag": 1,
+        "status": "fresh",
+        "label": "Actualizado",
         "inputs": {
-          "UST30": "2026-10-23",
-          "BROAD_USD": "2026-10-16",
-          "VIX": "2026-10-23",
-          "US_BUND": "2026-10-23"
+          "UST30": "2026-10-26",
+          "BROAD_USD": "2026-10-23",
+          "VIX": "2026-10-26",
+          "US_BUND": "2026-10-26"
         }
       },
       "URR": {
         "asof": "2026-09-28",
-        "business_day_lag": 19,
+        "business_day_lag": 20,
         "status": "stale",
         "label": "Obsoleto",
         "inputs": {
-          "UST30": "2026-10-23",
-          "BROAD_USD": "2026-10-16",
-          "VIX": "2026-10-23",
-          "US_BUND": "2026-10-23",
+          "UST30": "2026-10-26",
+          "BROAD_USD": "2026-10-23",
+          "VIX": "2026-10-26",
+          "US_BUND": "2026-10-26",
           "GOLD": "2026-09-28",
-          "REAL_10Y": "2026-10-23"
+          "REAL_10Y": "2026-10-26"
         }
       },
       "DSS": {
-        "asof": "2026-10-16",
-        "business_day_lag": 5,
-        "status": "stale",
-        "label": "Obsoleto",
+        "asof": "2026-10-23",
+        "business_day_lag": 1,
+        "status": "fresh",
+        "label": "Actualizado",
         "inputs": {
-          "UST30": "2026-10-23",
-          "BROAD_USD": "2026-10-16",
-          "VIX": "2026-10-23"
+          "UST30": "2026-10-26",
+          "BROAD_USD": "2026-10-23",
+          "VIX": "2026-10-26"
         }
       },
       "NKS": {
-        "asof": "2026-10-16",
-        "business_day_lag": 5,
+        "asof": "2026-10-20",
+        "business_day_lag": 4,
         "status": "stale",
         "label": "Obsoleto",
         "inputs": {
-          "EUR_NOK": "2026-10-16",
-          "NOK_SEK": "2026-10-16",
-          "NOK_RESIDUAL": "2026-10-16",
-          "NORWAY_BUND": "2026-10-22"
+          "EUR_NOK": "2026-10-23",
+          "NOK_SEK": "2026-10-23",
+          "NOK_RESIDUAL": "2026-10-20",
+          "NORWAY_BUND": "2026-10-26"
         }
       },
       "NRS": {
-        "asof": "2026-10-16",
-        "business_day_lag": 5,
+        "asof": "2026-10-20",
+        "business_day_lag": 4,
         "status": "stale",
         "label": "Obsoleto",
         "inputs": {
-          "EUR_NOK": "2026-10-16",
-          "NOK_SEK": "2026-10-16",
-          "NOK_RESIDUAL": "2026-10-16",
-          "NORWAY_BUND": "2026-10-22",
+          "EUR_NOK": "2026-10-23",
+          "NOK_SEK": "2026-10-23",
+          "NOK_RESIDUAL": "2026-10-20",
+          "NORWAY_BUND": "2026-10-26",
           "BRENT": "2026-10-20"
         }
       }
@@ -93,8 +93,10 @@
     "active_targets": [
       "DCOILBRENTEU",
       "DEXNOUS",
-      "DEXUSEU"
+      "DEXSDUS",
+      "DEXUSEU",
+      "DTWEXBGS"
     ]
   },
-  "fingerprint": "normal|inactive|inactive|inactive|normal|inactive|normal|normal|inactive,inactive,inactive,normal,inactive|DCOILBRENTEU:2026-10-23,DEXNOUS:2026-10-23,DEXUSEU:2026-10-23"
+  "fingerprint": "normal|inactive|inactive|inactive|normal|inactive|normal|normal|inactive,inactive,inactive,normal,inactive|DCOILBRENTEU:2026-10-26,DEXNOUS:2026-10-26,DEXSDUS:2026-10-26,DEXUSEU:2026-10-26,DTWEXBGS:2026-10-26"
 }
