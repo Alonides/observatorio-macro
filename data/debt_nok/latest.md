@@ -1,20 +1,20 @@
-# Informe Debt/NOK · 2026-10-27
+# Informe Debt/NOK · 2026-10-28
 
 **Estado oficial: Normal.** Sin configuración activa de crisis; vigilancia estructural normal
 
 El detector no identifica actualmente una configuración de crisis de deuda/dólar ni estrés material de NOK.
 
-**Actualizado en Oslo:** 2026-10-27 13:47. **Último dato oficial disponible:** 2026-10-26. **Bloque oficial más retrasado:** URR (20 días hábiles).
+**Actualizado en Oslo:** 2026-10-28 14:37. **Último dato oficial disponible:** 2026-10-27. **Bloque oficial más retrasado:** URR (21 días hábiles).
 
 ## Frescura oficial de los bloques
 
 | Bloque | Datos a | Retraso aproximado | Estado |
 |---|---|---:|---|
-| URP | 2026-10-23 | 1 día hábil | Actualizado |
-| URR | 2026-09-28 | 20 días hábiles | Obsoleto |
-| DSS | 2026-10-23 | 1 día hábil | Actualizado |
-| NKS | 2026-10-20 | 4 días hábiles | Obsoleto |
-| NRS | 2026-10-20 | 4 días hábiles | Obsoleto |
+| URP | 2026-10-23 | 2 días hábiles | Retrasado |
+| URR | 2026-09-28 | 21 días hábiles | Obsoleto |
+| DSS | 2026-10-23 | 2 días hábiles | Retrasado |
+| NKS | 2026-10-20 | 5 días hábiles | Obsoleto |
+| NRS | 2026-10-20 | 5 días hábiles | Obsoleto |
 
 ## Panel oficial de bloques
 
@@ -48,24 +48,24 @@ La vía rápida usa proxies primarios o secundarios expresamente identificados y
 
 | Bloque | Oficial | Provisional | Δ | Estado provisional | Datos provisionales a |
 |---|---:|---:|---:|---|---|
-| URP | 0.00 | 0.00 | 0.00 | inactive | 2026-10-26 |
+| URP | 0.00 | 0.00 | 0.00 | inactive | 2026-10-23 |
 | URR | 0.00 | 0.00 | 0.00 | inactive | 2026-09-28 |
-| DSS | 0.00 | 0.00 | 0.00 | inactive | 2026-10-26 |
-| NKS | 3.74 | 4.40 | 0.66 | normal | 2026-10-26 |
-| NRS | 0.00 | 0.00 | 0.00 | inactive | 2026-10-26 |
+| DSS | 0.00 | 0.00 | 0.00 | inactive | 2026-10-23 |
+| NKS | 3.74 | 5.37 | 1.63 | normal | 2026-10-23 |
+| NRS | 0.00 | 0.00 | 0.00 | inactive | 2026-10-23 |
 
 ### Puentes de datos
 
 | Serie | Estado | Oficial hasta | Proxy hasta | Extensión hasta | Correlación | Error medio |
 |---|---|---|---|---|---:|---:|
-| DEXUSEU | active | 2026-10-23 | 2026-10-26 | 2026-10-26 | 0.625 | 0.207 pp |
-| DEXNOUS | active | 2026-10-23 | 2026-10-26 | 2026-10-26 | 0.668 | 0.224 pp |
-| DEXSDUS | active | 2026-10-23 | 2026-10-26 | 2026-10-26 | 0.611 | 0.310 pp |
-| DTWEXBGS | active | 2026-10-23 | 2026-10-26 | 2026-10-26 | 0.603 | 0.191 pp |
-| DCOILBRENTEU | active | 2026-10-20 | 2026-10-26 | 2026-10-26 | 0.701 | 1.882 pp |
+| DEXUSEU | rejected | 2026-10-23 | 2026-10-27 | — | 0.550 | 0.204 pp |
+| DEXNOUS | rejected | 2026-10-23 | 2026-10-27 | — | 0.620 | 0.224 pp |
+| DEXSDUS | rejected | 2026-10-23 | 2026-10-27 | — | 0.514 | 0.303 pp |
+| DTWEXBGS | rejected | 2026-10-23 | 2026-10-27 | — | 0.535 | 0.191 pp |
+| DCOILBRENTEU | active | 2026-10-20 | 2026-10-27 | 2026-10-27 | 0.701 | 1.882 pp |
 
 **Fuentes rápidas no disponibles:**
-- CME_WTI_SETTLEMENT: CME WTI settlements unavailable: 2026-10-09: https://www.cmegroup.com/CmeWS/mvc/Settlements/Futures/Settlements/425/FUT?tradeDate=10%2F09%2F2026: HTTP Error 403: Forbidden
+- CME_WTI_SETTLEMENT: CME WTI settlements unavailable: 2026-10-12: https://www.cmegroup.com/CmeWS/mvc/Settlements/Futures/Settlements/425/FUT?tradeDate=10%2F12%2F2026: HTTP Error 403: Forbidden
 
 ## Método y límites
 
