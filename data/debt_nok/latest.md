@@ -1,20 +1,20 @@
-# Informe Debt/NOK · 2026-11-02
+# Informe Debt/NOK · 2026-11-03
 
 **Estado oficial: Normal.** Sin configuración activa de crisis; vigilancia estructural normal
 
 El detector no identifica actualmente una configuración de crisis de deuda/dólar ni estrés material de NOK.
 
-**Actualizado en Oslo:** 2026-11-02 18:21. **Último dato oficial disponible:** 2026-10-30. **Bloque oficial más retrasado:** URR (24 días hábiles).
+**Actualizado en Oslo:** 2026-11-03 15:41. **Último dato oficial disponible:** 2026-11-02. **Bloque oficial más retrasado:** URR (25 días hábiles).
 
 ## Frescura oficial de los bloques
 
 | Bloque | Datos a | Retraso aproximado | Estado |
 |---|---|---:|---|
-| URP | 2026-10-23 | 5 días hábiles | Obsoleto |
-| URR | 2026-09-28 | 24 días hábiles | Obsoleto |
-| DSS | 2026-10-23 | 5 días hábiles | Obsoleto |
-| NKS | 2026-10-23 | 5 días hábiles | Obsoleto |
-| NRS | 2026-10-23 | 5 días hábiles | Obsoleto |
+| URP | 2026-10-23 | 6 días hábiles | Obsoleto |
+| URR | 2026-09-28 | 25 días hábiles | Obsoleto |
+| DSS | 2026-10-23 | 6 días hábiles | Obsoleto |
+| NKS | 2026-10-27 | 4 días hábiles | Obsoleto |
+| NRS | 2026-10-27 | 4 días hábiles | Obsoleto |
 
 ## Panel oficial de bloques
 
@@ -23,18 +23,18 @@ El detector no identifica actualmente una configuración de crisis de deuda/dól
 | URP · Rechazo USA | 0.00 | inactive | 2026-10-23 | 0.00 | +0.00 |
 | URR · Persistencia USA | 0.00 | inactive | 2026-09-28 | 0.00 | +0.00 |
 | DSS · Escasez de dólares | 0.00 | inactive | 2026-10-23 | 0.00 | +0.00 |
-| NKS · Estrés NOK | 5.37 | normal | 2026-10-23 | 6.25 | -0.88 |
-| NRS · Reversión NOK | 0.00 | inactive | 2026-10-23 | 0.00 | +0.00 |
+| NKS · Estrés NOK | 5.10 | normal | 2026-10-27 | 3.74 | +1.36 |
+| NRS · Reversión NOK | 0.00 | inactive | 2026-10-27 | 0.00 | +0.00 |
 
 ## Variables discriminantes oficiales
 
 - Treasury 30 años, cambio 10 sesiones: **-27.0 pb**.
 - Dólar amplio, caída 10 sesiones: **0.10 %**.
 - VIX: **19.45**.
-- EUR/NOK, cambio 20 sesiones: **-3.50 %**.
-- Debilidad NOK frente a SEK, 20 sesiones: **-1.84 %**.
-- Residual NOK: **-1.52σ**.
-- Norway–Bund, cambio 20 sesiones: **12.2 pb**.
+- EUR/NOK, cambio 20 sesiones: **-3.98 %**.
+- Debilidad NOK frente a SEK, 20 sesiones: **-1.79 %**.
+- Residual NOK: **-1.70σ**.
+- Norway–Bund, cambio 20 sesiones: **11.6 pb**.
 
 ## Lectura operativa oficial
 
@@ -51,21 +51,21 @@ La vía rápida usa proxies primarios o secundarios expresamente identificados y
 | URP | 0.00 | 0.00 | 0.00 | inactive | 2026-10-23 |
 | URR | 0.00 | 0.00 | 0.00 | inactive | 2026-09-28 |
 | DSS | 0.00 | 0.00 | 0.00 | inactive | 2026-10-23 |
-| NKS | 5.37 | 5.37 | 0.00 | normal | 2026-10-23 |
-| NRS | 0.00 | 0.00 | 0.00 | inactive | 2026-10-23 |
+| NKS | 5.10 | 0.00 | -5.10 | normal | 2026-10-30 |
+| NRS | 0.00 | 0.00 | 0.00 | inactive | 2026-10-30 |
 
 ### Puentes de datos
 
 | Serie | Estado | Oficial hasta | Proxy hasta | Extensión hasta | Correlación | Error medio |
 |---|---|---|---|---|---:|---:|
-| DEXUSEU | expired | 2026-10-23 | 2026-11-02 | — | 0.570 | 0.199 pp |
-| DEXNOUS | expired | 2026-10-23 | 2026-11-02 | — | 0.614 | 0.227 pp |
-| DEXSDUS | expired | 2026-10-23 | 2026-11-02 | — | 0.530 | 0.295 pp |
+| DEXUSEU | rejected | 2026-10-30 | 2026-11-02 | — | 0.563 | 0.198 pp |
+| DEXNOUS | rejected | 2026-10-30 | 2026-11-02 | — | 0.619 | 0.223 pp |
+| DEXSDUS | rejected | 2026-10-30 | 2026-11-02 | — | 0.559 | 0.284 pp |
 | DTWEXBGS | expired | 2026-10-23 | 2026-11-02 | — | 0.568 | 0.180 pp |
-| DCOILBRENTEU | active | 2026-10-27 | 2026-10-29 | 2026-10-29 | 0.654 | 1.874 pp |
+| DCOILBRENTEU | active | 2026-10-27 | 2026-11-02 | 2026-11-02 | 0.654 | 1.874 pp |
 
 **Fuentes rápidas no disponibles:**
-- CME_WTI_SETTLEMENT: CME WTI settlements unavailable: 2026-10-15: https://www.cmegroup.com/CmeWS/mvc/Settlements/Futures/Settlements/425/FUT?tradeDate=10%2F15%2F2026: HTTP Error 403: Forbidden
+- CME_WTI_SETTLEMENT: CME WTI settlements unavailable: 2026-10-16: https://www.cmegroup.com/CmeWS/mvc/Settlements/Futures/Settlements/425/FUT?tradeDate=10%2F16%2F2026: HTTP Error 403: Forbidden
 
 ## Método y límites
 
