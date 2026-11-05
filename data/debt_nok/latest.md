@@ -1,20 +1,20 @@
-# Informe Debt/NOK · 2026-11-04
+# Informe Debt/NOK · 2026-11-05
 
 **Estado oficial: Normal.** Sin configuración activa de crisis; vigilancia estructural normal
 
 El detector no identifica actualmente una configuración de crisis de deuda/dólar ni estrés material de NOK.
 
-**Actualizado en Oslo:** 2026-11-04 15:55. **Último dato oficial disponible:** 2026-11-03. **Bloque oficial más retrasado:** URR (26 días hábiles).
+**Actualizado en Oslo:** 2026-11-05 15:59. **Último dato oficial disponible:** 2026-11-04. **Bloque oficial más retrasado:** URR (27 días hábiles).
 
 ## Frescura oficial de los bloques
 
 | Bloque | Datos a | Retraso aproximado | Estado |
 |---|---|---:|---|
-| URP | 2026-10-30 | 2 días hábiles | Retrasado |
-| URR | 2026-09-28 | 26 días hábiles | Obsoleto |
-| DSS | 2026-10-30 | 2 días hábiles | Retrasado |
-| NKS | 2026-10-27 | 5 días hábiles | Obsoleto |
-| NRS | 2026-10-27 | 5 días hábiles | Obsoleto |
+| URP | 2026-10-30 | 3 días hábiles | Retrasado |
+| URR | 2026-09-28 | 27 días hábiles | Obsoleto |
+| DSS | 2026-10-30 | 3 días hábiles | Retrasado |
+| NKS | 2026-10-30 | 3 días hábiles | Retrasado |
+| NRS | 2026-10-30 | 3 días hábiles | Retrasado |
 
 ## Panel oficial de bloques
 
@@ -23,18 +23,18 @@ El detector no identifica actualmente una configuración de crisis de deuda/dól
 | URP · Rechazo USA | 0.00 | inactive | 2026-10-30 | 0.00 | +0.00 |
 | URR · Persistencia USA | 0.00 | inactive | 2026-09-28 | 0.00 | +0.00 |
 | DSS · Escasez de dólares | 0.00 | inactive | 2026-10-30 | 0.00 | +0.00 |
-| NKS · Estrés NOK | 5.10 | normal | 2026-10-27 | 3.74 | +1.36 |
-| NRS · Reversión NOK | 0.00 | inactive | 2026-10-27 | 0.00 | +0.00 |
+| NKS · Estrés NOK | 0.00 | normal | 2026-10-30 | 5.37 | -5.37 |
+| NRS · Reversión NOK | 0.00 | inactive | 2026-10-30 | 0.00 | +0.00 |
 
 ## Variables discriminantes oficiales
 
 - Treasury 30 años, cambio 10 sesiones: **-12.0 pb**.
 - Dólar amplio, caída 10 sesiones: **-0.21 %**.
 - VIX: **19.42**.
-- EUR/NOK, cambio 20 sesiones: **-3.98 %**.
-- Debilidad NOK frente a SEK, 20 sesiones: **-1.79 %**.
-- Residual NOK: **-1.70σ**.
-- Norway–Bund, cambio 20 sesiones: **11.6 pb**.
+- EUR/NOK, cambio 20 sesiones: **-5.02 %**.
+- Debilidad NOK frente a SEK, 20 sesiones: **-2.16 %**.
+- Residual NOK: **-2.08σ**.
+- Norway–Bund, cambio 20 sesiones: **-6.3 pb**.
 
 ## Lectura operativa oficial
 
@@ -51,18 +51,18 @@ La vía rápida usa proxies primarios o secundarios expresamente identificados y
 | URP | 0.00 | 0.00 | 0.00 | inactive | 2026-10-30 |
 | URR | 0.00 | 0.00 | 0.00 | inactive | 2026-09-28 |
 | DSS | 0.00 | 0.00 | 0.00 | inactive | 2026-10-30 |
-| NKS | 5.10 | 0.00 | -5.10 | normal | 2026-10-30 |
+| NKS | 0.00 | 0.00 | 0.00 | normal | 2026-10-30 |
 | NRS | 0.00 | 0.00 | 0.00 | inactive | 2026-10-30 |
 
 ### Puentes de datos
 
 | Serie | Estado | Oficial hasta | Proxy hasta | Extensión hasta | Correlación | Error medio |
 |---|---|---|---|---|---:|---:|
-| DEXUSEU | rejected | 2026-10-30 | 2026-11-03 | — | 0.563 | 0.199 pp |
-| DEXNOUS | rejected | 2026-10-30 | 2026-11-03 | — | 0.615 | 0.227 pp |
-| DEXSDUS | rejected | 2026-10-30 | 2026-11-03 | — | 0.567 | 0.281 pp |
-| DTWEXBGS | rejected | 2026-10-30 | 2026-11-03 | — | 0.566 | 0.179 pp |
-| DCOILBRENTEU | active | 2026-10-27 | 2026-11-03 | 2026-11-03 | 0.654 | 1.874 pp |
+| DEXUSEU | rejected | 2026-10-30 | 2026-11-05 | — | 0.575 | 0.195 pp |
+| DEXNOUS | rejected | 2026-10-30 | 2026-11-05 | — | 0.620 | 0.226 pp |
+| DEXSDUS | rejected | 2026-10-30 | 2026-11-05 | — | 0.586 | 0.278 pp |
+| DTWEXBGS | rejected | 2026-10-30 | 2026-11-05 | — | 0.595 | 0.173 pp |
+| DCOILBRENTEU | active | 2026-11-03 | 2026-11-04 | 2026-11-04 | 0.673 | 1.913 pp |
 
 **Fuentes rápidas no disponibles:**
 - CME_WTI_SETTLEMENT: CME WTI settlements unavailable: 2026-10-19: https://www.cmegroup.com/CmeWS/mvc/Settlements/Futures/Settlements/425/FUT?tradeDate=10%2F19%2F2026: HTTP Error 403: Forbidden
