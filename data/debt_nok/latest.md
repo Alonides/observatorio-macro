@@ -1,20 +1,20 @@
-# Informe Debt/NOK · 2026-11-06
+# Informe Debt/NOK · 2026-11-09
 
 **Estado oficial: Normal.** Sin configuración activa de crisis; vigilancia estructural normal
 
 El detector no identifica actualmente una configuración de crisis de deuda/dólar ni estrés material de NOK.
 
-**Actualizado en Oslo:** 2026-11-06 15:39. **Último dato oficial disponible:** 2026-11-05. **Bloque oficial más retrasado:** URR (28 días hábiles).
+**Actualizado en Oslo:** 2026-11-09 18:44. **Último dato oficial disponible:** 2026-11-06. **Bloque oficial más retrasado:** URR (29 días hábiles).
 
 ## Frescura oficial de los bloques
 
 | Bloque | Datos a | Retraso aproximado | Estado |
 |---|---|---:|---|
-| URP | 2026-10-30 | 4 días hábiles | Obsoleto |
-| URR | 2026-09-28 | 28 días hábiles | Obsoleto |
-| DSS | 2026-10-30 | 4 días hábiles | Obsoleto |
-| NKS | 2026-10-30 | 4 días hábiles | Obsoleto |
-| NRS | 2026-10-30 | 4 días hábiles | Obsoleto |
+| URP | 2026-10-30 | 5 días hábiles | Obsoleto |
+| URR | 2026-09-28 | 29 días hábiles | Obsoleto |
+| DSS | 2026-10-30 | 5 días hábiles | Obsoleto |
+| NKS | 2026-10-30 | 5 días hábiles | Obsoleto |
+| NRS | 2026-10-30 | 5 días hábiles | Obsoleto |
 
 ## Panel oficial de bloques
 
@@ -58,14 +58,14 @@ La vía rápida usa proxies primarios o secundarios expresamente identificados y
 
 | Serie | Estado | Oficial hasta | Proxy hasta | Extensión hasta | Correlación | Error medio |
 |---|---|---|---|---|---:|---:|
-| DEXUSEU | rejected | 2026-10-30 | 2026-11-05 | — | 0.575 | 0.195 pp |
-| DEXNOUS | rejected | 2026-10-30 | 2026-11-05 | — | 0.620 | 0.226 pp |
-| DEXSDUS | rejected | 2026-10-30 | 2026-11-05 | — | 0.586 | 0.278 pp |
-| DTWEXBGS | rejected | 2026-10-30 | 2026-11-05 | — | 0.595 | 0.173 pp |
-| DCOILBRENTEU | active | 2026-11-03 | 2026-11-05 | 2026-11-05 | 0.673 | 1.913 pp |
+| DEXUSEU | expired | 2026-10-30 | 2026-11-09 | — | 0.575 | 0.200 pp |
+| DEXNOUS | expired | 2026-10-30 | 2026-11-09 | — | 0.619 | 0.229 pp |
+| DEXSDUS | expired | 2026-10-30 | 2026-11-09 | — | 0.583 | 0.281 pp |
+| DTWEXBGS | expired | 2026-10-30 | 2026-11-09 | — | 0.595 | 0.178 pp |
+| DCOILBRENTEU | active | 2026-11-03 | 2026-11-06 | 2026-11-06 | 0.673 | 1.913 pp |
 
 **Fuentes rápidas no disponibles:**
-- CME_WTI_SETTLEMENT: CME WTI settlements unavailable: 2026-10-19: https://www.cmegroup.com/CmeWS/mvc/Settlements/Futures/Settlements/425/FUT?tradeDate=10%2F19%2F2026: HTTP Error 403: Forbidden
+- CME_WTI_SETTLEMENT: CME WTI settlements unavailable: 2026-10-22: https://www.cmegroup.com/CmeWS/mvc/Settlements/Futures/Settlements/425/FUT?tradeDate=10%2F22%2F2026: HTTP Error 403: Forbidden
 
 ## Método y límites
 
