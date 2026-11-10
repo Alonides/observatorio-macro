@@ -1,83 +1,83 @@
 {
-  "updated_at": "2026-11-09T17:44:28.780375+00:00",
-  "report_date": "2026-11-09",
-  "asof": "2026-10-30",
+  "updated_at": "2026-11-10T15:16:33.709159+00:00",
+  "report_date": "2026-11-10",
+  "asof": "2026-11-06",
   "block_asof": {
-    "URP": "2026-10-30",
+    "URP": "2026-11-06",
     "URR": "2026-09-28",
-    "DSS": "2026-10-30",
-    "NKS": "2026-10-30",
-    "NRS": "2026-10-30"
+    "DSS": "2026-11-06",
+    "NKS": "2026-11-03",
+    "NRS": "2026-11-03"
   },
   "freshness": {
     "quality": "stale",
     "label": "Obsoleto",
-    "latest_input_date": "2026-11-06",
-    "latest_block_date": "2026-10-30",
+    "latest_input_date": "2026-11-09",
+    "latest_block_date": "2026-11-06",
     "oldest_block": "URR",
     "oldest_block_date": "2026-09-28",
-    "maximum_business_day_lag": 29,
+    "maximum_business_day_lag": 30,
     "unavailable_blocks": [],
     "blocks": {
       "URP": {
-        "asof": "2026-10-30",
-        "business_day_lag": 5,
-        "status": "stale",
-        "label": "Obsoleto",
+        "asof": "2026-11-06",
+        "business_day_lag": 1,
+        "status": "fresh",
+        "label": "Actualizado",
         "inputs": {
-          "UST30": "2026-11-06",
-          "BROAD_USD": "2026-10-30",
-          "VIX": "2026-11-06",
-          "US_BUND": "2026-11-06"
+          "UST30": "2026-11-09",
+          "BROAD_USD": "2026-11-06",
+          "VIX": "2026-11-09",
+          "US_BUND": "2026-11-09"
         }
       },
       "URR": {
         "asof": "2026-09-28",
-        "business_day_lag": 29,
+        "business_day_lag": 30,
         "status": "stale",
         "label": "Obsoleto",
         "inputs": {
-          "UST30": "2026-11-06",
-          "BROAD_USD": "2026-10-30",
-          "VIX": "2026-11-06",
-          "US_BUND": "2026-11-06",
+          "UST30": "2026-11-09",
+          "BROAD_USD": "2026-11-06",
+          "VIX": "2026-11-09",
+          "US_BUND": "2026-11-09",
           "GOLD": "2026-09-28",
-          "REAL_10Y": "2026-11-06"
+          "REAL_10Y": "2026-11-09"
         }
       },
       "DSS": {
-        "asof": "2026-10-30",
-        "business_day_lag": 5,
-        "status": "stale",
-        "label": "Obsoleto",
+        "asof": "2026-11-06",
+        "business_day_lag": 1,
+        "status": "fresh",
+        "label": "Actualizado",
         "inputs": {
-          "UST30": "2026-11-06",
-          "BROAD_USD": "2026-10-30",
-          "VIX": "2026-11-06"
+          "UST30": "2026-11-09",
+          "BROAD_USD": "2026-11-06",
+          "VIX": "2026-11-09"
         }
       },
       "NKS": {
-        "asof": "2026-10-30",
-        "business_day_lag": 5,
+        "asof": "2026-11-03",
+        "business_day_lag": 4,
         "status": "stale",
         "label": "Obsoleto",
         "inputs": {
-          "EUR_NOK": "2026-10-30",
-          "NOK_SEK": "2026-10-30",
-          "NOK_RESIDUAL": "2026-10-30",
-          "NORWAY_BUND": "2026-11-06"
+          "EUR_NOK": "2026-11-06",
+          "NOK_SEK": "2026-11-06",
+          "NOK_RESIDUAL": "2026-11-03",
+          "NORWAY_BUND": "2026-11-09"
         }
       },
       "NRS": {
-        "asof": "2026-10-30",
-        "business_day_lag": 5,
+        "asof": "2026-11-03",
+        "business_day_lag": 4,
         "status": "stale",
         "label": "Obsoleto",
         "inputs": {
-          "EUR_NOK": "2026-10-30",
-          "NOK_SEK": "2026-10-30",
-          "NOK_RESIDUAL": "2026-10-30",
-          "NORWAY_BUND": "2026-11-06",
+          "EUR_NOK": "2026-11-06",
+          "NOK_SEK": "2026-11-06",
+          "NOK_RESIDUAL": "2026-11-03",
+          "NORWAY_BUND": "2026-11-09",
           "BRENT": "2026-11-03"
         }
       }
@@ -91,8 +91,12 @@
     "raw_level": "normal",
     "review_required": false,
     "active_targets": [
-      "DCOILBRENTEU"
+      "DCOILBRENTEU",
+      "DEXNOUS",
+      "DEXSDUS",
+      "DEXUSEU",
+      "DTWEXBGS"
     ]
   },
-  "fingerprint": "normal|inactive|inactive|inactive|normal|inactive|normal|normal|inactive,inactive,inactive,normal,inactive|DCOILBRENTEU:2026-11-06"
+  "fingerprint": "normal|inactive|inactive|inactive|normal|inactive|normal|normal|inactive,inactive,inactive,normal,inactive|DCOILBRENTEU:2026-11-09,DEXNOUS:2026-11-10,DEXSDUS:2026-11-10,DEXUSEU:2026-11-10,DTWEXBGS:2026-11-10"
 }
