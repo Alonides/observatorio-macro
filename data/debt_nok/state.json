@@ -1,6 +1,6 @@
 {
-  "updated_at": "2026-11-24T18:24:59.504158+00:00",
-  "report_date": "2026-11-24",
+  "updated_at": "2026-11-25T17:40:08.878163+00:00",
+  "report_date": "2026-11-25",
   "asof": "2026-11-20",
   "block_asof": {
     "URP": "2026-11-20",
@@ -12,72 +12,72 @@
   "freshness": {
     "quality": "stale",
     "label": "Obsoleto",
-    "latest_input_date": "2026-11-23",
+    "latest_input_date": "2026-11-24",
     "latest_block_date": "2026-11-20",
     "oldest_block": "URR",
     "oldest_block_date": "2026-09-28",
-    "maximum_business_day_lag": 40,
+    "maximum_business_day_lag": 41,
     "unavailable_blocks": [],
     "blocks": {
       "URP": {
         "asof": "2026-11-20",
-        "business_day_lag": 1,
-        "status": "fresh",
-        "label": "Actualizado",
+        "business_day_lag": 2,
+        "status": "delayed",
+        "label": "Retrasado",
         "inputs": {
-          "UST30": "2026-11-23",
+          "UST30": "2026-11-24",
           "BROAD_USD": "2026-11-20",
-          "VIX": "2026-11-23",
-          "US_BUND": "2026-11-23"
+          "VIX": "2026-11-24",
+          "US_BUND": "2026-11-24"
         }
       },
       "URR": {
         "asof": "2026-09-28",
-        "business_day_lag": 40,
+        "business_day_lag": 41,
         "status": "stale",
         "label": "Obsoleto",
         "inputs": {
-          "UST30": "2026-11-23",
+          "UST30": "2026-11-24",
           "BROAD_USD": "2026-11-20",
-          "VIX": "2026-11-23",
-          "US_BUND": "2026-11-23",
+          "VIX": "2026-11-24",
+          "US_BUND": "2026-11-24",
           "GOLD": "2026-09-28",
-          "REAL_10Y": "2026-11-23"
+          "REAL_10Y": "2026-11-24"
         }
       },
       "DSS": {
         "asof": "2026-11-20",
-        "business_day_lag": 1,
-        "status": "fresh",
-        "label": "Actualizado",
+        "business_day_lag": 2,
+        "status": "delayed",
+        "label": "Retrasado",
         "inputs": {
-          "UST30": "2026-11-23",
+          "UST30": "2026-11-24",
           "BROAD_USD": "2026-11-20",
-          "VIX": "2026-11-23"
+          "VIX": "2026-11-24"
         }
       },
       "NKS": {
         "asof": "2026-11-17",
-        "business_day_lag": 4,
+        "business_day_lag": 5,
         "status": "stale",
         "label": "Obsoleto",
         "inputs": {
           "EUR_NOK": "2026-11-20",
           "NOK_SEK": "2026-11-20",
           "NOK_RESIDUAL": "2026-11-17",
-          "NORWAY_BUND": "2026-11-23"
+          "NORWAY_BUND": "2026-11-24"
         }
       },
       "NRS": {
         "asof": "2026-11-17",
-        "business_day_lag": 4,
+        "business_day_lag": 5,
         "status": "stale",
         "label": "Obsoleto",
         "inputs": {
           "EUR_NOK": "2026-11-20",
           "NOK_SEK": "2026-11-20",
           "NOK_RESIDUAL": "2026-11-17",
-          "NORWAY_BUND": "2026-11-23",
+          "NORWAY_BUND": "2026-11-24",
           "BRENT": "2026-11-17"
         }
       }
@@ -93,8 +93,10 @@
     "active_targets": [
       "DCOILBRENTEU",
       "DEXNOUS",
-      "DEXSDUS"
+      "DEXSDUS",
+      "DEXUSEU",
+      "DTWEXBGS"
     ]
   },
-  "fingerprint": "normal|inactive|inactive|inactive|normal|inactive|normal|normal|inactive,inactive,inactive,normal,inactive|DCOILBRENTEU:2026-11-23,DEXNOUS:2026-11-24,DEXSDUS:2026-11-24"
+  "fingerprint": "normal|inactive|inactive|inactive|normal|inactive|normal|normal|inactive,inactive,inactive,normal,inactive|DCOILBRENTEU:2026-11-24,DEXNOUS:2026-11-25,DEXSDUS:2026-11-25,DEXUSEU:2026-11-25,DTWEXBGS:2026-11-25"
 }
